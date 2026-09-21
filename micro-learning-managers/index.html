@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Démo : un micro-learning pour managers, en cinq wagons · Meujesse Learning</title>
+<meta name="description" content="Démo e-learning : un micro-learning de cinq minutes pour managers. Un tableau des départs, un train en cinq étapes, des actions à cocher, une mentor qui conseille et une fiche mémo à télécharger.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Démo : un micro-learning pour managers">
+<meta property="og:description" content="Un tableau des départs, un train en cinq étapes, des actions à cocher et une fiche mémo en PDF. Démo à tester en ligne, tutoriel d'une minute.">
+<meta property="og:image" content="https://meujesse.github.io/demos/micro-learning-managers/assets/og.jpg">
+<meta property="og:url" content="https://meujesse.github.io/demos/micro-learning-managers/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/logo-bicolore.png">
+<link rel="preload" href="assets/fonts/pt-serif-pro_narrow-bold-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/vitrine.css?v=1790026338">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="nav__brand" href="https://meujesselearning.com" target="_blank" rel="noopener"><img src="assets/logo-bicolore.png" alt="Meujesse Learning"><span>Démo</span></a>
+    <nav class="nav__links" aria-label="Navigation">
+      <a href="#tutoriel">Tutoriel</a><a href="#demo">La démo</a><a href="#contact">Contact</a>
+    </nav>
+    <a class="pill pill--rouge" href="#contact">Prenez un appel</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero__in">
+    <div>
+      <p class="kicker" data-reveal>Démo e-learning : micro-learning managers</p>
+      <h1 data-reveal style="--d:.08s">Cinq minutes, <em>cinq wagons.</em></h1>
+      <p class="hero__pitch" data-reveal style="--d:.16s">Un module court pour managers pressés : <b>un train en cinq étapes</b>, des actions à cocher, une <b>mentor qui conseille</b> et une <b>fiche mémo</b> à télécharger.</p>
+      <p class="hero__sub" data-reveal style="--d:.22s">Une minute de tutoriel pour comprendre, puis la démo complète à tester vous-même, directement dans votre navigateur.</p>
+      <div class="hero__cta" data-reveal style="--d:.28s">
+        <a class="pill pill--blanc" href="#demo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Tester la démo</a>
+        <a class="pill pill--ghost" href="#tutoriel">Voir le tutoriel</a>
+      </div>
+      <p class="hero__note" data-reveal style="--d:.34s">Conçue pour ordinateur. Sur téléphone, tournez l'écran à l'horizontale.</p>
+    </div>
+    <div class="telephone" data-reveal style="--d:.2s">
+      <video src="media/apercu-linkedin.mp4?v=1790026338" poster="media/apercu-poster.jpg?v=1790026338" autoplay muted loop playsinline preload="auto" aria-label="Aperçu accéléré de la démo"></video>
+    </div>
+  </div>
+</section>
+
+<div class="chiffres">
+  <ul class="wrap">
+    <li><b>5</b> minutes par module</li>
+    <li><b>5</b> étapes à parcourir</li>
+    <li><b>25</b> actions à cocher</li>
+    <li><b>1</b> fiche mémo en PDF</li>
+  </ul>
+</div>
+
+<section class="section section--ciel" id="tutoriel">
+  <div class="wrap">
+    <div class="section__head" data-reveal>
+      <p class="kicker">Tutoriel&nbsp;: 1 minute</p>
+      <h2>Comment ça marche, <em>en une minute</em></h2>
+      <p>Regardez le curseur faire, puis cliquez sur une étape pour y aller directement.</p>
+    </div>
+    <div class="tuto">
+      <div class="lecteur" id="lecteur" data-reveal>
+        <video id="tuto" src="media/tuto.mp4?v=1790026338" poster="media/tuto-poster.jpg?v=1790026338" playsinline preload="metadata"></video>
+        <p class="lecteur__etape" id="etape-en-cours" aria-live="polite"></p>
+        <button class="lecteur__agrandir" type="button" id="agrandir" aria-label="Agrandir la vidéo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Agrandir</span></button>
+        <button class="lecteur__play" type="button" aria-label="Lancer le tutoriel"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Lancer le tutoriel</span></button>
+        <div class="lecteur__barre">
+          <button type="button" id="lecture" aria-label="Lecture"><svg viewBox="0 0 24 24" fill="currentColor"><path class="ic-play" d="M8 5v14l11-7z"/><path class="ic-pause" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+          <button type="button" id="precedente" aria-label="Étape précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <div class="piste" id="piste"><div class="piste__fait" id="fait"></div></div>
+          <button type="button" id="suivante" aria-label="Étape suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+          <span class="temps" id="temps">0:00</span>
+          <button type="button" id="son" aria-label="Couper le son"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" stroke="none"/><path class="ic-on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="ic-off" d="M16 9l5 6M21 9l-5 6"/></svg></button>
+          <button type="button" id="plein-tuto" aria-label="Plein écran"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        </div>
+      </div>
+      <div data-reveal style="--d:.1s">
+        <ol class="etapes" id="etapes"></ol>
+        <p class="tuto__note">Musique douce en fond. Les consignes s'affichent à l'écran, la vidéo se suit aussi sans le son.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="demo">
+  <div class="wrap">
+    <div class="section__head" data-reveal>
+      <p class="kicker">La démo complète</p>
+      <h2>À vous, <em>testez-la</em></h2>
+      <p>Choisissez le module à quai, montez dans le train, ouvrez un wagon, cochez vos actions, puis téléchargez votre fiche mémo.</p>
+    </div>
+    <div class="demo__outils" data-reveal>
+      <button class="pill pill--rouge" type="button" id="plein"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Plein écran</button>
+      <a class="pill pill--contour" href="https://meujesse.github.io/robot-3d/integration/index.html" target="_blank" rel="noopener">Ouvrir dans un nouvel onglet</a>
+      <p>Le chargement de la 3D prend quelques secondes.</p>
+    </div>
+    <div class="ecran" id="ecran" data-reveal>
+      <button class="ecran__lancer" type="button" id="lancer" aria-label="Lancer la démo"><img src="assets/demo-apercu.jpg" alt=""><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Lancer la démo</span></button>
+    </div>
+
+    <div class="fait">
+      <article data-reveal><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div><h3>Court et actionnable</h3><p>Pas de long cours : le manager trouve quoi faire, quand et avec qui. Il coche ce qui est fait et repart avec une fiche d'une page.</p></article>
+      <article data-reveal style="--d:.08s"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M10 8.5l4 1.5-4 1.5z" fill="currentColor"/></svg></div><h3>Module ultra immersif</h3><p>Un tableau des départs qui s'anime, un train qui entre en gare, des photos de situation et Salomé, une mentor avec sa propre voix.</p></article>
+      <article data-reveal style="--d:.16s"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></div><h3>100 % HTML, prêt pour votre plateforme</h3><p>Léger, rapide à charger, intégrable dans Genially ou exportable en SCORM. Couleurs, textes et étapes se changent dans un seul fichier.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact__in">
+    <div data-reveal>
+      <img class="contact__portrait" src="assets/jyn-portrait-cercle.png" alt="Jyn Chérèze">
+      <h2>On fait la même chose avec votre équipe&nbsp;?</h2>
+      <p>Prenez un appel avec moi pour parler de vos managers, de vos sujets et de votre plateforme. Sans engagement.</p>
+      <p class="contact__mail">Vous préférez écrire&nbsp;? <a href="mailto:contact@meujesselearning.com?subject=Une%20d%C3%A9mo%20en%203D%20pour%20mes%20%C3%A9quipes">contact@meujesselearning.com</a></p>
+      <a class="pill pill--blanc" href="https://calendly.com/jyn-chereze/decouverte" target="_blank" rel="noopener">Prenez un appel</a>
+    </div>
+    <div data-reveal style="--d:.1s">
+    <div class="contact__cal">
+      <div class="contact__secours"><div><p>Chargement du calendrier…</p><a class="pill pill--rouge" href="https://calendly.com/jyn-chereze/decouverte" target="_blank" rel="noopener">Ouvrir le calendrier</a></div></div>
+      <iframe title="Prendre un appel avec Jyn Chérèze" data-src="https://calendly.com/jyn-chereze/decouverte?embed_type=Inline&hide_gdpr_banner=1&hide_event_type_details=1&primary_color=e4003a&text_color=230000" loading="lazy"></iframe>
+    </div>
+      <p class="contact__lien">Le calendrier ne s'affiche pas&nbsp;? <a href="https://calendly.com/jyn-chereze/decouverte" target="_blank" rel="noopener">Ouvrez-le dans un nouvel onglet</a></p>
+    </div>
+  </div>
+</section>
+
+<div class="partage">
+  <span>Cette démo peut intéresser quelqu'un&nbsp;?</span>
+  <a class="pill pill--contour" id="partager-li" href="#" target="_blank" rel="noopener">Partager sur LinkedIn</a>
+  <button class="pill pill--contour" type="button" id="copier">Copier le lien</button>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <img src="assets/logo-blanc.png" alt="Meujesse Learning">
+    <p>Meujesse Learning · Agence Digital Learning · Ambassadrice Genially</p>
+    <ul>
+      <li><a href="https://meujesselearning.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c3 3 3 16 0 19M12 2.5c-3 3-3 16 0 19"/></svg>Site</a></li>
+      <li><a href="https://www.linkedin.com/in/jynchereze/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5v6M8 7.5v.1M12 16.5v-6M12 13c0-1.5 1-2.5 2.5-2.5S17 11.5 17 13v3.5"/></svg>LinkedIn</a></li>
+      <li><a href="https://www.youtube.com/@meujesselearning" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.2v5.6l5-2.8z" fill="currentColor" stroke="none"/></svg>YouTube</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  if (location.search.includes('capture')) document.querySelectorAll('[data-reveal]').forEach(e => e.classList.add('vu'));
+  // apparitions
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vu'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  // tutoriel : étapes cliquables synchronisées avec la vidéo
+  const CHAP = [{"n": 1, "titre": "Choisissez un module", "t": 6.8}, {"n": 2, "titre": "Montez dans le train", "t": 14.3}, {"n": 3, "titre": "Cochez vos actions", "t": 20.7}, {"n": 4, "titre": "Ouvrez une ressource", "t": 25.6}, {"n": 5, "titre": "Écoutez Salomé, votre mentor", "t": 28.4}, {"n": 6, "titre": "Avancez d'étape en étape", "t": 31.1}, {"n": 7, "titre": "Téléchargez la fiche mémo", "t": 43.7}];
+  const v = $('#tuto'), lecteur = $('#lecteur'), liste = $('#etapes'), piste = $('#piste');
+  const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  liste.innerHTML = CHAP.map(c => `<li><button type="button" data-t="${c.t}"><span class="n">${c.n}</span><span class="t">${c.titre}</span><span class="h">${mmss(c.t)}</span></button></li>`).join('');
+  const btns = [...liste.querySelectorAll('button')];
+  let sonVoulu = true;
+  const majSon = () => { lecteur.classList.toggle('muet', v.muted); $('#son').setAttribute('aria-label', v.muted ? 'Activer le son' : 'Couper le son'); };
+  const jouer = () => { v.muted = !sonVoulu; v.volume = 1; v.play().catch(() => { v.muted = true; majSon(); v.play().catch(() => {}); }); majSon(); };
+  const aller = t => { const go = () => { v.currentTime = t; jouer(); }; if (v.readyState >= 1) go(); else { v.addEventListener('loadedmetadata', go, { once: true }); v.preload = 'auto'; v.load(); } };
+  const indice = () => { let i = -1; CHAP.forEach((c, k) => { if (v.currentTime >= c.t - .05) i = k; }); return i; };
+  // repères des étapes sur la barre
+  const poser = () => { const d = v.duration || 54; piste.querySelectorAll('.repere').forEach(e => e.remove()); CHAP.forEach(c => { const r = document.createElement('button'); r.type = 'button'; r.className = 'repere'; r.style.left = (c.t / d * 100) + '%'; r.dataset.titre = `${c.n}. ${c.titre}`; r.setAttribute('aria-label', `Étape ${c.n} : ${c.titre}`); r.addEventListener('click', e => { e.stopPropagation(); aller(c.t); }); piste.appendChild(r); }); };
+  poser(); v.addEventListener('loadedmetadata', poser);
+  piste.addEventListener('click', e => { const q = piste.getBoundingClientRect(); aller(Math.max(0, (e.clientX - q.left) / q.width) * (v.duration || 54)); });
+  $('.lecteur__play').addEventListener('click', jouer);
+  v.addEventListener('click', () => v.paused ? jouer() : v.pause());
+  $('#lecture').addEventListener('click', () => v.paused ? jouer() : v.pause());
+  $('#son').addEventListener('click', () => { sonVoulu = v.muted; v.muted = !sonVoulu; majSon(); });
+  v.addEventListener('volumechange', majSon);
+  $('#precedente').addEventListener('click', () => { const i = indice(); const c = CHAP[Math.max(0, (v.currentTime - (CHAP[i] ? CHAP[i].t : 0) < 1.5 ? i - 1 : i))]; aller(c ? c.t : 0); });
+  $('#suivante').addEventListener('click', () => { const c = CHAP[indice() + 1]; if (c) aller(c.t); });
+  btns.forEach(b => b.addEventListener('click', () => { aller(+b.dataset.t); if (!document.fullscreenElement) lecteur.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }));
+  v.addEventListener('play', () => lecteur.classList.add('lecture', 'joue'));
+  v.addEventListener('pause', () => lecteur.classList.remove('joue'));
+  v.addEventListener('timeupdate', () => {
+    const i = indice(), d = v.duration || 54;
+    btns.forEach((b, k) => b.classList.toggle('actif', k === i));
+    $('#fait').style.width = (v.currentTime / d * 100) + '%';
+    $('#temps').textContent = `${mmss(v.currentTime)} / ${mmss(d)}`;
+    $('#etape-en-cours').textContent = i >= 0 ? `Étape ${CHAP[i].n} sur ${CHAP.length} : ${CHAP[i].titre}` : '';
+  });
+  // agrandir : plein écran sur le lecteur (vidéo + étapes), repli sur le plein écran natif (iPhone)
+  // agrandir : vrai plein écran si le navigateur l'accepte, sinon le lecteur occupe toute la fenêtre
+  const libelle = on => { $('#agrandir span').textContent = on ? 'Réduire' : 'Agrandir'; $('#agrandir').setAttribute('aria-label', on ? 'Réduire la vidéo' : 'Agrandir la vidéo'); };
+  const fenetre = on => { lecteur.classList.toggle('plein', on); lecteur.classList.toggle('fenetre', on); document.documentElement.classList.toggle('sans-defil', on); libelle(on); };
+  const enPleinEcran = () => (document.fullscreenElement || document.webkitFullscreenElement) === lecteur;
+  const agrandir = () => {
+    if (enPleinEcran()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    if (lecteur.classList.contains('fenetre')) { fenetre(false); return; }
+    if (v.paused) jouer();
+    const req = lecteur.requestFullscreen || lecteur.webkitRequestFullscreen;
+    const permis = document.fullscreenEnabled !== false || document.webkitFullscreenEnabled;
+    if (!req || !permis) return fenetre(true);
+    try {
+      const r = req.call(lecteur);
+      if (r && r.catch) r.catch(() => fenetre(true));
+      setTimeout(() => { if (!enPleinEcran() && !lecteur.classList.contains('fenetre')) fenetre(true); }, 700);
+    } catch (e) { fenetre(true); }
+  };
+  const suivre = () => { const on = enPleinEcran(); if (on) lecteur.classList.remove('fenetre'); lecteur.classList.toggle('plein', on || lecteur.classList.contains('fenetre')); libelle(on || lecteur.classList.contains('fenetre')); };
+  document.addEventListener('fullscreenchange', suivre); document.addEventListener('webkitfullscreenchange', suivre);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && lecteur.classList.contains('fenetre')) fenetre(false); });
+  $('#agrandir').addEventListener('click', agrandir); $('#plein-tuto').addEventListener('click', agrandir);
+  v.addEventListener('dblclick', agrandir);
+  let minuterie; lecteur.addEventListener('mousemove', () => { lecteur.classList.add('bouge'); clearTimeout(minuterie); minuterie = setTimeout(() => lecteur.classList.remove('bouge'), 2500); });
+
+  // démo : chargée au clic, plein écran
+  const ecran = $('#ecran');
+  const charger = () => { if (ecran.querySelector('iframe')) return; const f = document.createElement('iframe'); f.src = 'https://meujesse.github.io/robot-3d/integration/index.html'; f.title = "D\u00e9mo : micro-learning managers"; f.allow = 'fullscreen'; ecran.appendChild(f); $('#lancer').remove(); };
+  $('#lancer').addEventListener('click', charger);
+  $('#plein').addEventListener('click', () => {
+    charger();
+    const req = ecran.requestFullscreen || ecran.webkitRequestFullscreen;
+    if (req) req.call(ecran).catch(() => window.open('https://meujesse.github.io/robot-3d/integration/index.html', '_blank')); else window.open('https://meujesse.github.io/robot-3d/integration/index.html', '_blank');
+  });
+
+  // calendrier chargé quand on s'en approche
+  const cal = document.querySelector('.contact__cal iframe');
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { cal.src = cal.dataset.src; o.disconnect(); } }, { rootMargin: '400px' }).observe(cal);
+
+  // partage
+  const url = location.origin + location.pathname;
+  $('#partager-li').href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
+  const toast = t => { const e = $('#toast'); e.textContent = t; e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 2200); };
+  $('#copier').addEventListener('click', () => navigator.clipboard.writeText(url).then(() => toast('Lien copié'), () => toast(url)));
+})();
+</script>
+</body>
+</html>

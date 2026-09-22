@@ -45,11 +45,13 @@ h2 em{color:var(--prune)}
 .hero__pitch{font-size:1.25rem;margin:0 0 .6em;max-width:36em}
 .hero__pitch b{color:#fff;font-weight:700;background:var(--violet);padding:.02em .35em;border-radius:8px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 /* mots du titre : dégradé doux qui glisse d'un bout à l'autre (repris du portfolio) */
-.hero h1 em{display:inline-block;padding-bottom:.12em;margin-bottom:-.12em;-webkit-background-clip:text;background-clip:text;color:transparent;background-size:250% 100%;animation:degradeGlisse 12s ease-in-out infinite alternate;
+/* effet signature Meujesse : skill meujesse-texte-degrade-anime, code de référence copié tel quel */
+.ml-degrade{display:inline-block;padding-bottom:.12em;margin-bottom:-.12em;-webkit-background-clip:text;background-clip:text;color:transparent;
   background-image:linear-gradient(90deg,#ffe2c4 0%,#f5a04c 11%,#ff3b30 21%,#f0102f 26%,#ff4f98 36%,#b52aa0 46%,#6a2fa8 55%,#522583 61%,#3f63b0 71%,#4c76ba 76%,#b0d8f4 86%,#d6ecfb 94%,#e6f4fd 100%);
+  background-size:250% 100%;animation:mlDegradeGlisse 12s ease-in-out infinite alternate;
   filter:drop-shadow(0 .04em .06em rgba(35,0,0,.35)) drop-shadow(0 .1em .3em rgba(35,0,0,.4))}
-@keyframes degradeGlisse{from{background-position:0% 50%}to{background-position:100% 50%}}
-@media (prefers-reduced-motion:reduce){.hero h1 em{animation:none}}
+@keyframes mlDegradeGlisse{from{background-position:0% 50%}to{background-position:100% 50%}}
+@media (prefers-reduced-motion:reduce){.ml-degrade{animation:none}}
 .hero__sub{margin:0 0 1.6em;opacity:.92;max-width:36em}
 .hero__cta{display:flex;flex-wrap:wrap;gap:14px}
 .hero__note{margin:18px 0 0;font-size:.9rem;opacity:.85}

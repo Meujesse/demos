@@ -43,7 +43,7 @@ h2 em{color:var(--prune)}
 .hero .kicker{color:#fff}
 .hero h1{font-size:clamp(2.6rem,5.4vw,4.4rem);color:#fff;margin-bottom:.4em}
 .hero__pitch{font-size:1.25rem;margin:0 0 .6em;max-width:36em}
-.hero__pitch b{font-weight:700}
+.hero__pitch b{color:#fff;font-weight:700;background:var(--violet);padding:.02em .35em;border-radius:8px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 /* mots du titre : dégradé doux qui glisse d'un bout à l'autre (repris du portfolio) */
 /* effet signature Meujesse : skill meujesse-texte-degrade-anime, code de référence copié tel quel */
 .ml-degrade{display:inline-block;padding-bottom:.12em;margin-bottom:-.12em;-webkit-background-clip:text;background-clip:text;color:transparent;

@@ -7,9 +7,11 @@
   html,body{margin:0;height:100%;background:transparent;overflow:hidden}
   .scene{position:fixed;inset:0;pointer-events:none}
   /* Soleil rasant qui passe par la verrière : il respire, il ne clignote pas. */
-  .soleil{position:fixed;inset:0;mix-blend-mode:screen;
+  /* Pas de mix-blend-mode : un melange plein ecran se recompose a chaque image.
+     On anime seulement l'opacite d'un degrade, ce qui reste sur la carte graphique. */
+  .soleil{position:fixed;inset:0;will-change:opacity;
     background:
-      radial-gradient(55% 40% at 72% 10%, rgba(255,247,219,.26), rgba(255,247,219,0) 72%),
+      radial-gradient(55% 40% at 72% 10%, rgba(255,247,219,.22), rgba(255,247,219,0) 72%),
       radial-gradient(40% 30% at 18% 6%, rgba(255,250,232,.16), rgba(255,250,232,0) 70%);
     animation:respire 13s ease-in-out infinite}
   @keyframes respire{0%,100%{opacity:.6}50%{opacity:1}}
@@ -28,7 +30,7 @@
 <div class="scene" id="scene"><div class="soleil"></div></div>
 <script>
   var scene = document.getElementById('scene');
-  var N = 9;
+  var N = 6;
   for (var i = 0; i < N; i++) {
     var g = document.createElement('div');
     g.className = 'grain';

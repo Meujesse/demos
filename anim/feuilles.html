@@ -23,25 +23,25 @@ var SRC = [
 ];
 
 var scene = document.getElementById('scene');
-var N = 5;
+var N = 4;
 var feuilles = [];
 var W = window.innerWidth || 1200, H = window.innerHeight || 675;
 
 function hasard(a, b){ return a + Math.random() * (b - a); }
 
 function naissance(f, demarrage){
-  // le vent pousse vers la droite : les feuilles entrent par la gauche et le haut
-  f.x = demarrage ? hasard(-0.1, 1.0) * W : hasard(-0.25, -0.05) * W;
-  f.y = demarrage ? hasard(-0.2, 0.9) * H : hasard(-0.35, 0.45) * H;
-  f.taille = hasard(15, 31);
-  f.prise = hasard(0.72, 1.28);          // prise au vent : une feuille large part plus vite
-  f.chute = hasard(7, 15);               // vitesse de chute propre, en px/s
-  f.battT = hasard(1.1, 2.3);            // periode du battement lateral
-  f.battA = hasard(7, 17);               // amplitude du battement
+  // Les feuilles tombent des arbres : elles entrent par le haut, jamais en plein
+  // milieu de l'ecran. Le vent les pousse ensuite vers la droite.
+  f.x = hasard(-0.15, 0.85) * W;
+  f.y = demarrage ? hasard(-0.3, 0.8) * H : hasard(-0.35, -0.08) * H;
+  f.taille = hasard(16, 30);
+  f.prise = hasard(0.75, 1.25);          // prise au vent
+  f.chute = hasard(26, 46);              // vitesse de chute propre, en px/s
+  f.oscT = hasard(2.6, 4.4);             // periode du balancement, lente
+  f.oscA = hasard(5, 13);                // amplitude laterale, en px
   f.phase = hasard(0, 6.28);
-  f.vrille = hasard(0.5, 1.5);           // vitesse a laquelle la feuille se retourne
-  f.inclin = hasard(-30, 30);
-  f.opac = hasard(0.72, 1);
+  f.inclin = hasard(-18, 18);
+  f.opac = hasard(0.78, 1);
   var i = Math.floor(Math.random() * SRC.length);
   if (f.el.getAttribute('data-i') !== String(i)) { f.el.src = SRC[i]; f.el.setAttribute('data-i', i); }
   f.el.style.width = f.taille.toFixed(1) + 'px';
@@ -64,22 +64,22 @@ function image(maintenant){
   var dt = Math.min(0.05, (maintenant - dernier) / 1000);
   dernier = maintenant;
 
-  // Rafales : deux sinusoides de periodes premieres entre elles, donc le vent
-  // ne se repete pas de facon perceptible. Il retombe presque a zero entre deux.
-  var vent = 0.42 + 0.40 * Math.sin(t / 5.1) + 0.26 * Math.sin(t / 2.27 + 1.7);
-  if (vent < 0.04) vent = 0.04;
+  // Rafales : deux sinusoides de periodes premieres entre elles, le vent ne se
+  // repete donc pas de facon perceptible et retombe presque entre deux bourrasques.
+  var vent = 0.34 + 0.34 * Math.sin(t / 6.3) + 0.22 * Math.sin(t / 2.9 + 1.7);
+  if (vent < 0.05) vent = 0.05;
 
   for (var k = 0; k < feuilles.length; k++){
     var f = feuilles[k];
-    var batt = Math.sin(t * 6.283 / f.battT + f.phase);
-    f.x += (14 + 58 * vent) * f.prise * dt;
-    f.y += (f.chute + 16 * vent) * dt + batt * f.battA * dt;
-    var angle = f.inclin + batt * 26 + vent * 18 * f.prise;
-    var retourne = Math.cos(t * f.vrille + f.phase);     // la feuille montre sa tranche
-    var ex = 0.25 + 0.75 * Math.abs(retourne);
+    var osc = Math.sin(t * 6.283 / f.oscT + f.phase);
+    // la feuille descend d'abord, le vent la decale sur le cote
+    f.x += (8 + 46 * vent) * f.prise * dt + osc * f.oscA * dt;
+    f.y += f.chute * dt;
+    // elle s'incline dans le sens du balancement, sans tourner sur elle-meme
+    var angle = f.inclin + osc * 13 + vent * 9 * f.prise;
     f.el.style.transform = 'translate3d(' + f.x.toFixed(1) + 'px,' + f.y.toFixed(1) + 'px,0) '
-      + 'rotate(' + angle.toFixed(1) + 'deg) scaleX(' + ex.toFixed(3) + ')';
-    if (f.x > W + 60 || f.y > H + 60) naissance(f, false);
+      + 'rotate(' + angle.toFixed(1) + 'deg)';
+    if (f.y > H + 50 || f.x > W + 60) naissance(f, false);
   }
   boucle = requestAnimationFrame(image);
 }

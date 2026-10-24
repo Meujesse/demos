@@ -21,9 +21,12 @@
   .leaf{animation:fall var(--dur) linear var(--delay) infinite}
   .leaf > span{display:block;animation:sway calc(var(--dur)/4) ease-in-out infinite}
   /* voile de lumière très léger, façon soleil rasant */
-  .glow{position:fixed;inset:0;background:
-     radial-gradient(60% 45% at 78% 18%, rgba(255,246,214,.22), rgba(255,246,214,0) 70%);
-     mix-blend-mode:screen;animation:breathe 11s ease-in-out infinite}
+  /* Pas de mix-blend-mode : un calque melange plein ecran se recompose a chaque
+     image et fait ramer la page des qu'il y en a plusieurs. Un simple degrade
+     dont on anime l'opacite reste sur la carte graphique. */
+  .glow{position:fixed;inset:0;will-change:opacity;background:
+     radial-gradient(60% 45% at 78% 18%, rgba(255,246,214,.20), rgba(255,246,214,0) 70%);
+     animation:breathe 11s ease-in-out infinite}
   @keyframes breathe{0%,100%{opacity:.55}50%{opacity:.9}}
 </style>
 </head>

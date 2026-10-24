@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vie Nhood</title>
+<style>
+  html,body{margin:0;height:100%;background:transparent;overflow:hidden}
+  .scene{position:fixed;inset:0;pointer-events:none}
+  .leaf{position:absolute;top:-8%;will-change:transform,opacity}
+  .leaf svg{display:block}
+  @keyframes fall{
+    0%{transform:translate3d(0,-10vh,0) rotate(0deg);opacity:0}
+    8%{opacity:.85}
+    92%{opacity:.7}
+    100%{transform:translate3d(var(--dx),112vh,0) rotate(var(--rot));opacity:0}
+  }
+  @keyframes sway{
+    0%,100%{transform:translateX(0)}
+    50%{transform:translateX(var(--sw))}
+  }
+  .leaf{animation:fall var(--dur) linear var(--delay) infinite}
+  .leaf > span{display:block;animation:sway calc(var(--dur)/4) ease-in-out infinite}
+  /* voile de lumière très léger, façon soleil rasant */
+  .glow{position:fixed;inset:0;background:
+     radial-gradient(60% 45% at 78% 18%, rgba(255,246,214,.22), rgba(255,246,214,0) 70%);
+     mix-blend-mode:screen;animation:breathe 11s ease-in-out infinite}
+  @keyframes breathe{0%,100%{opacity:.55}50%{opacity:.9}}
+</style>
+</head>
+<body>
+<div class="scene" id="scene"><div class="glow"></div></div>
+<script>
+  // Feuilles aux verts Nhood : #009944, #4cb87d, #75c5b5, #cfeeda
+  var TEINTES = ['#009944','#4cb87d','#75c5b5','#cfeeda','#9fddb8'];
+  var scene = document.getElementById('scene');
+  var N = 7; // juste assez pour que ça vive, pas assez pour distraire
+
+  function feuille(i){
+    var wrap = document.createElement('div');
+    wrap.className = 'leaf';
+    var taille = 12 + Math.random()*14;
+    var teinte = TEINTES[i % TEINTES.length];
+    wrap.style.left = (4 + Math.random()*92) + '%';
+    wrap.style.setProperty('--dur', (16 + Math.random()*14).toFixed(1) + 's');
+    wrap.style.setProperty('--delay', (-Math.random()*22).toFixed(1) + 's');
+    wrap.style.setProperty('--dx', ((Math.random()*2-1)*18).toFixed(0) + 'vw');
+    wrap.style.setProperty('--rot', (180 + Math.random()*540).toFixed(0) + 'deg');
+    var inner = document.createElement('span');
+    inner.style.setProperty('--sw', (6 + Math.random()*14).toFixed(0) + 'px');
+    inner.innerHTML =
+      '<svg width="'+taille+'" height="'+taille+'" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M12 2C7 6 3 10 3 15a9 9 0 0 0 18 0c0-5-4-9-9-13z" fill="'+teinte+'" opacity="0.9"/>' +
+      '<path d="M12 4v15" stroke="rgba(255,255,255,.45)" stroke-width="1" fill="none"/>' +
+      '</svg>';
+    wrap.appendChild(inner);
+    return wrap;
+  }
+
+  for (var i=0;i<N;i++) scene.appendChild(feuille(i));
+
+  // Respect des préférences d'accessibilité : on coupe tout si l'utilisateur
+  // a demandé moins d'animations.
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.leaf, .glow').forEach(function(el){
+      el.style.animation = 'none';
+      el.style.opacity = '0';
+    });
+  }
+</script>
+</body>
+</html>

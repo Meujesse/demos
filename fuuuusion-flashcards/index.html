@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flashcards de l'entrepreneur</title>
+<!-- Activité créée avec Claude Code (hors Canva) pour la démo FUUUUSION B1 L2 : import d'un fichier HTML dans Canva. -->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(160deg,#fdeef2,#f3ecf9);color:#230000}
+h1{font-size:30px;color:#522583;text-align:center}
+p.aide{font-size:15px;color:#6b5555;text-align:center}
+.zone{perspective:1200px;width:min(520px,92vw);height:300px}
+.carte{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;cursor:pointer}
+.carte.retournee{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:22px;display:flex;align-items:center;justify-content:center;padding:28px;text-align:center;
+  backface-visibility:hidden;box-shadow:0 14px 40px rgba(82,37,131,.18)}
+.recto{background:linear-gradient(135deg,#e4003a,#951b81);color:#fff;font-size:36px;font-weight:800}
+.verso{background:#fff;color:#230000;font-size:20px;line-height:1.45;transform:rotateY(180deg);border:3px solid #951b81}
+.barre{display:flex;gap:10px;align-items:center}
+button{border:0;border-radius:30px;padding:12px 22px;font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+.ok{background:#1f9d55;color:#fff}.ko{background:#e4003a;color:#fff}.nav{background:#fff;color:#522583;border:2px solid #522583}
+.score{font-size:15px;color:#522583;font-weight:700}
+.prog{width:min(520px,92vw);height:8px;border-radius:8px;background:#e9dff3;overflow:hidden}.prog i{display:block;height:100%;background:#951b81;transition:width .3s}
+</style></head>
+<body>
+<h1>Les 4 piliers de l'entrepreneur</h1>
+<p class="aide">Cliquez sur la carte pour la retourner, puis dites si vous connaissiez la réponse.</p>
+<div class="prog"><i id="prog"></i></div>
+<div class="zone"><div class="carte" id="carte"><div class="face recto" id="recto"></div><div class="face verso" id="verso"></div></div></div>
+<div class="barre"><button class="ko" id="ko">À revoir</button><button class="ok" id="ok">Je savais</button></div>
+<div class="score" id="score"></div>
+<script>
+const cartes=[
+ ["Motivation","La force intérieure qui pousse un entrepreneur à démarrer et à persévérer malgré les difficultés."],
+ ["Valeur","Ce qui donne du sens aux actions quotidiennes et permet de prendre des décisions alignées avec une mission."],
+ ["Vision","Permet de se projeter vers un futur idéal et de créer une entreprise en cohérence avec cette ambition."],
+ ["Discipline","Assure que les actions nécessaires sont menées de façon régulière et méthodique."]];
+let file=cartes.map((c,i)=>i), su=0, i=0;
+const $=s=>document.getElementById(s);
+function montre(){ if(!file.length){ $("recto").textContent="Bravo !"; $("verso").textContent="Vous maîtrisez les 4 piliers."; $("carte").classList.remove("retournee"); $("ok").disabled=$("ko").disabled=true; return; }
+  const c=cartes[file[0]]; $("carte").classList.remove("retournee"); setTimeout(()=>{$("recto").textContent=c[0]; $("verso").textContent=c[1];},200);
+  $("prog").style.width=(su/cartes.length*100)+"%"; $("score").textContent=`${su} / ${cartes.length} maîtrisées`; }
+$("carte").onclick=()=>$("carte").classList.toggle("retournee");
+$("ok").onclick=()=>{ file.shift(); su++; montre(); };
+$("ko").onclick=()=>{ file.push(file.shift()); montre(); };
+montre();
+</script>
+</body></html>

@@ -187,7 +187,7 @@
             function extractModule(blockId) {
                 // Get all available federation containers (more specific filtering)
                 const allContainers = Object.keys(window).filter(function(key) {
-                    const obj = window[key];
+                    let obj; try { obj = window[key]; if (obj === window.parent || obj === window.top || obj === window.opener || obj === window) return false; 'get' in Object(obj); } catch (e) { return false; }
                     return obj && 
                            typeof obj === 'object' && 
                            'get' in obj &&
@@ -203,7 +203,7 @@
                 
                 // Also show all global objects for debugging
                 const allGlobals = Object.keys(window).filter(function(key) {
-                    return typeof window[key] === 'object' && window[key] !== null && !key.startsWith('webkit') && !key.startsWith('moz');
+                    try { return typeof window[key] === 'object' && window[key] !== null && !key.startsWith('webkit') && !key.startsWith('moz'); } catch (e) { return false; }
                 });
                 
                 // Try different possible names for this block
@@ -356,7 +356,7 @@
                                 
                                 // Check what new globals were added
                                 const currentGlobals = Object.keys(window).filter(function(key) {
-                                    const obj = window[key];
+                                    let obj; try { obj = window[key]; if (obj === window.parent || obj === window.top || obj === window.opener || obj === window) return false; 'get' in Object(obj); } catch (e) { return false; }
                                     return obj && typeof obj === 'object' && 'get' in obj && typeof obj.get === 'function';
                                 });
                                 
@@ -403,7 +403,7 @@
                     setTimeout(function() {
                         // Debug: Show what's available
                         const availableContainers = Object.keys(window).filter(function(key) {
-                            return window[key] && typeof window[key] === 'object' && 'get' in window[key];
+                            try { const o = window[key]; if (o === window.parent || o === window.top || o === window) return false; return o && typeof o === 'object' && 'get' in o; } catch (e) { return false; }
                         });
                         
                         try {

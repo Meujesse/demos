@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/anna-profil.png">
+<title>Anna sur WhatsApp</title>
+<!-- Activité créée avec Claude Code pour la démo vibe coding FUUUUSION 2027 (Bonus 2, leçon 8). Le prompt utilisé est dans PROMPT.md. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --poudre:#f8e4ea; --poudre2:#f3d3de; --rose:#e4579b; --rose-f:#c2185b; --ardoise:#64798A; --texte:#230000; --blanc:#fff;
+  --wa-vert:#008069; --wa-vert2:#25d366; --wa-fond:#efeae2; --wa-out:#d9fdd3; --wa-bleu:#53bdeb; --wa-gris:#667781;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --titre:Poppins,var(--ui);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--poudre);color:var(--texte);font-family:var(--ui);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+img{display:block}
+
+/* ---------- Scène 16:9 mise à l'échelle ---------- */
+#scene{position:absolute;left:50%;top:50%;width:1200px;height:675px;transform-origin:50% 50%;overflow:hidden;
+  background:radial-gradient(circle at 12% 18%,#fff6f8 0,transparent 38%),radial-gradient(circle at 88% 85%,#f6c9da 0,transparent 42%),linear-gradient(140deg,#fbeef2,#f3d6e0)}
+#scene:before,#scene:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.55;pointer-events:none}
+#scene:before{width:420px;height:420px;left:-140px;bottom:-190px;background:radial-gradient(circle,#f7b6cf,transparent 70%)}
+#scene:after{width:360px;height:360px;right:-120px;top:-150px;background:radial-gradient(circle,#ffffff,transparent 70%)}
+
+.cote{position:absolute;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;z-index:1}
+.gauche{left:56px;width:330px}
+.droite{right:48px;width:340px}
+
+.badge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:#fff;border-radius:30px;padding:6px 14px 6px 8px;font:600 12.5px var(--titre);color:var(--ardoise);box-shadow:0 4px 14px rgba(100,121,138,.15)}
+.badge i{width:22px;height:22px;border-radius:50%;background:var(--wa-vert2);display:grid;place-items:center}
+h1{font:800 38px/1.08 var(--titre);margin:18px 0 14px;letter-spacing:-.5px}
+h1 span{color:var(--rose)}
+.intro{font-size:15.5px;line-height:1.55;color:#4a3a3d}
+.intro b{color:var(--texte)}
+.prog{margin-top:26px;background:#fff;border-radius:18px;padding:16px 18px;box-shadow:0 8px 24px rgba(194,24,91,.08)}
+.prog-t{display:flex;justify-content:space-between;font:600 13px var(--titre);color:var(--ardoise)}
+.prog-t strong{color:var(--rose-f)}
+.segs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
+.segs i{height:8px;border-radius:6px;background:#f1e4e8;transition:background .4s}
+.segs i.ok{background:var(--rose)}
+.segs i.repris{background:#f3a6c8}
+.astuce{margin-top:14px;font-size:12.5px;color:var(--ardoise);line-height:1.5}
+.astuce kbd{font:600 11px var(--ui);background:#fff;border:1px solid #e3cbd3;border-bottom-width:2px;border-radius:5px;padding:1px 6px;color:var(--texte)}
+
+.carnet{background:#fff;border-radius:22px;padding:20px 20px 14px;box-shadow:0 14px 40px rgba(194,24,91,.12)}
+.carnet h2{font:700 17px var(--titre);display:flex;align-items:center;gap:8px}
+.carnet h2 small{margin-left:auto;font:600 12px var(--titre);color:var(--ardoise)}
+.carnet ol{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.legende{margin-top:10px;font-size:11px;color:var(--ardoise);display:flex;gap:14px}.legende span{display:inline-flex;align-items:center;gap:5px}.legende i{width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:9px;color:#fff;background:var(--rose)}.legende i.r{background:#f3a6c8}
+.carnet li{display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border-radius:12px;background:#faf5f7;min-height:46px;transition:background .4s}
+.carnet li .n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--titre);background:#ece2e6;color:#9c8a90}
+.carnet li .c{font-size:11.5px;line-height:1.36;color:#9c8a90;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.carnet li .c b{display:block;font:600 13px var(--titre);color:#b9aab0}
+.carnet li.on{background:#fdf0f5;animation:pop .5s}
+.carnet li.on .n{background:var(--rose);color:#fff}
+.carnet li.on.repris .n{background:#f3a6c8}
+.carnet li.on .c{color:#4a3a3d}
+.carnet li.on .c b{color:var(--texte)}
+.tag{display:inline-block;margin-left:6px;font:600 10.5px var(--titre);padding:1px 7px;border-radius:10px;vertical-align:1px}
+.tag.v{background:#ffe1ee;color:var(--rose-f)}
+.tag.r{background:#eef1f4;color:var(--ardoise)}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+/* ---------- Téléphone ---------- */
+.tel{position:absolute;left:50%;top:50%;width:318px;height:640px;transform:translate(-50%,-50%);z-index:2;
+  background:#16161a;border-radius:48px;padding:10px;box-shadow:0 0 0 2px #2c2c33,0 30px 60px rgba(90,20,50,.35),inset 0 0 0 1px #3a3a42}
+.tel:before{content:"";position:absolute;right:-3px;top:150px;width:3px;height:70px;border-radius:0 3px 3px 0;background:#2c2c33}
+.tel.vibre{animation:vibre .5s 2}
+@keyframes vibre{0%,100%{transform:translate(-50%,-50%)}20%{transform:translate(calc(-50% - 3px),-50%) rotate(-.6deg)}40%{transform:translate(calc(-50% + 3px),-50%) rotate(.6deg)}60%{transform:translate(calc(-50% - 2px),-50%)}80%{transform:translate(calc(-50% + 2px),-50%)}}
+.ecran{position:relative;width:100%;height:100%;border-radius:38px;overflow:hidden;background:var(--wa-fond);display:flex;flex-direction:column}
+.barre-etat{position:absolute;left:0;right:0;top:0;height:34px;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 24px 0 28px;font:600 13px var(--ui);color:#fff;pointer-events:none}
+.ilot{position:absolute;left:50%;top:8px;width:92px;height:26px;margin-left:-46px;background:#000;border-radius:20px}
+.icones-etat{display:flex;gap:5px;align-items:center}
+.ecran.clair .barre-etat{color:#fff}
+
+/* écran verrouillé */
+#verrou{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;align-items:center;padding-top:70px;color:#fff;
+  background:radial-gradient(circle at 30% 20%,#f59ac3,transparent 55%),radial-gradient(circle at 80% 80%,#7e5aa8,transparent 60%),linear-gradient(160deg,#d94f8c,#6f4a8e);transition:opacity .5s,transform .5s}
+#verrou.parti{opacity:0;transform:scale(1.06);pointer-events:none}
+.v-date{font:600 15px var(--ui);opacity:.9}
+.v-heure{font:300 74px/1 var(--ui);letter-spacing:-2px;margin-top:2px}
+.notif{margin-top:34px;width:calc(100% - 22px);text-align:left;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#111;border-radius:20px;padding:11px 12px;display:flex;gap:10px;align-items:flex-start;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);opacity:0;transform:translateY(-30px) scale(.96);transition:all .55s cubic-bezier(.2,1.3,.4,1)}
+.notif.vue{opacity:1;transform:none}
+.notif:hover{background:rgba(255,255,255,.9)}
+.n-app{flex:none;width:36px;height:36px;border-radius:9px;background:var(--wa-vert2);display:grid;place-items:center}
+.n-txt{flex:1;min-width:0}
+.n-haut{display:flex;justify-content:space-between;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.3px}
+.n-nom{font-weight:700;font-size:14px;margin-top:2px}
+.n-msg{font-size:13.5px;line-height:1.3;margin-top:1px}
+.n-photo{flex:none;width:32px;height:32px;border-radius:50%;overflow:hidden;align-self:center}
+.v-aide{margin-top:auto;margin-bottom:46px;font-size:13px;opacity:0;transition:opacity .5s .6s;animation:pulse 2.2s infinite}
+.notif.vue ~ .v-aide{opacity:.95}
+@keyframes pulse{50%{transform:translateY(-3px)}}
+.v-barre{position:absolute;bottom:8px;left:50%;width:120px;height:5px;margin-left:-60px;border-radius:5px;background:rgba(255,255,255,.85)}
+
+/* bannière (notification pendant le jeu) */
+#banniere{position:absolute;left:8px;right:8px;top:40px;z-index:18;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:18px;padding:10px 12px;display:flex;gap:10px;align-items:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);transform:translateY(-140%);transition:transform .5s cubic-bezier(.2,1.2,.4,1)}
+#banniere.vue{transform:none}
+#banniere .n-app{background:#fff;border:1px solid #eee}
+
+/* en-tête WhatsApp */
+.wa-tete{flex:none;background:var(--wa-vert);color:#fff;padding:40px 8px 9px 6px;display:flex;align-items:center;gap:6px}
+.wa-tete .retour{width:24px;display:grid;place-items:center;opacity:.95}
+.av{width:36px;height:36px;border-radius:50%;overflow:hidden;flex:none;background:#f8d6e2}
+.av img{width:100%;height:100%;object-fit:cover}
+.qui{flex:1;min-width:0;line-height:1.2}
+.qui b{display:block;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qui span{font-size:12px;opacity:.9;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wa-tete .act{display:flex;gap:13px;padding-right:4px}
+
+/* fil */
+#fil{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 12px 14px;scroll-behavior:smooth;
+  background-color:var(--wa-fond);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23d6cfc4' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 18c3-5 9-5 10 0s-5 8-5 8-6-3-5-8z'/%3E%3Ccircle cx='70' cy='16' r='6'/%3E%3Cpath d='M100 10l3 6 6 1-4 4 1 6-6-3-5 3 1-6-4-4 6-1z'/%3E%3Cpath d='M20 60h16v12H20zM24 60v-4h8v4'/%3E%3Cpath d='M64 54c6 0 10 4 10 9s-4 9-10 9l-6 4 1-6c-3-2-5-4-5-7 0-5 4-9 10-9z'/%3E%3Cpath d='M98 58l10 10M108 58l-10 10'/%3E%3Ccircle cx='18' cy='102' r='3'/%3E%3Cpath d='M44 96c4-6 12-6 14 0M60 108h10M90 100c0-6 10-6 10 0s-10 10-10 10'/%3E%3C/g%3E%3C/svg%3E")}
+#fil::-webkit-scrollbar{width:0}
+.puce{display:table;margin:6px auto 10px;padding:5px 12px;border-radius:8px;background:#fff;font-size:11.5px;color:var(--wa-gris);box-shadow:0 1px .5px rgba(11,20,26,.13);text-transform:uppercase;letter-spacing:.2px}
+.puce.secu{background:#ffeecd;color:#54656f;text-transform:none;text-align:center;max-width:250px;line-height:1.35;font-size:11.5px}
+.ligne{display:flex;margin-top:2px}
+.ligne.debut{margin-top:8px}
+.ligne.out{justify-content:flex-end}
+.bulle{position:relative;max-width:82%;padding:6px 8px 7px 9px;border-radius:8px;font-size:14px;line-height:1.36;box-shadow:0 1px .5px rgba(11,20,26,.13);background:#fff;color:#111b21;word-wrap:break-word;animation:arrive .32s cubic-bezier(.2,1.1,.4,1)}
+.out .bulle{background:var(--wa-out)}
+.debut.in .bulle{border-top-left-radius:0}
+.debut.out .bulle{border-top-right-radius:0}
+.debut.in .bulle:before{content:"";position:absolute;left:-7px;top:0;border-top:0 solid transparent;border-right:8px solid #fff;border-bottom:10px solid transparent}
+.debut.out .bulle:before{content:"";position:absolute;right:-7px;top:0;border-left:8px solid var(--wa-out);border-bottom:10px solid transparent}
+@keyframes arrive{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+.meta{float:right;margin:6px 0 -4px 10px;font-size:10.5px;color:var(--wa-gris);display:inline-flex;gap:3px;align-items:center;line-height:1}
+.coches{width:16px;height:11px;color:#8696a0;transition:color .35s}
+.lu .coches{color:var(--wa-bleu)}
+.reac{position:absolute;bottom:-14px;background:#fff;border-radius:12px;padding:1px 5px;font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.18);animation:reac .45s cubic-bezier(.2,1.6,.4,1)}
+.out .reac{right:10px}
+.ligne.avec-reac{margin-bottom:14px}
+@keyframes reac{from{transform:scale(0)}to{transform:scale(1)}}
+.bulle.image{padding:3px;width:232px}
+.bulle.image button{display:block;width:100%;border-radius:6px;overflow:hidden;position:relative}
+.bulle.image img{width:100%;height:auto}
+.bulle.image .meta{position:absolute;right:9px;bottom:8px;margin:0;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6);float:none}
+.bulle.image .loupe{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.45);color:#fff;font-size:10.5px;border-radius:10px;padding:2px 8px}
+.ecrit .bulle{padding:11px 14px}
+.points{display:flex;gap:4px}
+.points i{width:7px;height:7px;border-radius:50%;background:#9aa5ab;animation:pt 1.2s infinite}
+.points i:nth-child(2){animation-delay:.18s}.points i:nth-child(3){animation-delay:.36s}
+@keyframes pt{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+
+/* zone de réponse */
+.bas{flex:none;background:var(--wa-fond);padding:0 6px 10px}
+#choix{display:flex;flex-direction:column;gap:6px;padding:8px 4px 8px;max-height:0;overflow:hidden;opacity:0;transition:max-height .45s ease,opacity .3s}
+#choix.ouvert{max-height:330px;opacity:1}
+#choix .lib{font:600 10.5px var(--titre);letter-spacing:.6px;text-transform:uppercase;color:var(--ardoise);padding-left:4px}
+.rep{text-align:left;background:#fff;border:1.5px solid #c7e9df;border-radius:14px;padding:8px 11px 8px 34px;font-size:13px;line-height:1.32;color:#111b21;position:relative;transition:transform .15s,border-color .2s,background .2s;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.rep:before{content:attr(data-k);position:absolute;left:9px;top:8px;width:18px;height:18px;border-radius:50%;background:#e7f6f1;color:var(--wa-vert);font:700 11px/18px var(--titre);text-align:center}
+.rep:hover{border-color:var(--wa-vert);background:#f5fcf9;transform:translateX(2px)}
+.rep.barre{opacity:.45;text-decoration:line-through;pointer-events:none}
+.saisie{display:flex;align-items:flex-end;gap:6px}
+.champ{flex:1;min-height:42px;background:#fff;border-radius:22px;display:flex;align-items:center;gap:8px;padding:6px 12px;color:#8696a0;font-size:14.5px;box-shadow:0 1px .5px rgba(11,20,26,.13)}
+#tape{flex:1;color:#111b21;line-height:1.3;max-height:60px;overflow:hidden;font-size:13.5px}
+#tape:empty:before{content:"Message";color:#8696a0}
+.micro{flex:none;width:42px;height:42px;border-radius:50%;background:var(--wa-vert);display:grid;place-items:center;color:#fff}
+
+/* visionneuse */
+#visio{position:absolute;inset:0;z-index:16;background:rgba(10,12,14,.94);display:none;flex-direction:column;align-items:center;justify-content:center;padding:50px 10px 20px;color:#fff}
+#visio.vue{display:flex;animation:arrive .25s}
+#visio img{max-width:100%;max-height:78%;border-radius:4px}
+#visio p{font-size:12.5px;margin-top:12px;opacity:.85;text-align:center}
+#visio button{position:absolute;top:42px;right:14px;background:rgba(255,255,255,.14);border-radius:20px;padding:6px 12px;font-size:12.5px;color:#fff}
+
+/* ---------- Bilan ---------- */
+#bilan{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(60,20,40,.35);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+#bilan.vu{display:flex;animation:arrive .5s}
+.b-carte{position:relative;z-index:2;width:760px;height:520px;background:#fff;border-radius:28px;box-shadow:0 30px 80px rgba(90,20,50,.35);display:flex;overflow:hidden}
+.b-gauche{flex:1;padding:34px 30px 26px 40px;display:flex;flex-direction:column;overflow:auto}
+.b-droite{flex:none;width:250px;background:linear-gradient(170deg,#fde3ee,#f6c3d8);position:relative;display:flex;align-items:flex-end;justify-content:center}
+.b-droite img{height:94%;width:auto;position:relative;z-index:1}
+.b-bulle{margin-top:18px;display:flex;gap:10px;align-items:flex-start}
+.b-bulle img{flex:none;width:34px;height:34px;border-radius:50%}
+.b-bulle p{position:relative;background:var(--wa-out);border-radius:0 12px 12px 12px;padding:8px 12px;font-size:13.5px;line-height:1.4;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.b-bulle p b{display:block;font-size:12px;color:var(--wa-vert)}
+.b-sur{font:600 12px var(--titre);color:var(--ardoise);letter-spacing:.6px;text-transform:uppercase}
+.b-score{display:flex;align-items:center;gap:18px;margin:12px 0 8px}
+.anneau{--p:0;flex:none;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--rose) calc(var(--p)*1%),#f6e6ec 0);display:grid;place-items:center}
+.anneau div{width:76px;height:76px;border-radius:50%;background:#fff;display:grid;place-items:center;font:800 26px var(--titre);color:var(--texte)}
+.anneau small{font-size:14px;color:var(--ardoise);font-weight:600}
+.b-score h3{font:800 24px/1.15 var(--titre)}
+.b-txt{font-size:13.5px;line-height:1.5;color:#4a3a3d}
+.b-liste{list-style:none;margin:14px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.b-liste li{font-size:12.5px;display:flex;gap:7px;align-items:center}
+.b-liste li i{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--rose)}
+.b-liste li.r i{background:#b6c2cc}
+.b-btns{margin-top:auto;padding-top:16px;display:flex;gap:10px}
+.btn{border-radius:30px;padding:11px 20px;font:700 14px var(--titre)}
+.btn.plein{background:var(--rose);color:#fff;box-shadow:0 8px 20px rgba(228,87,155,.35)}
+.btn.plein:hover{background:var(--rose-f)}
+.btn.vide{background:#fff;color:var(--ardoise);border:2px solid #dfe5ea}
+.confetti{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;z-index:1;pointer-events:none;animation:tombe linear forwards}
+@keyframes tombe{to{transform:translateY(720px) rotate(540deg);opacity:.2}}
+
+/* ---------- Mobile : plein écran ---------- */
+body.mobile #scene{left:0;top:0;width:100%;height:100%;transform:none!important;background:var(--wa-fond)}
+body.mobile #scene:before,body.mobile #scene:after,body.mobile .cote{display:none}
+body.mobile .tel{left:0;top:0;width:100%;height:100%;transform:none;border-radius:0;padding:0;box-shadow:none;background:none;animation:none}
+body.mobile .tel:before,body.mobile .barre-etat,body.mobile .v-barre{display:none}
+body.mobile .ecran{border-radius:0}
+body.mobile .wa-tete{padding-top:calc(10px + env(safe-area-inset-top))}
+body.mobile #banniere{top:10px}
+body.mobile #visio button{top:14px}
+body.mobile .bas{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+body.mobile .bulle{font-size:15px}
+body.mobile .rep{font-size:14px}
+body.mobile .bulle.image{width:250px}
+body.mobile .b-carte{width:calc(100% - 24px);height:auto;max-height:calc(100% - 24px);flex-direction:column-reverse}
+body.mobile .b-droite{display:none}
+body.mobile .b-gauche{padding:22px 20px 18px}
+body.mobile .b-liste{grid-template-columns:1fr}
+body.mobile .b-score h3{font-size:20px}
+body.mobile .b-btns{flex-wrap:wrap}
+
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="scene">
+
+  <!-- Colonne gauche -->
+  <section class="cote gauche" aria-label="Consigne">
+    <span class="badge"><i><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></i>Devenir entrepreneur</span>
+    <h1>Anna a besoin<br>de <span>vos conseils</span></h1>
+    <p class="intro">Anna lance son activité de <b>marketing digital</b> pour les petites entreprises. Avant de sauter le pas, elle vous écrit sur WhatsApp. <b>Répondez-lui</b> en choisissant le meilleur conseil : si elle doute, vous pourrez vous reprendre.</p>
+    <div class="prog">
+      <div class="prog-t"><span>Conseils validés</span><strong id="compte">0 / 6</strong></div>
+      <div class="segs" id="segs"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <p class="astuce">Astuce : au clavier, répondez avec <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>. Cliquez sur une image pour l'agrandir.</p>
+  </section>
+
+  <!-- Téléphone -->
+  <div class="tel" id="tel">
+    <div class="ecran" id="ecran">
+      <div class="barre-etat"><span id="heure-etat">08:42</span><span class="ilot"></span>
+        <span class="icones-etat">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.1-1.1A9.6 9.6 0 0 0 7.5.6 9.6 9.6 0 0 0 .7 3.3l1.1 1.1a8.1 8.1 0 0 1 5.7-2.2zm0 3.1c1.3 0 2.5.5 3.5 1.3l1.1-1.1a6.6 6.6 0 0 0-9.2 0L4 6.6c1-.8 2.2-1.3 3.5-1.3zm0 3.1c.5 0 1 .2 1.3.5L7.5 10.2 6.2 8.9c.3-.3.8-.5 1.3-.5z"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+        </span>
+      </div>
+
+      <!-- Écran verrouillé -->
+      <div id="verrou">
+        <div class="v-date" id="v-date">mardi 27 octobre</div>
+        <div class="v-heure">08:42</div>
+        <button type="button" class="notif" id="notif" aria-label="Ouvrir le message d'Anna Lightwood">
+          <span class="n-app"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></span>
+          <span class="n-txt"><span class="n-haut"><span>WhatsApp</span><span>maintenant</span></span>
+            <span class="n-nom" style="display:block">Anna Lightwood</span>
+            <span class="n-msg" style="display:block">Coucou ! Tu as 2 minutes ? J'ai besoin de toi 🙏</span></span>
+          <span class="n-photo"><img src="img/anna-profil.png" alt="" width="32" height="32"></span>
+        </button>
+        <div class="v-aide">Touchez la notification pour répondre</div>
+        <div class="v-barre"></div>
+      </div>
+
+      <!-- Bannière de notification -->
+      <div id="banniere" aria-live="polite">
+        <span class="n-app"><svg width="22" height="22" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="19" rx="4" fill="#fff" stroke="#e53935"/><rect x="2" y="3" width="20" height="6" rx="3" fill="#e53935"/><text x="12" y="19" font-size="10" text-anchor="middle" font-family="Arial" font-weight="700" fill="#222">29</text></svg></span>
+        <span class="n-txt"><span class="n-haut"><span>Calendrier</span><span>maintenant</span></span>
+          <span class="n-nom" style="display:block;font-size:13.5px">Jeudi 10:00 · Rendez-vous boulangerie</span>
+          <span class="n-msg" style="display:block;font-size:12.5px;color:#444">Ajouté par Anna Lightwood</span></span>
+      </div>
+
+      <!-- En-tête de conversation -->
+      <div class="wa-tete">
+        <span class="retour" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></span>
+        <span class="av"><img src="img/anna-profil.png" alt="Photo de profil d'Anna"></span>
+        <span class="qui"><b>Anna Lightwood</b><span id="statut">en ligne</span></span>
+        <span class="act" aria-hidden="true">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="#fff"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="#fff"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+        </span>
+      </div>
+
+      <!-- Fil de messages -->
+      <div id="fil" aria-live="polite" aria-label="Conversation avec Anna">
+        <div class="puce">Aujourd'hui</div>
+        <div class="puce secu">🔒 Les messages sont chiffrés de bout en bout. Personne en dehors de cette discussion ne peut les lire.</div>
+      </div>
+
+      <!-- Réponses et barre de saisie -->
+      <div class="bas">
+        <div id="choix" role="group" aria-label="Vos réponses possibles"></div>
+        <div class="saisie">
+          <div class="champ">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#8696a0" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18.2a8.2 8.2 0 1 1 0-16.4 8.2 8.2 0 0 1 0 16.4zM8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm7 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM12 17.5c2.3 0 4.3-1.4 5-3.5H7c.7 2.1 2.7 3.5 5 3.5z"/></svg>
+            <span id="tape"></span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#8696a0" aria-hidden="true"><path d="M16.5 6.5v10.6a4.5 4.5 0 0 1-9 0V5a3 3 0 0 1 6 0v10.5a1.5 1.5 0 0 1-3 0V6.5H9v9a3 3 0 0 0 6 0V5a4.5 4.5 0 0 0-9 0v12.1a6 6 0 0 0 12 0V6.5z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#8696a0" aria-hidden="true"><path d="M12 9a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm8-3h-3.2L15 4H9L7.2 6H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zm-8 13a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/></svg>
+          </div>
+          <span class="micro" id="micro" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <!-- Visionneuse d'image -->
+      <div id="visio" role="dialog" aria-label="Image envoyée par Anna">
+        <button type="button" id="visio-fermer">Fermer ✕</button>
+        <img id="visio-img" src="" alt="">
+        <p id="visio-txt"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Colonne droite -->
+  <aside class="cote droite" aria-label="Carnet de conseils">
+    <div class="carnet">
+      <h2>📒 Carnet de conseils <small id="carnet-compte">0 / 6</small></h2>
+      <ol id="carnet"></ol>
+      <div class="legende"><span><i>★</i>du premier coup</span><span><i class="r">✓</i>après réflexion</span></div>
+    </div>
+  </aside>
+
+  <!-- Bilan -->
+  <div id="bilan" role="dialog" aria-label="Bilan de la conversation">
+    <div class="b-carte">
+      <div class="b-gauche">
+        <div class="b-sur">Bilan de la conversation</div>
+        <div class="b-score">
+          <div class="anneau" id="anneau"><div><span><span id="b-n">0</span><small>/6</small></span></div></div>
+          <h3 id="b-titre"></h3>
+        </div>
+        <p class="b-txt" id="b-txt"></p>
+        <ul class="b-liste" id="b-liste"></ul>
+        <div class="b-bulle" id="b-bulle"><img src="img/anna-profil.png" alt="" width="34" height="34"><p><b>Anna Lightwood</b>Merci ! Grâce à toi, je me lance pour de vrai. Studio Lightwood est né ! 🚀</p></div>
+        <div class="b-btns">
+          <button type="button" class="btn plein" id="rejouer">Rejouer</button>
+          <button type="button" class="btn vide" id="relire">Relire la conversation</button>
+        </div>
+      </div>
+      <div class="b-droite">
+        <img src="img/anna-entiere.png" alt="Anna, dans son tailleur rose, montre fièrement le chemin" width="483" height="965">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var Q = new URLSearchParams(location.search);
+var VITESSE = Q.has("rapide") ? 0.04 : 1;
+
+/* ---------------- Le scénario ---------------- */
+var INTRO = {
+  anna: ["Coucou ! 👋 Tu as 2 minutes ?",
+         "Ça y est, je crois que je me lance : je veux aider les petites entreprises à avoir une vraie identité et à exister en ligne.",
+         "Mais j'ai la tête qui tourne avec toutes les décisions à prendre 😅 Je peux te poser quelques questions ?"],
+  choix: [{t:"Bien sûr, je t'écoute !", ok:true, reac:"❤️", rep:["Merci, tu me sauves 🙏"]},
+          {t:"Vas-y, raconte-moi tout.", ok:true, reac:"❤️", rep:["Merci, tu me sauves 🙏"]}]
+};
+
+var ETAPES = [
+ { titre:"Le statut juridique", lecon:"Pour démarrer seul, la micro-entreprise : création en ligne, comptabilité allégée, cotisations calculées sur le chiffre d'affaires encaissé.",
+   anna:["Première question : le statut. J'ai vu micro-entreprise, SAS, SARL… 🤯",
+         "Je démarre seule, depuis chez moi, avec peu de frais. Tu me conseilles quoi ?"],
+   choix:[
+    {t:"Une SAS, ça fait plus sérieux auprès des clients.", ok:false,
+     rep:["Hmm… 🤔 Une SAS, c'est des statuts à rédiger, une comptabilité complète et des frais dès la création.",
+          "C'est utile pour s'associer ou lever des fonds. Moi je suis seule et je teste mon activité… Tu maintiens ?"]},
+    {t:"La micro-entreprise : c'est le plus simple pour démarrer seule.", ok:true, reac:"🙏",
+     rep:["Ouf, c'est ce que je pensais aussi !",
+          "Je résume : déclaration en ligne, comptabilité allégée, et mes cotisations sont calculées sur ce que j'encaisse. Pas de chiffre d'affaires, pas de cotisations 👌"]},
+    {t:"Une SARL, pour protéger ton patrimoine personnel.", ok:false,
+     rep:["Mon patrimoine perso est déjà protégé en micro-entreprise : depuis 2022, il est séparé de mon patrimoine pro par défaut.",
+          "Et une SARL, c'est beaucoup de formalités pour démarrer seule 😕 Tu as une autre idée ?"]}
+   ]},
+ { titre:"Le SWOT", lecon:"Forces et faiblesses dépendent de vous (interne). Opportunités et menaces viennent de l'environnement (externe).",
+   anna:["Deuxième chose : hier soir, j'ai fait mon SWOT 📝",
+         {img:"img/anna-swot.jpg", alt:"Brouillon du SWOT d'Anna sur une feuille de cahier : forces, faiblesses, opportunités, menaces", legende:"Le SWOT d'Anna. « Beaucoup de concurrents sur Instagram » est surligné dans les faiblesses."},
+         "Par contre j'hésite : « beaucoup de concurrents sur Instagram », je l'ai mis dans mes faiblesses. C'est bien rangé ?"],
+   choix:[
+    {t:"Oui, c'est bien une faiblesse de ton projet.", ok:false,
+     rep:["Attends… une faiblesse, c'est quelque chose d'interne, qui dépend de moi. Comme mon manque de portfolio.",
+          "La concurrence, je ne la contrôle pas : elle vient de l'extérieur 🤔 Ça te paraît toujours juste ?"]},
+    {t:"Non, c'est une menace : ça vient de l'extérieur, pas de toi.", ok:true, reac:"💡",
+     rep:["Mais oui ! Forces et faiblesses, c'est ce qui dépend de moi. Opportunités et menaces, c'est mon environnement.",
+          "Je déplace la concurrence dans les menaces. Merci !"]}
+   ]},
+ { titre:"Un objectif SMART", lecon:"Spécifique, Mesurable, Atteignable, Réaliste, Temporel. Exemple : signer 3 clients d'ici fin mars.",
+   anna:["Pour me motiver, je me suis fixé un objectif 🚀",
+         "« Devenir LA référence du marketing digital en France. » Ça claque, non ?"],
+   choix:[
+    {t:"Génial, il faut viser très haut !", ok:false,
+     rep:["Ça me fait plaisir… mais comment je saurai si je l'ai atteint ? Et quand ? 😕",
+          "Là, je ne peux ni le mesurer, ni fixer de date. Tu as un autre conseil ?"]},
+    {t:"Pas besoin d'objectif au début, laisse venir.", ok:false,
+     rep:["Sans objectif, j'ai peur de m'éparpiller et de ne jamais savoir si j'avance 😬",
+          "Tu ne crois pas qu'un cap précis m'aiderait ?"]},
+    {t:"Rends-le SMART : par exemple, signer 3 clients d'ici fin mars.", ok:true, reac:"🎯",
+     rep:["Oh oui, beaucoup mieux ! Spécifique, mesurable, atteignable, réaliste et daté ✅",
+          "3 clients d'ici fin mars : je peux suivre ça chaque semaine. Je le note !"]}
+   ]},
+ { titre:"La méthode Pomodoro", lecon:"25 minutes de concentration sur une seule tâche, 5 minutes de pause, une pause plus longue après 4 cycles.",
+   anna:["Autre souci : hier, j'ai travaillé 10 heures d'affilée sans pause.",
+         "À 18 h, j'étais vidée et je relisais trois fois la même phrase 😩 Tu as une technique ?"],
+   choix:[
+    {t:"Réponds à tes messages dès qu'ils arrivent, tu gagneras du temps.", ok:false,
+     rep:["Justement, je crois que c'est ça qui m'épuise : je saute d'une tâche à l'autre toute la journée.",
+          "À chaque interruption, je perds ma concentration 😵 Tu as autre chose ?"]},
+    {t:"Bois un café de plus et tiens bon jusqu'au soir.", ok:false,
+     rep:["Haha, j'en suis déjà à trois ☕ et ça ne règle rien.",
+          "Sans vraies pauses, je m'use. Tu connais une méthode plus durable ?"]},
+    {t:"Essaie la méthode Pomodoro : 25 minutes concentrée, puis 5 minutes de pause.", ok:true, reac:"🍅",
+     rep:["La fameuse tomate ! J'en avais entendu parler.",
+          "Donc 25 minutes sur une seule tâche, 5 minutes de pause, et une pause plus longue après 4 tours. Je teste dès cet après-midi 💪"]}
+   ]},
+ { titre:"Une identité cohérente", lecon:"Mêmes couleurs, même police, même ton sur tous les supports : la marque devient reconnaissable.",
+   anna:["Bonne nouvelle : mon logo est prêt ! Et j'ai préparé mes 3 premiers posts 😍",
+         {img:"img/anna-logo.jpg", alt:"Le logo Studio Lightwood en rose, et trois posts Instagram aux couleurs et polices toutes différentes", legende:"Le logo de Studio Lightwood et les 3 premiers posts d'Anna : jaune, vert, violet, trois polices différentes."},
+         "Pour ne jamais lasser, je change de couleurs et de police à chaque post. Tu valides ?"],
+   choix:[
+    {t:"Garde les couleurs et la police de ton logo partout : on te reconnaîtra au premier coup d'œil.", ok:true, reac:"🎨",
+     rep:["Évidemment ! Je vends des identités fortes, je dois montrer l'exemple 😅",
+          "Je refais mes posts en rose avec ma police, et je me crée une petite charte graphique."]},
+    {t:"Oui, la variété attire l'œil !", ok:false,
+     rep:["C'est ce que je me disais… mais côte à côte, on dirait trois entreprises différentes 😕",
+          "Et moi, je vends justement des identités fortes à mes clients. Tu vois le problème ?"]}
+   ]},
+ { titre:"Fixer son prix", lecon:"Un prix se construit : temps passé, frais, prix du marché. Brader au départ rend la hausse difficile ensuite.",
+   anna:["Dernière question, et pas la moindre…",
+         "La boulangerie de ma rue veut que je gère son Instagram 🥐 Elle me demande un devis !",
+         "J'ai envie de proposer un tout petit prix pour être sûre de signer. Bonne idée ?"],
+   choix:[
+    {t:"Oui, casse les prix pour te faire connaître.", ok:false,
+     rep:["Hmm… si je commence très bas, comment je remonte ensuite ? 😟",
+          "Et si je ne couvre ni mes frais ni mon temps, je travaille à perte. Tu maintiens ?"]},
+    {t:"Offre-lui le premier mois, elle paiera ensuite.", ok:false,
+     rep:["C'est risqué : elle pourrait trouver ça normal et ne jamais vouloir payer le vrai prix 😬",
+          "Et j'ai besoin d'un vrai chiffre d'affaires pour vivre. Une autre idée ?"]},
+    {t:"Calcule ton prix avec ton temps, tes frais et les tarifs du marché.", ok:true, reac:"💪",
+     rep:["Tu as raison : un prix, ça se construit, ça ne se devine pas.",
+          "Je compte mes heures et mes outils, je regarde ce que font les autres, et j'annonce un prix juste 💰"]}
+   ]}
+];
+
+var FIN = ["Bon. Grande respiration… 😮‍💨",
+           "Je viens d'envoyer ma déclaration de micro-entreprise. Studio Lightwood existe officiellement ! 🎉",
+           "Et j'ai rendez-vous jeudi avec la boulangerie, devis en main. Merci d'avoir été là ce matin 💗"];
+
+/* ---------------- Outils ---------------- */
+var $ = function(id){ return document.getElementById(id); };
+var fil = $("fil"), choixEl = $("choix"), statut = $("statut"), tape = $("tape");
+var jeton = 0;               // annule une partie en cours quand on rejoue
+var resultats = [];          // true = du premier coup, false = après réflexion
+var minute = 42;
+function Stop(){}
+function attendre(ms, j){ return new Promise(function(ok, ko){ setTimeout(function(){ j !== jeton ? ko(new Stop()) : ok(); }, ms * VITESSE); }); }
+function heure(){ var h = 8 + Math.floor(minute/60), m = minute % 60; return (h<10?"0":"")+h+":"+(m<10?"0":"")+m; }
+function avance(n){ minute += n; $("heure-etat").textContent = heure(); }
+function enBas(){ fil.scrollTop = fil.scrollHeight; }
+var dernier = null;  // "in" ou "out" : regroupe les bulles comme WhatsApp
+var COCHES = '<svg class="coches" viewBox="0 0 18 11" aria-label="lu"><path d="M1 6l3 3 6.5-8M7.2 8.4l.8.8 6.5-8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function echappe(s){ return s.replace(/[&<>]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]; }); }
+
+function ligne(sens){
+  var l = document.createElement("div");
+  l.className = "ligne " + sens + (dernier !== sens ? " debut" : "");
+  dernier = sens;
+  fil.appendChild(l);
+  return l;
+}
+function bulleTexte(sens, txt){
+  var l = ligne(sens);
+  l.innerHTML = '<div class="bulle">' + echappe(txt) + '<span class="meta">' + heure() + (sens==="out" ? COCHES : "") + '</span></div>';
+  enBas(); return l;
+}
+function bulleImage(o){
+  var l = ligne("in");
+  l.innerHTML = '<div class="bulle image"><button type="button" aria-label="Agrandir l\'image : ' + echappe(o.alt) + '"><img src="' + o.img + '" alt="' + echappe(o.alt) + '" width="1000" height="750"><span class="loupe">Toucher pour agrandir</span><span class="meta">' + heure() + '</span></button></div>';
+  l.querySelector("button").addEventListener("click", function(){ ouvreImage(o); });
+  var im = l.querySelector("img"); im.addEventListener("load", enBas);
+  enBas(); return l;
+}
+function ouvreImage(o){
+  $("visio-img").src = o.img; $("visio-img").alt = o.alt; $("visio-txt").textContent = o.legende;
+  $("visio").classList.add("vue"); $("visio-fermer").focus();
+}
+function fermeImage(){ $("visio").classList.remove("vue"); }
+$("visio-fermer").addEventListener("click", fermeImage);
+$("visio").addEventListener("click", function(e){ if (e.target.id === "visio") fermeImage(); });
+
+/* Anna écrit puis envoie un message */
+async function annaDit(m, j){
+  var long = typeof m === "string" ? m.length : 40;
+  statut.textContent = "en train d'écrire…";
+  var l = ligne("in"); l.classList.add("ecrit");
+  l.innerHTML = '<div class="bulle"><span class="points"><i></i><i></i><i></i></span></div>';
+  enBas();
+  await attendre(Math.min(2600, Math.max(900, 500 + long * 24)), j);
+  l.remove(); dernier = fil.lastElementChild && fil.lastElementChild.classList.contains("ligne") ? (fil.lastElementChild.classList.contains("in") ? "in" : "out") : null;
+  statut.textContent = "en ligne";
+  if (typeof m === "string") bulleTexte("in", m); else bulleImage(m);
+  await attendre(450, j);
+}
+
+/* L'apprenant tape et envoie sa réponse */
+var ICON_MICRO = '<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 15a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v7a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H5a7 7 0 0 0 6 6.9V22h2v-3.1a7 7 0 0 0 6-6.9z"/></svg>';
+var ICON_ENVOI = '<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>';
+$("micro").innerHTML = ICON_MICRO;
+async function jeDis(txt, j){
+  $("micro").innerHTML = ICON_ENVOI;
+  var pas = Math.max(1, Math.ceil(txt.length / 22));
+  for (var i = pas; i < txt.length; i += pas){ tape.textContent = txt.slice(0, i); await attendre(18, j); }
+  tape.textContent = txt; await attendre(220, j);
+  tape.textContent = ""; $("micro").innerHTML = ICON_MICRO;
+  var l = bulleTexte("out", txt);
+  await attendre(700, j);
+  l.classList.add("lu");                 // coches bleues : Anna a lu
+  return l;
+}
+async function reaction(l, emoji, j){
+  await attendre(250, j);
+  var r = document.createElement("span"); r.className = "reac"; r.textContent = emoji;
+  l.querySelector(".bulle").appendChild(r); l.classList.add("avec-reac"); enBas();
+  await attendre(500, j);
+}
+
+/* Affiche les boutons et attend un clic (ou une touche 1, 2, 3) */
+var resoudre = null;
+function proposer(liste, exclus){
+  choixEl.innerHTML = '<span class="lib">Votre réponse</span>';
+  var k = 0;
+  liste.forEach(function(c, i){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "rep";
+    if (exclus.indexOf(i) >= 0){ b.classList.add("barre"); b.disabled = true; b.setAttribute("aria-hidden","true"); }
+    else { k++; b.dataset.k = k; b.dataset.i = i; }
+    b.textContent = c.t;
+    b.addEventListener("click", function(){ if (resoudre){ var f = resoudre; resoudre = null; f(i); } });
+    choixEl.appendChild(b);
+  });
+  choixEl.classList.add("ouvert");
+  setTimeout(enBas, 460);
+  return new Promise(function(ok){ resoudre = ok; });
+}
+function fermerChoix(){ choixEl.classList.remove("ouvert"); }
+document.addEventListener("keydown", function(e){
+  if (e.key === "Escape") fermeImage();
+  if (!resoudre || !/^[1-3]$/.test(e.key)) return;
+  var b = choixEl.querySelector('.rep[data-k="' + e.key + '"]');
+  if (b) b.click();
+});
+
+/* Carnet et progression */
+function initCarnet(){
+  var ol = $("carnet"); ol.innerHTML = "";
+  ETAPES.forEach(function(e, i){
+    var li = document.createElement("li");
+    li.innerHTML = '<span class="n">' + (i+1) + '</span><span class="c"><b>Conseil à découvrir</b>Répondez à Anna pour le débloquer.</span>';
+    ol.appendChild(li);
+  });
+  [].forEach.call($("segs").children, function(s){ s.className = ""; });
+  $("compte").textContent = "0 / 6"; $("carnet-compte").textContent = "0 / 6";
+}
+function noteCarnet(i, premierCoup){
+  var li = $("carnet").children[i];
+  li.className = "on" + (premierCoup ? "" : " repris");
+  li.innerHTML = '<span class="n">' + (premierCoup ? "★" : "✓") + '</span><span class="c"><b>' + ETAPES[i].titre +
+    '</b>' + ETAPES[i].lecon + '</span>';
+  $("segs").children[i].className = premierCoup ? "ok" : "repris";
+  var n = resultats.length;
+  $("compte").textContent = n + " / 6"; $("carnet-compte").textContent = n + " / 6";
+}
+
+/* Une étape : questions d'Anna, choix, réactions, reprise possible */
+async function etape(e, j, idx){
+  for (var m of e.anna) await annaDit(m, j);
+  var exclus = [], premier = true;
+  while (true){
+    var i = await proposer(e.choix, exclus);
+    fermerChoix();
+    var c = e.choix[i];
+    var l = await jeDis(c.t, j);
+    if (c.ok){
+      if (c.reac) await reaction(l, c.reac, j);
+      for (var r of c.rep) await annaDit(r, j);
+      if (idx !== undefined){ resultats.push(premier); noteCarnet(idx, premier); }
+      return;
+    }
+    premier = false; exclus.push(i);
+    for (var r2 of c.rep) await annaDit(r2, j);
+  }
+}
+
+/* ---------------- Partie ---------------- */
+async function partie(){
+  var j = ++jeton;
+  try{
+    await attendre(300, j);
+    await annaDit(INTRO.anna[0], j);
+    await etape({anna: INTRO.anna.slice(1), choix: INTRO.choix}, j);
+    for (var i = 0; i < ETAPES.length; i++){
+      avance(i === 0 ? 1 : 2);
+      await attendre(500, j);
+      await etape(ETAPES[i], j, i);
+    }
+    avance(3);
+    await attendre(600, j);
+    for (var m of FIN) await annaDit(m, j);
+    statut.textContent = "Fondatrice · Studio Lightwood ✨";
+    await attendre(500, j);
+    $("banniere").classList.add("vue");
+    await attendre(3200, j);
+    $("banniere").classList.remove("vue");
+    await attendre(500, j);
+    montreBilan();
+  } catch(err){ if (!(err instanceof Stop)) throw err; }
+}
+
+function montreBilan(){
+  var n = resultats.filter(Boolean).length;
+  $("b-n").textContent = n;
+  $("anneau").style.setProperty("--p", Math.round(n / 6 * 100));
+  var titre, txt;
+  if (n === 6){ titre = "Conseil parfait : 6 sur 6 du premier coup !"; txt = "Vous avez guidé Anna sans aucune hésitation. Statut, SWOT, objectif, temps, identité, prix : elle part avec des bases solides."; }
+  else if (n >= 4){ titre = "Très bon binôme !"; txt = "Vous avez donné " + n + " bons conseils sur 6 du premier coup. Pour les autres, les doutes d'Anna vous ont permis de vous reprendre : c'est exactement comme ça qu'on apprend."; }
+  else { titre = "Vous avez su vous reprendre"; txt = "Vous avez donné " + n + " bon" + (n>1?"s":"") + " conseil" + (n>1?"s":"") + " sur 6 du premier coup, et vous avez corrigé tous les autres. Rejouez pour tout trouver du premier coup !"; }
+  $("b-titre").textContent = titre; $("b-txt").textContent = txt;
+  $("b-liste").innerHTML = ETAPES.map(function(e, i){
+    var ok = resultats[i];
+    return '<li class="' + (ok ? "" : "r") + '"><i>' + (ok ? "★" : "↺") + '</i>' + e.titre + '</li>';
+  }).join("");
+  $("bilan").classList.add("vu");
+  confettis();
+  setTimeout(function(){ $("rejouer").focus(); }, 100);
+}
+function confettis(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var cols = ["#e4579b","#f8b4d0","#64798A","#25d366","#ffd166","#c2185b"];
+  for (var i = 0; i < 46; i++){
+    var c = document.createElement("i"); c.className = "confetti";
+    c.style.left = Math.random()*100 + "%"; c.style.background = cols[i % cols.length];
+    c.style.animationDuration = (2.2 + Math.random()*1.8) + "s"; c.style.animationDelay = Math.random()*.6 + "s";
+    $("bilan").appendChild(c);
+    setTimeout(function(x){ return function(){ x.remove(); }; }(c), 4800);
+  }
+}
+
+function demarrer(){
+  var v = $("verrou"); if (v.classList.contains("parti")) return;
+  v.classList.add("parti");
+  partie();
+}
+function reinitialiser(){
+  jeton++; resoudre = null; resultats = []; minute = 42; avance(0); dernier = null;
+  fil.innerHTML = '<div class="puce">Aujourd\'hui</div><div class="puce secu">🔒 Les messages sont chiffrés de bout en bout. Personne en dehors de cette discussion ne peut les lire.</div>';
+  choixEl.innerHTML = ""; fermerChoix(); tape.textContent = ""; statut.textContent = "en ligne";
+  $("bilan").classList.remove("vu"); $("banniere").classList.remove("vue"); fermeImage();
+  initCarnet();
+}
+
+$("notif").addEventListener("click", demarrer);
+$("rejouer").addEventListener("click", function(){ reinitialiser(); partie(); });
+$("relire").addEventListener("click", function(){ $("bilan").classList.remove("vu"); });
+
+/* Date du jour sur l'écran verrouillé */
+try { $("v-date").textContent = new Date().toLocaleDateString("fr-FR", {weekday:"long", day:"numeric", month:"long"}); } catch(e){}
+
+/* Mise à l'échelle : scène 16:9 sur ordinateur, plein écran sur téléphone */
+function ajuste(){
+  var w = document.documentElement.clientWidth || window.innerWidth, h = document.documentElement.clientHeight || window.innerHeight;
+  var mobile = matchMedia("(max-width:719px) and (orientation:portrait)").matches || (w < 720 && h > w * 1.05);
+  document.body.classList.toggle("mobile", mobile);
+  $("scene").style.transform = mobile ? "" : "translate(-50%,-50%) scale(" + Math.min(w / 1200, h / 675) + ")";
+}
+window.addEventListener("resize", ajuste); window.addEventListener("load", ajuste); ajuste();
+
+initCarnet();
+/* La notification arrive (le téléphone vibre, sans aucun son) */
+setTimeout(function(){
+  $("notif").classList.add("vue"); $("tel").classList.add("vibre");
+  setTimeout(function(){ $("tel").classList.remove("vibre"); }, 1100);
+}, 700 * VITESSE);
+
+/* Accès pour les tests automatiques */
+window.__anna = { etapes: ETAPES, resultats: function(){ return resultats.slice(); }, attend: function(){ return !!resoudre; } };
+})();
+</script>
+</body>
+</html>

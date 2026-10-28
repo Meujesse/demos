@@ -107,6 +107,7 @@ if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').m
     box-shadow:0 3px 10px rgba(27,36,48,.28), 0 0 0 2px rgba(123,131,138,.55) inset;
     display:flex;align-items:center;justify-content:center}
   #carte .badge img{width:58%;display:block}
+  #carte .badge.vu{background:rgba(0,153,68,.95);box-shadow:0 3px 10px rgba(27,36,48,.26), 0 0 0 2px rgba(255,255,255,.75) inset}
   #carte .halo{position:absolute;width:6.2%;aspect-ratio:1;transform:translate(-50%,-50%);
     border-radius:50%;border:2.5px solid rgba(0,153,68,.8);
     box-shadow:0 0 0 5px rgba(255,255,255,.5)}
@@ -126,6 +127,9 @@ var LIEUX = {
   cuisine:[53.1, 24.7], agora:[27.3, 29.9], serre:[75.6, 35.9],
   reu:[27.3, 66.2],     jardin:[68.9, 71.4]
 };
+var COCHE = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">' +
+  '<path d="M9 25l10 10L39 14" fill="none" stroke="#ffffff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
 var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 56">' +
   '<path d="M12 24v-8a12 12 0 0 1 24 0v8" fill="none" stroke="#3f4750" stroke-width="7" stroke-linecap="round"/>' +
@@ -149,11 +153,11 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
       });
       return;
     }
-    if (vus.indexOf(k) >= 0) return;   // deja visite : ni cadenas ni halo
+    var vu = vus.indexOf(k) >= 0;
     var b = document.createElement('div');
-    b.className = 'badge';
+    b.className = 'badge' + (vu ? ' vu' : '');
     b.style.left = p[0] + '%'; b.style.top = p[1] + '%';
-    b.innerHTML = '<img src="' + VERROU + '" alt="">';
+    b.innerHTML = '<img src="' + (vu ? COCHE : VERROU) + '" alt="">';
     hote.appendChild(b);
   });
 })();

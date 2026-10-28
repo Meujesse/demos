@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Clignement</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:transparent}
+  #ferme{position:fixed;inset:0;width:100%;height:100%;object-fit:fill;opacity:0;
+         will-change:opacity;pointer-events:none}
+</style>
+</head>
+<body>
+<img id="ferme" alt="">
+<script>
+// Le clignement n'est pas une rustine coll&eacute;e sur les yeux : c'est la MEME image,
+// rendue avec les paupi&egrave;res baiss&eacute;es, qu'on fait appara&icirc;tre une fraction de seconde
+// &agrave; travers un masque doux pos&eacute; sur chaque visage. Rien d'autre ne bouge.
+var q = new URLSearchParams(location.search);
+var img = document.getElementById('ferme');
+img.src = q.get('img') || '';
+
+// masques : cx,cy,rx,ry en % du canevas, s&eacute;par&eacute;s par des points-virgules
+var zones = (q.get('m') || '').split(';').filter(Boolean).map(function (z) {
+  return z.split(',').map(Number);
+});
+if (zones.length) {
+  var grads = zones.map(function (z) {
+    return 'radial-gradient(ellipse ' + z[2] + '% ' + z[3] + '% at ' + z[0] + '% ' + z[1] + '%, '
+         + '#000 0%, #000 52%, rgba(0,0,0,.55) 74%, transparent 100%)';
+  }).join(', ');
+  img.style.webkitMaskImage = grads;
+  img.style.maskImage = grads;
+  img.style.webkitMaskComposite = 'source-over';
+  img.style.maskComposite = 'add';
+  img.style.webkitMaskRepeat = 'no-repeat';
+  img.style.maskRepeat = 'no-repeat';
+}
+
+function alea(a, b) { return a + Math.random() * (b - a); }
+
+function cligne() {
+  // fermeture rapide, maintien court, r&eacute;ouverture plus lente : c'est ce rapport
+  // qui fait qu'un clignement a l'air vivant et pas m&eacute;canique.
+  img.animate([
+    { opacity: 0, offset: 0,   easing: 'cubic-bezier(.45,0,.85,1)' },
+    { opacity: 1, offset: .22, easing: 'linear' },
+    { opacity: 1, offset: .46, easing: 'cubic-bezier(.1,0,.35,1)' },
+    { opacity: 0, offset: 1 }
+  ], { duration: 210 + Math.random() * 60 });
+}
+
+function boucle() {
+  cligne();
+  // une fois sur cinq, un double clignement
+  if (Math.random() < 0.2) setTimeout(cligne, alea(260, 340));
+  setTimeout(boucle, alea(2400, 6400));
+}
+
+if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // on ne clignote pas pour qui a demand&eacute; moins d'animation
+} else {
+  img.addEventListener('load', function () { setTimeout(boucle, alea(900, 2200)); });
+}
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) img.getAnimations().forEach(function (a) { a.cancel(); });
+});
+</script>
+</body>
+</html>

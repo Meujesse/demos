@@ -102,7 +102,11 @@ if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').m
 
 <style>
   #carte{position:fixed;inset:0;pointer-events:none;z-index:5}
-  #carte .verrou{position:absolute;width:3.17%;transform:translate(-50%,-50%)}
+  #carte .badge{position:absolute;width:4.5%;aspect-ratio:1;transform:translate(-50%,-50%);
+    border-radius:50%;background:rgba(255,255,255,.94);
+    box-shadow:0 3px 10px rgba(27,36,48,.28), 0 0 0 2px rgba(123,131,138,.55) inset;
+    display:flex;align-items:center;justify-content:center}
+  #carte .badge img{width:58%;display:block}
   #carte .halo{position:absolute;width:6.2%;aspect-ratio:1;transform:translate(-50%,-50%);
     border-radius:50%;border:2.5px solid rgba(0,153,68,.8);
     box-shadow:0 0 0 5px rgba(255,255,255,.5)}
@@ -124,10 +128,10 @@ var LIEUX = {
 };
 var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 56">' +
-  '<path d="M12 24v-8a12 12 0 0 1 24 0v8" fill="none" stroke="#5d666e" stroke-width="7" stroke-linecap="round"/>' +
-  '<rect x="4" y="23" width="40" height="31" rx="6" fill="#7b838a" stroke="#5d666e" stroke-width="2.5"/>' +
-  '<circle cx="24" cy="36" r="4.4" fill="#fbfbfb"/>' +
-  '<rect x="22.1" y="38" width="3.8" height="9" rx="1.9" fill="#fbfbfb"/></svg>');
+  '<path d="M12 24v-8a12 12 0 0 1 24 0v8" fill="none" stroke="#3f4750" stroke-width="7" stroke-linecap="round"/>' +
+  '<rect x="4" y="23" width="40" height="31" rx="6" fill="#4b545d"/>' +
+  '<circle cx="24" cy="36" r="4.6" fill="#ffffff"/>' +
+  '<rect x="22" y="38" width="4" height="9.5" rx="2" fill="#ffffff"/></svg>');
 
 (function(){
   var q = new URLSearchParams(location.search);
@@ -146,11 +150,11 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
       return;
     }
     if (vus.indexOf(k) >= 0) return;   // deja visite : ni cadenas ni halo
-    var v = document.createElement('img');
-    v.className = 'verrou'; v.src = VERROU; v.alt = '';
-    v.style.left = (p[0] + 3.4) + '%';
-    v.style.top  = (p[1] - 4.6) + '%';
-    hote.appendChild(v);
+    var b = document.createElement('div');
+    b.className = 'badge';
+    b.style.left = p[0] + '%'; b.style.top = p[1] + '%';
+    b.innerHTML = '<img src="' + VERROU + '" alt="">';
+    hote.appendChild(b);
   });
 })();
 </script>

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carnet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papier:#fbf8f0;
+    --encre:#1b2430;
+    --ligne:#cfdbe6;
+    --marge:#d98a7f;
+    --vert:#009944;
+    --pas:38px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:#e9e4da}
+  body{
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Patrick Hand',"Bradley Hand","Segoe Print",cursive;
+    color:var(--encre);
+  }
+  /* le bureau */
+  .bureau{position:fixed;inset:0;background:
+      radial-gradient(120% 90% at 50% 0%, #f3efe6 0%, #e3ddd1 55%, #d8d1c4 100%);}
+  /* le carnet */
+  .carnet{
+    position:relative;width:1000px;height:502px;
+    background:var(--papier);
+    border-radius:4px 10px 10px 4px;
+    box-shadow:0 18px 44px rgba(27,36,48,.22), 0 2px 0 #efe9dc inset;
+    display:flex;overflow:hidden;
+  }
+  /* la reliure */
+  .reliure{width:86px;flex:0 0 86px;position:relative;
+    background:linear-gradient(90deg,#efe7d7 0%, #f7f2e8 60%, var(--papier) 100%);
+    border-right:1px solid #e6dfd0;}
+  .reliure i{position:absolute;left:30px;width:26px;height:26px;border-radius:50%;
+    background:#e9e4da;box-shadow:inset 0 2px 3px rgba(0,0,0,.25), 0 1px 0 #fff;}
+  /* la zone écrite */
+  .page{position:relative;flex:1;padding:34px 54px 28px 44px;}
+  .page::before{  /* les lignes du cahier */
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(to bottom,
+      transparent 0, transparent calc(var(--pas) - 1px),
+      var(--ligne) calc(var(--pas) - 1px), var(--ligne) var(--pas));
+    background-position:0 30px;
+    opacity:.85;pointer-events:none;
+  }
+  .page::after{ /* le filet de marge */
+    content:"";position:absolute;top:0;bottom:0;left:16px;width:2px;background:var(--marge);opacity:.5;
+  }
+  .contenu{position:relative;z-index:1}
+  h1{
+    font-weight:400;font-size:46px;line-height:var(--pas);
+    margin:0 0 2px;letter-spacing:.3px;
+  }
+  .souligne{display:block;width:var(--w,340px);height:9px;margin:2px 0 8px;overflow:visible}
+  p{font-size:27px;line-height:var(--pas);margin:0}
+  p + p{margin-top:0}
+  .note{color:#4b5a68}
+  .vert{color:var(--vert)}
+  .schema{position:relative;z-index:1;margin-top:6px}
+  .pied{position:absolute;right:30px;bottom:12px;font-size:19px;color:#8d9aa6;z-index:1}
+  .onglet{
+    position:absolute;right:-1px;top:48px;background:var(--vert);color:#fff;
+    font-size:19px;letter-spacing:.6px;padding:7px 18px 8px;border-radius:6px 0 0 6px;z-index:2;
+  }
+</style>
+</head>
+<body>
+<div class="bureau"></div>
+<div class="carnet">
+  <div class="reliure" id="reliure"></div>
+  <div class="page">
+    <div class="onglet" id="onglet">NOTE 1 / 5</div>
+    <div class="contenu" id="contenu"></div>
+    <div class="pied">Mon carnet · séquence 1</div>
+  </div>
+</div>
+
+<script>
+// un trait de soulignement tracé « à la main »
+function souligne(largeur){
+  const w = largeur, h = 9;
+  let d = 'M2,6';
+  const n = 6;
+  for (let i = 1; i <= n; i++){
+    const x = 2 + (w - 6) * i / n;
+    const y = 6 + (i % 2 ? -1.6 : 1.4) * (0.6 + Math.random() * 0.7);
+    d += ' Q' + (x - (w - 6) / (2 * n)) + ',' + (y + (i % 2 ? -2 : 2)) + ' ' + x + ',' + y;
+  }
+  return '<svg class="souligne" style="--w:' + w + 'px" viewBox="0 0 ' + w + ' ' + h + '">' +
+    '<path d="' + d + '" fill="none" stroke="#009944" stroke-width="3.2" stroke-linecap="round" opacity=".9"/></svg>';
+}
+
+// le schéma « même chose pour tous / ce qu'il faut à chacun »
+function schemaEquite(){
+  const W = 760, H = 196, base = 150;
+  const corps = [85, 68, 51];          // trois tailles, écart d'une boîte
+  const BH = 17, BW = 46, PAS = 66;
+  const groupe = function (ox, boites, titre, ligne){
+    let g = '<text x="' + (ox + 110) + '" y="22" text-anchor="middle" font-family="Patrick Hand" font-size="22" fill="#4b5a68">' + titre + '</text>';
+    let hauts = [];
+    for (let i = 0; i < 3; i++){
+      const x = ox + 24 + i * PAS, nb = boites[i];
+      for (let b = 0; b < nb; b++){
+        g += '<rect x="' + x + '" y="' + (base - (b + 1) * BH) + '" width="' + BW + '" height="' + (BH - 2) + '" rx="2" fill="#cfeeda" stroke="#009944" stroke-width="1.8"/>';
+      }
+      const sol = base - nb * BH;          // les pieds
+      const tete = sol - corps[i];         // le sommet du crâne
+      hauts.push(tete);
+      const cx = x + BW / 2;
+      g += '<circle cx="' + cx + '" cy="' + (tete + 10) + '" r="10" fill="#fbf8f0" stroke="#1b2430" stroke-width="2.2"/>';
+      g += '<line x1="' + cx + '" y1="' + (tete + 20) + '" x2="' + cx + '" y2="' + (sol - 14) + '" stroke="#1b2430" stroke-width="2.2"/>';
+      g += '<line x1="' + (cx - 11) + '" y1="' + (tete + 29) + '" x2="' + (cx + 11) + '" y2="' + (tete + 29) + '" stroke="#1b2430" stroke-width="2.2"/>';
+      g += '<line x1="' + cx + '" y1="' + (sol - 14) + '" x2="' + (cx - 8) + '" y2="' + sol + '" stroke="#1b2430" stroke-width="2.2"/>';
+      g += '<line x1="' + cx + '" y1="' + (sol - 14) + '" x2="' + (cx + 8) + '" y2="' + sol + '" stroke="#1b2430" stroke-width="2.2"/>';
+    }
+    if (ligne){
+      const y = Math.min.apply(null, hauts) - 6;
+      g += '<line x1="' + (ox + 8) + '" y1="' + y + '" x2="' + (ox + 236) + '" y2="' + y + '" stroke="#009944" stroke-dasharray="7 6" stroke-width="2.2"/>';
+      g += '<text x="' + (ox + 244) + '" y="' + (y + 7) + '" font-family="Patrick Hand" font-size="20" fill="#009944">même hauteur de vue</text>';
+    } else {
+      hauts.forEach(function (y, i){
+        const x = ox + 24 + i * PAS + BW / 2;
+        g += '<line x1="' + (x - 26) + '" y1="' + (y - 6) + '" x2="' + (x + 26) + '" y2="' + (y - 6) + '" stroke="#b5453a" stroke-dasharray="5 5" stroke-width="1.8" opacity=".75"/>';
+      });
+    }
+    return g;
+  };
+  let s = '<svg class="schema" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">';
+  s += '<line x1="6" y1="' + base + '" x2="' + (W - 6) + '" y2="' + base + '" stroke="#1b2430" stroke-width="2" opacity=".4"/>';
+  s += groupe(6, [1, 1, 1], 'la même chose pour tous', false);
+  s += groupe(300, [0, 1, 2], 'ce dont chacun a besoin', true);
+  s += '</svg>';
+  return s;
+}
+
+const NOTES = {
+  'diversite': { n:1, titre:'Diversité', w:250, corps:[
+    "Ce qui est déjà là : la variété des parcours, des",
+    "origines, des âges, des situations de santé, des",
+    "façons de travailler.",
+    "<span class='vert'>On ne la décrète pas, on la reconnaît.</span>",
+    "",
+    "<span class='note'>Baromètre Nhood : les deux priorités citées par</span>",
+    "<span class='note'>les Nhooders sont l'égalité femmes-hommes (61 %)</span>",
+    "<span class='note'>et la santé et le handicap (38 %).</span>"
+  ]},
+  'vivre-ensemble': { n:2, titre:'Vivre-ensemble', w:390, corps:[
+    "Engagement n° 1 de Nhood : une culture fondée sur",
+    "l'éthique, le courage, l'exemplarité, le respect",
+    "et la confiance.",
+    "<span class='vert'>Marque employeur, communication, management,</span>",
+    "<span class='vert'>gouvernance.</span>",
+    "",
+    "<span class='note'>Ça se joue dans les gestes ordinaires : qui on</span>",
+    "<span class='note'>salue, qui on écoute, qui on coupe.</span>"
+  ]},
+  'egalite-des-chances': { n:3, titre:'Égalité des chances', w:490, corps:[
+    "Engagement n° 3 : accueillir la diversité des",
+    "individualités et des parcours pour que l'accès à",
+    "l'emploi et le développement professionnel ne",
+    "dépendent pas du point de départ.",
+    "<span class='vert'>Origines sociales, parcours académiques, handicap.</span>",
+    "",
+    "<span class='note'>À ne pas confondre avec l'égalité professionnelle</span>",
+    "<span class='note'>(engagement n° 2), qui vise l'égalité des genres.</span>"
+  ]},
+  'equite': { n:4, titre:'Équité', w:200, corps:[
+    "Donner à chacun ce dont il a besoin pour être à",
+    "égalité, plutôt que la même chose à tout le monde.",
+    "<span class='vert'>L'égalité distribue pareil. L'équité ajuste.</span>"
+  ], schema:true },
+  'inclusion': { n:5, titre:'Inclusion', w:250, corps:[
+    "Engagement n° 4 : garantir l'inclusion de toutes et",
+    "tous grâce à un accompagnement adapté aux réalités",
+    "de chaque étape de vie.",
+    "<span class='vert'>Intégration, QVT, parentalité, début et fin de carrière.</span>",
+    "",
+    "<span class='note'>Objectif Nhood à 2030 : 85 % de score d'inclusion</span>",
+    "<span class='note'>au baromètre, et au moins un référent DE&amp;I par</span>",
+    "<span class='note'>Business Unit.</span>"
+  ]}
+};
+
+const q = new URLSearchParams(location.search);
+const cle = q.get('n') || 'equite';
+const N = NOTES[cle] || NOTES['equite'];
+
+document.getElementById('onglet').textContent = 'NOTE ' + N.n + ' / 5';
+let html = '<h1>' + N.titre + '</h1>' + souligne(N.w);
+html += N.corps.map(function (l) { return '<p>' + (l === '' ? '&nbsp;' : l) + '</p>'; }).join('');
+if (N.schema) html += schemaEquite();
+document.getElementById('contenu').innerHTML = html;
+
+// les anneaux de la reliure
+const rel = document.getElementById('reliure');
+for (let y = 36; y < 480; y += 58){
+  const i = document.createElement('i');
+  i.style.top = y + 'px';
+  rel.appendChild(i);
+}
+</script>
+</body>
+</html>

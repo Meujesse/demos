@@ -62,6 +62,7 @@
   .schema{position:relative;z-index:1;display:block}
   .pied{position:absolute;right:30px;bottom:12px;font-size:19px;color:#8d9aa6;z-index:1}
   /* mode papier (?papier=1) : le texte est écrit dans Genially, la page ne garde que le support */
+  body.papier .contenu{position:static}   /* le schéma se cale alors sur la page, pas sur le bloc de texte vide */
   body.papier .schema{position:absolute;left:44px;bottom:36px}
   body.papier .page::before{opacity:.95}
   .onglet{

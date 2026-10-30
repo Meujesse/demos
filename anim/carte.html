@@ -113,12 +113,20 @@ if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').m
     box-shadow:0 0 0 5px rgba(255,255,255,.5)}
   #carte .onde{position:absolute;width:6.2%;aspect-ratio:1;border-radius:50%;
     transform:translate(-50%,-50%);
-    border:2.5px solid rgba(0,153,68,.65);animation:pulse 2.4s ease-out infinite}
-  #carte .onde.b{animation-delay:1.2s}
+    border:2.5px solid rgba(0,153,68,.65)}
   @keyframes pulse{0%{transform:translate(-50%,-50%) scale(1);opacity:.85}
                    75%{transform:translate(-50%,-50%) scale(1.75);opacity:0}
                    100%{transform:translate(-50%,-50%) scale(1.75);opacity:0}}
-  @media (prefers-reduced-motion: reduce){ #carte .onde{animation:none;opacity:0} }
+  /* apparition : chaque repère se pose sur la carte, l'un après l'autre */
+  #carte .badge, #carte .halo{opacity:0;animation:pose .6s cubic-bezier(.2,.9,.3,1.25) forwards;animation-delay:var(--d,.8s)}
+  #carte .onde{opacity:0;animation:pulse 2.4s ease-out infinite;animation-delay:var(--d,1.2s)}
+  #carte .onde.b{animation-delay:calc(var(--d,1.2s) + 1.2s)}
+  @keyframes pose{0%{opacity:0;transform:translate(-50%,-50%) scale(.25)}
+                  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+  @media (prefers-reduced-motion: reduce){
+    #carte .onde{animation:none;opacity:0}
+    #carte .badge, #carte .halo{animation:none;opacity:1}
+  }
 </style>
 <div id="carte"></div>
 <script>
@@ -142,13 +150,19 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   var ouvert = q.get('ouvre') || 'agora';
   var vus = (q.get('vus') || '').split(',').filter(Boolean);
   var hote = document.getElementById('carte');
-  Object.keys(LIEUX).forEach(function(k){
+  // ordre d'apparition : d'abord les cadenas (de gauche à droite), le lieu ouvert en dernier
+  var ordre = Object.keys(LIEUX).filter(function(k){ return k !== ouvert; })
+    .sort(function(a, b){ return LIEUX[a][0] - LIEUX[b][0]; });
+  ordre.push(ouvert);
+  ordre.forEach(function(k, idx){
     var p = LIEUX[k];
+    var delai = (0.7 + idx * 0.14).toFixed(2) + 's';
     if (k === ouvert){
       ['halo','onde','onde b'].forEach(function(cls){
         var h = document.createElement('div');
         h.className = cls;
         h.style.left = p[0] + '%'; h.style.top = p[1] + '%';
+        h.style.setProperty('--d', cls === 'halo' ? delai : (0.7 + idx * 0.14 + 0.5).toFixed(2) + 's');
         hote.appendChild(h);
       });
       return;
@@ -156,6 +170,7 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
     var vu = vus.indexOf(k) >= 0;
     var b = document.createElement('div');
     b.className = 'badge' + (vu ? ' vu' : '');
+    b.style.setProperty('--d', delai);
     b.style.left = p[0] + '%'; b.style.top = p[1] + '%';
     b.innerHTML = '<img src="' + (vu ? COCHE : VERROU) + '" alt="">';
     hote.appendChild(b);

@@ -14,7 +14,8 @@
     --ligne:#cfdbe6;
     --marge:#d98a7f;
     --vert:#009944;
-    --pas:38px;
+    --pas:38px;      /* l'interligne du cahier : tout ce qui est écrit s'y cale */
+    --decal:30px;    /* recalé au chargement sur la ligne de base réelle du texte */
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:100%;overflow:hidden;background:#e9e4da}
@@ -23,10 +24,8 @@
     font-family:'Patrick Hand',"Bradley Hand","Segoe Print",cursive;
     color:var(--encre);
   }
-  /* le bureau */
   .bureau{position:fixed;inset:0;background:
       radial-gradient(120% 90% at 50% 0%, #f3efe6 0%, #e3ddd1 55%, #d8d1c4 100%);}
-  /* le carnet */
   .carnet{
     position:relative;width:1000px;height:502px;
     background:var(--papier);
@@ -34,36 +33,33 @@
     box-shadow:0 18px 44px rgba(27,36,48,.22), 0 2px 0 #efe9dc inset;
     display:flex;overflow:hidden;
   }
-  /* la reliure */
   .reliure{width:86px;flex:0 0 86px;position:relative;
     background:linear-gradient(90deg,#efe7d7 0%, #f7f2e8 60%, var(--papier) 100%);
     border-right:1px solid #e6dfd0;}
   .reliure i{position:absolute;left:30px;width:26px;height:26px;border-radius:50%;
     background:#e9e4da;box-shadow:inset 0 2px 3px rgba(0,0,0,.25), 0 1px 0 #fff;}
-  /* la zone écrite */
   .page{position:relative;flex:1;padding:34px 54px 28px 44px;}
-  .page::before{  /* les lignes du cahier */
+  .page::before{  /* les lignes du cahier : une ligne au début de chaque période */
     content:"";position:absolute;inset:0;
     background:repeating-linear-gradient(to bottom,
-      transparent 0, transparent calc(var(--pas) - 1px),
-      var(--ligne) calc(var(--pas) - 1px), var(--ligne) var(--pas));
-    background-position:0 30px;
+      var(--ligne) 0, var(--ligne) 1px,
+      transparent 1px, transparent var(--pas));
+    background-position:0 var(--decal);
     opacity:.85;pointer-events:none;
   }
-  .page::after{ /* le filet de marge */
+  .page::after{
     content:"";position:absolute;top:0;bottom:0;left:16px;width:2px;background:var(--marge);opacity:.5;
   }
   .contenu{position:relative;z-index:1}
-  h1{
-    font-weight:400;font-size:46px;line-height:var(--pas);
-    margin:0 0 2px;letter-spacing:.3px;
+  h1{  /* le titre occupe deux lignes du cahier : sa ligne de base tombe sur la deuxième */
+    position:relative;font-weight:400;font-size:46px;line-height:calc(var(--pas) * 2);
+    margin:0;letter-spacing:.3px;white-space:nowrap;
   }
-  .souligne{display:block;width:var(--w,340px);height:9px;margin:2px 0 8px;overflow:visible}
+  h1 .souligne{position:absolute;left:0;top:var(--sl,100%);height:9px;overflow:visible;pointer-events:none}
   p{font-size:27px;line-height:var(--pas);margin:0}
-  p + p{margin-top:0}
   .note{color:#4b5a68}
   .vert{color:var(--vert)}
-  .schema{position:relative;z-index:1;margin-top:6px}
+  .schema{position:relative;z-index:1;display:block}
   .pied{position:absolute;right:30px;bottom:12px;font-size:19px;color:#8d9aa6;z-index:1}
   .onglet{
     position:absolute;right:-1px;top:48px;background:var(--vert);color:#fff;
@@ -75,7 +71,7 @@
 <div class="bureau"></div>
 <div class="carnet">
   <div class="reliure" id="reliure"></div>
-  <div class="page">
+  <div class="page" id="page">
     <div class="onglet" id="onglet">NOTE 1 / 5</div>
     <div class="contenu" id="contenu"></div>
     <div class="pied">Mon carnet · séquence 1</div>
@@ -83,9 +79,9 @@
 </div>
 
 <script>
-// un trait de soulignement tracé « à la main »
+// un trait de soulignement tracé « à la main », posé juste sous le titre
 function souligne(largeur){
-  const w = largeur, h = 9;
+  const w = Math.round(largeur), h = 9;
   let d = 'M2,6';
   const n = 6;
   for (let i = 1; i <= n; i++){
@@ -93,109 +89,111 @@ function souligne(largeur){
     const y = 6 + (i % 2 ? -1.6 : 1.4) * (0.6 + Math.random() * 0.7);
     d += ' Q' + (x - (w - 6) / (2 * n)) + ',' + (y + (i % 2 ? -2 : 2)) + ' ' + x + ',' + y;
   }
-  return '<svg class="souligne" style="--w:' + w + 'px" viewBox="0 0 ' + w + ' ' + h + '">' +
+  return '<svg class="souligne" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">' +
     '<path d="' + d + '" fill="none" stroke="#009944" stroke-width="3.2" stroke-linecap="round" opacity=".9"/></svg>';
 }
 
-// le schéma « même chose pour tous / ce qu'il faut à chacun »
-function schemaEquite(){
-  const W = 760, H = 196, base = 150;
-  const corps = [85, 68, 51];          // trois tailles, écart d'une boîte
-  const BH = 17, BW = 46, PAS = 66;
-  const groupe = function (ox, boites, titre, ligne){
-    let g = '<text x="' + (ox + 110) + '" y="22" text-anchor="middle" font-family="Patrick Hand" font-size="22" fill="#4b5a68">' + titre + '</text>';
-    let hauts = [];
-    for (let i = 0; i < 3; i++){
-      const x = ox + 24 + i * PAS, nb = boites[i];
-      for (let b = 0; b < nb; b++){
-        g += '<rect x="' + x + '" y="' + (base - (b + 1) * BH) + '" width="' + BW + '" height="' + (BH - 2) + '" rx="2" fill="#cfeeda" stroke="#009944" stroke-width="1.8"/>';
-      }
-      const sol = base - nb * BH;          // les pieds
-      const tete = sol - corps[i];         // le sommet du crâne
-      hauts.push(tete);
-      const cx = x + BW / 2;
-      g += '<circle cx="' + cx + '" cy="' + (tete + 10) + '" r="10" fill="#fbf8f0" stroke="#1b2430" stroke-width="2.2"/>';
-      g += '<line x1="' + cx + '" y1="' + (tete + 20) + '" x2="' + cx + '" y2="' + (sol - 14) + '" stroke="#1b2430" stroke-width="2.2"/>';
-      g += '<line x1="' + (cx - 11) + '" y1="' + (tete + 29) + '" x2="' + (cx + 11) + '" y2="' + (tete + 29) + '" stroke="#1b2430" stroke-width="2.2"/>';
-      g += '<line x1="' + cx + '" y1="' + (sol - 14) + '" x2="' + (cx - 8) + '" y2="' + sol + '" stroke="#1b2430" stroke-width="2.2"/>';
-      g += '<line x1="' + cx + '" y1="' + (sol - 14) + '" x2="' + (cx + 8) + '" y2="' + sol + '" stroke="#1b2430" stroke-width="2.2"/>';
-    }
-    if (ligne){
-      const y = Math.min.apply(null, hauts) - 6;
-      g += '<line x1="' + (ox + 8) + '" y1="' + y + '" x2="' + (ox + 236) + '" y2="' + y + '" stroke="#009944" stroke-dasharray="7 6" stroke-width="2.2"/>';
-      g += '<text x="' + (ox + 244) + '" y="' + (y + 7) + '" font-family="Patrick Hand" font-size="20" fill="#009944">même hauteur de vue</text>';
-    } else {
-      hauts.forEach(function (y, i){
-        const x = ox + 24 + i * PAS + BW / 2;
-        g += '<line x1="' + (x - 26) + '" y1="' + (y - 6) + '" x2="' + (x + 26) + '" y2="' + (y - 6) + '" stroke="#b5453a" stroke-dasharray="5 5" stroke-width="1.8" opacity=".75"/>';
-      });
-    }
-    return g;
-  };
+const PH = 'font-family="Patrick Hand"';
+// schéma « intention / impact » : deux boîtes, et l'écart entre les deux
+function schemaIntentionImpact(){
+  const W = 780, H = 114;
   let s = '<svg class="schema" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">';
-  s += '<line x1="6" y1="' + base + '" x2="' + (W - 6) + '" y2="' + base + '" stroke="#1b2430" stroke-width="2" opacity=".4"/>';
-  s += groupe(6, [1, 1, 1], 'la même chose pour tous', false);
-  s += groupe(300, [0, 1, 2], 'ce dont chacun a besoin', true);
+  s += '<rect x="8" y="22" width="268" height="70" rx="12" fill="#eaf7ee" stroke="#009944" stroke-width="2.2"/>';
+  s += '<text x="142" y="52" text-anchor="middle" ' + PH + ' font-size="24" fill="#1b2430">l’intention</text>';
+  s += '<text x="142" y="78" text-anchor="middle" ' + PH + ' font-size="19" fill="#4b5a68">ce qu’on a voulu, ce qu’on a écrit</text>';
+  s += '<rect x="504" y="22" width="268" height="70" rx="12" fill="#eaf7ee" stroke="#009944" stroke-width="2.2"/>';
+  s += '<text x="638" y="52" text-anchor="middle" ' + PH + ' font-size="24" fill="#1b2430">l’impact</text>';
+  s += '<text x="638" y="78" text-anchor="middle" ' + PH + ' font-size="19" fill="#4b5a68">ce que les gens vivent vraiment</text>';
+  // la flèche, cassée au milieu : c'est l'écart
+  s += '<path d="M284 57 L372 57" stroke="#1b2430" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+  s += '<path d="M372 57 l10 -12 l14 24 l14 -24 l10 12" stroke="#b5453a" stroke-width="2.4" fill="none" stroke-linejoin="round"/>';
+  s += '<path d="M420 57 L492 57" stroke="#1b2430" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+  s += '<path d="M482 49 L494 57 L482 65" stroke="#1b2430" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+  s += '<text x="398" y="103" text-anchor="middle" ' + PH + ' font-size="19" fill="#b5453a">l’écart : c’est lui qu’on cherche</text>';
+  s += '</svg>';
+  return s;
+}
+// schéma « diversité des usages » : un seul lieu, trois façons de s'en servir
+function schemaUsages(){
+  const W = 780, H = 114;
+  let s = '<svg class="schema" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">';
+  // la serre : un toit en verrière et des plantes
+  s += '<path d="M30 92 L30 50 L95 18 L160 50 L160 92 Z" fill="#eaf7ee" stroke="#009944" stroke-width="2.2" stroke-linejoin="round"/>';
+  s += '<path d="M62 92 L62 60 M95 92 L95 44 M128 92 L128 60" stroke="#009944" stroke-width="1.6" opacity=".7"/>';
+  s += '<text x="95" y="110" text-anchor="middle" ' + PH + ' font-size="19" fill="#4b5a68">un seul lieu</text>';
+  const usages = ['déjeuner', 'travailler', 'souffler'];
+  usages.forEach(function (u, i){
+    const y = 30 + i * 30;
+    s += '<path d="M172 56 Q 260 ' + (56 + (y - 56) * 0.5) + ' 330 ' + y + '" stroke="#1b2430" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    s += '<path d="M320 ' + (y - 6) + ' L332 ' + y + ' L320 ' + (y + 6) + '" stroke="#1b2430" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+    s += '<text x="346" y="' + (y + 8) + '" ' + PH + ' font-size="24" fill="#1b2430">' + u + '</text>';
+  });
+  s += '<text x="560" y="64" ' + PH + ' font-size="21" fill="#009944">trois usages, trois publics</text>';
   s += '</svg>';
   return s;
 }
 
+// Les notes de la séquence 1, dans l'ordre du chemin. Les anciennes notions
+// restent disponibles plus bas pour les séquences suivantes.
 const NOTES = {
-  'diversite': { n:1, titre:'Diversité', w:250, corps:[
-    "Ce qui est déjà là : la variété des parcours, des",
-    "origines, des âges, des situations de santé, des",
-    "façons de travailler.",
-    "<span class='vert'>On ne la décrète pas, on la reconnaît.</span>",
-    "",
-    "<span class='note'>Baromètre Nhood : les deux priorités citées par</span>",
-    "<span class='note'>les Nhooders sont l'égalité femmes-hommes (61 %)</span>",
-    "<span class='note'>et la santé et le handicap (38 %).</span>"
+  'signal-faible': { n:1, titre:'Signal faible', corps:[
+    "Un petit fait, presque rien : une porte qu’on te tient, un prénom qu’on écorche, une blague qui ne fait rire que la moitié de la table. Pris seul, il ne prouve rien. Noté, puis recoupé avec d’autres, il raconte quelque chose.",
+    "<span class='vert'>Dans une enquête, on note d’abord. On conclut après.</span>",
+    "<span class='note'>Chez Nhood, c’est avec ce genre de signaux que le baromètre DE&amp;I repère ce qui fonctionne et ce qui mérite d’être creusé.</span>"
   ]},
-  'vivre-ensemble': { n:2, titre:'Vivre-ensemble', w:390, corps:[
-    "Engagement n° 1 de Nhood : une culture fondée sur",
-    "l'éthique, le courage, l'exemplarité, le respect",
-    "et la confiance.",
-    "<span class='vert'>Marque employeur, communication, management,</span>",
-    "<span class='vert'>gouvernance.</span>",
-    "",
-    "<span class='note'>Ça se joue dans les gestes ordinaires : qui on</span>",
-    "<span class='note'>salue, qui on écoute, qui on coupe.</span>"
+  'angle-mort': { n:2, titre:'Angle mort', corps:[
+    "Ce qu’on ne voit plus quand on est dedans. Noé connaît le chemin « presque » : trois semaines suffisent pour que des habitudes deviennent invisibles, les bonnes comme les autres.",
+    "<span class='vert'>Ton regard neuf voit encore ce que les autres ne regardent plus.</span>",
+    "<span class='note'>C’est pour ça qu’on te demande d’être force de proposition : pendant quelques semaines, tu es la personne qui remarque.</span>"
   ]},
-  'egalite-des-chances': { n:3, titre:'Égalité des chances', w:490, corps:[
-    "Engagement n° 3 : accueillir la diversité des",
-    "individualités et des parcours pour que l'accès à",
-    "l'emploi et le développement professionnel ne",
-    "dépendent pas du point de départ.",
+  'diversite-des-usages': { n:3, titre:'Diversité des usages', corps:[
+    "Un même lieu ne sert pas à tout le monde de la même façon. La serre : pour déjeuner, pour travailler, pour souffler. La cuisine : pour rire, et pour dire ce qui tracasse.",
+    "<span class='vert'>Avant de juger un lieu ou une règle, regarder qui s’en sert, et comment.</span>"
+  ], schema:'usages' },
+  'intention-impact': { n:4, titre:'Intention / impact', corps:[
+    "L’intention, c’est ce qu’on a voulu : une politique écrite, quatre engagements. L’impact, c’est ce que les gens vivent et ressentent. Les deux ne coïncident pas toujours.",
+    "<span class='vert'>Le baromètre mesure l’impact. Il ne juge pas les intentions.</span>"
+  ], schema:'intention' },
+  'non-inclusion': { n:5, titre:'Non-inclusion', corps:[
+    "Rarement une volonté d’exclure. Plus souvent un fonctionnement qui laisse quelqu’un dehors sans que personne l’ait décidé : une réunion calée un jour de télétravail, une règle que seuls les anciens connaissent, une info qui ne circule qu’à la machine à café.",
+    "<span class='vert'>Personne n’a voulu exclure. Et pourtant quelqu’un manque.</span>",
+    "<span class='note'>Dans l’équipe de Leïla, c’est réglé par le fonctionnement : les réunions ne tombent jamais sur les jours de télétravail.</span>"
+  ]},
+
+  // --- notions gardées pour les séquences suivantes ---
+  'diversite': { n:1, titre:'Diversité', corps:[
+    "Ce qui est déjà là : la variété des parcours, des origines, des âges, des situations de santé, des façons de travailler.",
+    "<span class='vert'>On ne la décrète pas, on la reconnaît.</span>"
+  ]},
+  'vivre-ensemble': { n:2, titre:'Vivre-ensemble', corps:[
+    "Engagement n° 1 de Nhood : une culture fondée sur l’éthique, le courage, l’exemplarité, le respect et la confiance.",
+    "<span class='vert'>Marque employeur, communication, management, gouvernance.</span>",
+    "<span class='note'>Ça se joue dans les gestes ordinaires : qui on salue, qui on écoute, qui on coupe.</span>"
+  ]},
+  'egalite-des-chances': { n:3, titre:'Égalité des chances', corps:[
+    "Engagement n° 3 : accueillir la diversité des individualités et des parcours pour que l’accès à l’emploi et le développement professionnel ne dépendent pas du point de départ.",
     "<span class='vert'>Origines sociales, parcours académiques, handicap.</span>",
-    "",
-    "<span class='note'>À ne pas confondre avec l'égalité professionnelle</span>",
-    "<span class='note'>(engagement n° 2), qui vise l'égalité des genres.</span>"
+    "<span class='note'>À ne pas confondre avec l’égalité professionnelle (engagement n° 2), qui vise l’égalité des genres.</span>"
   ]},
-  'equite': { n:4, titre:'Équité', w:200, corps:[
-    "Donner à chacun ce dont il a besoin pour être à",
-    "égalité, plutôt que la même chose à tout le monde.",
-    "<span class='vert'>L'égalité distribue pareil. L'équité ajuste.</span>"
-  ], schema:true },
-  'inclusion': { n:5, titre:'Inclusion', w:250, corps:[
-    "Engagement n° 4 : garantir l'inclusion de toutes et",
-    "tous grâce à un accompagnement adapté aux réalités",
-    "de chaque étape de vie.",
-    "<span class='vert'>Intégration, QVT, parentalité, début et fin de carrière.</span>",
-    "",
-    "<span class='note'>Objectif Nhood à 2030 : 85 % de score d'inclusion</span>",
-    "<span class='note'>au baromètre, et au moins un référent DE&amp;I par</span>",
-    "<span class='note'>Business Unit.</span>"
+  'equite': { n:4, titre:'Équité', corps:[
+    "Donner à chacun ce dont il a besoin pour être à égalité, plutôt que la même chose à tout le monde.",
+    "<span class='vert'>L’égalité distribue pareil. L’équité ajuste.</span>"
+  ]},
+  'inclusion': { n:5, titre:'Inclusion', corps:[
+    "Engagement n° 4 : garantir l’inclusion de toutes et tous grâce à un accompagnement adapté aux réalités de chaque étape de vie.",
+    "<span class='vert'>Intégration, QVT, parentalité, début et fin de carrière.</span>"
   ]}
 };
 
 const q = new URLSearchParams(location.search);
-const cle = q.get('n') || 'equite';
-const N = NOTES[cle] || NOTES['equite'];
+const cle = q.get('n') || 'signal-faible';
+const N = NOTES[cle] || NOTES['signal-faible'];
 
 document.getElementById('onglet').textContent = 'NOTE ' + N.n + ' / 5';
-let html = '<h1>' + N.titre + '</h1>' + souligne(N.w);
-html += N.corps.map(function (l) { return '<p>' + (l === '' ? '&nbsp;' : l) + '</p>'; }).join('');
-if (N.schema) html += schemaEquite();
+let html = '<h1><span id="titre">' + N.titre + '</span></h1>';
+html += N.corps.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+if (N.schema === 'intention') html += schemaIntentionImpact();
+if (N.schema === 'usages') html += schemaUsages();
 document.getElementById('contenu').innerHTML = html;
 
 // les anneaux de la reliure
@@ -205,6 +203,41 @@ for (let y = 36; y < 480; y += 58){
   i.style.top = y + 'px';
   rel.appendChild(i);
 }
+
+// Calage de l'écriture sur les lignes : on mesure la vraie ligne de base du
+// texte une fois la police chargée, puis on pose les traits 2 px dessous.
+// Le titre, plus gros, a sa propre ligne de base : on le décale (sans toucher
+// au flux) pour qu'elle tombe elle aussi sur un trait.
+function cale(){
+  const page = document.getElementById('page');
+  const pas = 38;
+  const sonde = function (el){
+    const s = document.createElement('span');
+    s.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+    el.appendChild(s);
+    const y = s.getBoundingClientRect().top - page.getBoundingClientRect().top;
+    el.removeChild(s);
+    return y;
+  };
+  const p = page.querySelector('p');
+  const h1 = page.querySelector('h1');
+  if (!p || !h1) return;
+  h1.style.top = '0px';                      // recalage idempotent : on repart de zéro
+  const baseP = sonde(p);
+  let decal = (baseP + 2) % pas; if (decal < 0) decal += pas;
+  page.style.setProperty('--decal', decal.toFixed(2) + 'px');
+  const baseH = sonde(h1);
+  let d = (baseP - baseH) % pas; if (d > pas / 2) d -= pas; if (d < -pas / 2) d += pas;
+  h1.style.top = d.toFixed(2) + 'px';
+  // le soulignement part de la ligne de base du titre et suit sa largeur réelle
+  const t = document.getElementById('titre');
+  const old = h1.querySelector('.souligne'); if (old) old.remove();
+  const baseDansH1 = sonde(h1) - (h1.getBoundingClientRect().top - page.getBoundingClientRect().top);
+  h1.style.setProperty('--sl', (baseDansH1 + 3).toFixed(2) + 'px');
+  h1.insertAdjacentHTML('beforeend', souligne(t.getBoundingClientRect().width + 6));
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(cale); else cale();
+window.addEventListener('load', cale);
 </script>
 </body>
 </html>

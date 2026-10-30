@@ -61,6 +61,9 @@
   .vert{color:var(--vert)}
   .schema{position:relative;z-index:1;display:block}
   .pied{position:absolute;right:30px;bottom:12px;font-size:19px;color:#8d9aa6;z-index:1}
+  /* mode papier (?papier=1) : le texte est écrit dans Genially, la page ne garde que le support */
+  body.papier .schema{position:absolute;left:44px;bottom:36px}
+  body.papier .page::before{opacity:.95}
   .onglet{
     position:absolute;right:-1px;top:48px;background:var(--vert);color:#fff;
     font-size:19px;letter-spacing:.6px;padding:7px 18px 8px;border-radius:6px 0 0 6px;z-index:2;
@@ -190,8 +193,11 @@ const cle = q.get('n') || 'signal-faible';
 const N = NOTES[cle] || NOTES['signal-faible'];
 
 document.getElementById('onglet').textContent = 'NOTE ' + N.n + ' / 5';
-let html = '<h1><span id="titre">' + N.titre + '</span></h1>';
-html += N.corps.map(function (l) { return '<p>' + l + '</p>'; }).join('');
+// ?papier=1 : support seul (lignes, reliure, onglet, schéma) ; ?d=<px> cale la première ligne
+const PAPIER = q.get('papier') === '1';
+if (PAPIER) document.body.classList.add('papier');
+let html = PAPIER ? '' : '<h1><span id="titre">' + N.titre + '</span></h1>';
+if (!PAPIER) html += N.corps.map(function (l) { return '<p>' + l + '</p>'; }).join('');
 if (N.schema === 'intention') html += schemaIntentionImpact();
 if (N.schema === 'usages') html += schemaUsages();
 document.getElementById('contenu').innerHTML = html;
@@ -211,6 +217,11 @@ for (let y = 36; y < 480; y += 58){
 function cale(){
   const page = document.getElementById('page');
   const pas = 38;
+  if (PAPIER) {  // les lignes se posent là où Genially écrit : décalage fourni dans l'adresse
+    const d = parseFloat(q.get('d') || '30');
+    page.style.setProperty('--decal', (((d % pas) + pas) % pas).toFixed(2) + 'px');
+    return;
+  }
   const sonde = function (el){
     const s = document.createElement('span');
     s.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';

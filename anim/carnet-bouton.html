@@ -9,20 +9,20 @@
   html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
   body{font-family:Sora,system-ui,sans-serif}
   /* le bloc entier arrive avec un rebond, après un court délai */
-  .bloc{position:absolute;inset:0;display:flex;align-items:flex-end;gap:10px;padding:6px 8px;box-sizing:border-box;
-        transform-origin:70% 90%;opacity:0;animation:arrive .9s cubic-bezier(.34,1.56,.64,1) var(--delai,1.1s) forwards}
+  .bloc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding:4px 6px 6px;box-sizing:border-box;
+        transform-origin:50% 90%;opacity:0;animation:arrive .9s cubic-bezier(.34,1.56,.64,1) var(--delai,1.1s) forwards}
   @keyframes arrive{0%{opacity:0;transform:scale(.2) rotate(-25deg)}60%{opacity:1;transform:scale(1.08) rotate(4deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
-  .carnet{position:relative;width:128px;height:74px;flex:0 0 auto;transform:rotate(-5deg);transform-origin:50% 100%;
+  .carnet{position:relative;width:118px;height:68px;flex:0 0 auto;transform:rotate(-5deg);transform-origin:50% 100%;
           animation:respire 5.2s ease-in-out 2.2s infinite}
   @keyframes respire{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(-3deg) translateY(-3px)}}
   .carnet img{width:100%;height:100%;object-fit:contain;display:block}
-  .stylo{position:absolute;right:-18px;bottom:-6px;width:58px;height:58px;transform:rotate(0deg)}
+  .stylo{position:absolute;right:-22px;bottom:-8px;width:54px;height:54px;transform:rotate(0deg)}
   .pill{display:inline-flex;align-items:center;gap:8px;background:#1F3A5F;color:#fff;border-radius:999px;
-        padding:8px 14px 8px 14px;font-size:14px;font-weight:600;letter-spacing:.2px;white-space:nowrap;
+        padding:7px 13px;font-size:13px;font-weight:600;letter-spacing:.2px;white-space:nowrap;
         box-shadow:0 4px 12px rgba(27,36,48,.25);margin-bottom:4px}
-  .pill span{font-size:17px;line-height:1}
+  .pill span{font-size:16px;line-height:1}
   .titre{font-size:11px;color:#1B2430;background:rgba(255,255,255,.88);border-radius:6px;padding:2px 6px;margin-bottom:5px;display:inline-block;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .droite{display:flex;flex-direction:column;align-items:flex-start}
+  .droite{display:flex;flex-direction:column;align-items:center}
 </style>
 </head>
 <body>
@@ -49,7 +49,7 @@
   var n = q.get('n') || '1';
   document.getElementById('img').src = 'https://meujesse.github.io/demos/nhood/carnet-mini-' + n + '.png';
   var t = q.get('titre'); var el = document.getElementById('titre');
-  if (t) el.textContent = 'Note ' + n + ' · ' + t; else el.style.display = 'none';
+  el.style.display = 'none';
   if (q.get('delai')) document.getElementById('bloc').style.setProperty('--delai', q.get('delai') + 's');
 </script>
 </body>

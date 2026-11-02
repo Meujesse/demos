@@ -186,6 +186,17 @@ const NOTES = {
   'inclusion': { n:5, titre:'Inclusion', corps:[
     "Engagement n° 4 : garantir l’inclusion de toutes et tous grâce à un accompagnement adapté aux réalités de chaque étape de vie.",
     "<span class='vert'>Intégration, QVT, parentalité, début et fin de carrière.</span>"
+  ]},
+  // --- ajoutées le 2 nov. 2026 pour les decks S3 et S5 ---
+  'stereotype': { n:1, titre:'Stéréotype', corps:[
+    "Une idée toute faite sur un groupe, appliquée à une personne avant même de la connaître : « les jeunes », « les femmes », « les gens du terrain ». Il va vite, il rassure, et il se trompe souvent.",
+    "<span class='vert'>Principe clé de la politique DE&amp;I Nhood : déconstruire les stéréotypes et les préjugés.</span>",
+    "<span class='note'>On ne s’en débarrasse pas, on apprend à le repérer au moment où il décide à notre place.</span>"
+  ]},
+  'egalite-professionnelle': { n:2, titre:'Égalité professionnelle', corps:[
+    "Engagement n° 2 : assurer l’égalité des genres en offrant un traitement juste et équitable tout au long du parcours professionnel.",
+    "<span class='vert'>Recrutement, rémunération, évolution, représentativité.</span>",
+    "<span class='note'>Ça se joue aussi dans la parole : à qui on pose quelle question, quelle idée on crédite, quel rôle on attribue.</span>"
   ]}
 };
 
@@ -193,7 +204,8 @@ const q = new URLSearchParams(location.search);
 const cle = q.get('n') || 'signal-faible';
 const N = NOTES[cle] || NOTES['signal-faible'];
 
-document.getElementById('onglet').textContent = 'NOTE ' + N.n + ' / 5';
+document.getElementById('onglet').textContent = q.get('onglet') || ('NOTE ' + N.n + ' / 5');
+if (q.get('s')) document.querySelector('.pied').textContent = 'Mon carnet · séquence ' + q.get('s');
 // ?papier=1 : support seul (lignes, reliure, onglet, schéma) ; ?d=<px> cale la première ligne
 const PAPIER = q.get('papier') === '1';
 if (PAPIER) document.body.classList.add('papier');

@@ -117,6 +117,25 @@ function schemaIntentionImpact(){
   s += '</svg>';
   return s;
 }
+// schéma « du stéréotype à la discrimination » : trois étapes, deux flèches
+function schemaChemin(){
+  const W = 780, H = 104;
+  const et = [['le stéréotype','l’idée toute faite'],['le préjugé','le jugement qui en découle'],['la discrimination','l’acte : la conséquence']];
+  let s = '<svg class="schema" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">';
+  et.forEach(function (e, i){
+    const x = 6 + i * 276, fill = i === 2 ? '#fbe9e6' : '#eaf7ee', stroke = i === 2 ? '#b5453a' : '#009944';
+    s += '<rect x="' + x + '" y="18" width="226" height="70" rx="12" fill="' + fill + '" stroke="' + stroke + '" stroke-width="2.2"/>';
+    s += '<text x="' + (x + 113) + '" y="48" text-anchor="middle" ' + PH + ' font-size="24" fill="#1b2430">' + e[0] + '</text>';
+    s += '<text x="' + (x + 113) + '" y="74" text-anchor="middle" ' + PH + ' font-size="18" fill="#4b5a68">' + e[1] + '</text>';
+    if (i < 2){
+      const a = x + 236;
+      s += '<path d="M' + a + ' 53 L' + (a + 34) + ' 53" stroke="#1b2430" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+      s += '<path d="M' + (a + 24) + ' 45 L' + (a + 36) + ' 53 L' + (a + 24) + ' 61" stroke="#1b2430" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+    }
+  });
+  s += '</svg>';
+  return s;
+}
 // schéma « diversité des usages » : un seul lieu, trois façons de s'en servir
 function schemaUsages(){
   const W = 780, H = 114;
@@ -167,24 +186,21 @@ const NOTES = {
   // --- notions des séquences 2 à 8 (réécrites le 2 nov. 2026 : définition claire, au sens du module,
   //     puis la phrase de la politique DE&I Nhood en vert, puis un repère concret) ---
   'diversite': { n:1, titre:'Diversité', corps:[
-    "Au travail, la diversité, c’est le fait que les personnes d’une même équipe sont différentes : par le genre, l’âge, l’origine sociale ou culturelle, le parcours scolaire, la situation de santé ou de handicap, la façon de vivre. Elle décrit ce qui est, pas ce qu’on en fait.",
-    "<span class='vert'>Nhood s’engage à « accueillir et intégrer la diversité des individualités et des parcours » (engagement n° 3).</span>",
-    "<span class='note'>Une équipe diverse n’est pas forcément inclusive : la diversité se constate, l’inclusion se construit.</span>"
+    "En entreprise, la diversité, c’est le fait que les personnes d’une même équipe sont différentes : par le genre, l’âge, l’origine sociale ou culturelle, le parcours scolaire, la situation de santé ou de handicap, la façon de vivre.",
+    "<span class='vert'>Nhood s’engage à « accueillir et intégrer la diversité des individualités et des parcours » (engagement n° 3).</span>"
   ]},
   'stereotype': { n:1, titre:'Stéréotype', corps:[
-    "Une idée toute faite sur un groupe de personnes (« les jeunes ne sont pas fiables », « les femmes sont moins techniques »), appliquée à quelqu’un avant de le connaître. Au travail, il pèse sur qui on écoute, à qui on confie quoi, qui on recrute ou qui on fait évoluer.",
-    "<span class='vert'>Principe clé de la politique DE&amp;I Nhood : la déconstruction des stéréotypes et des préjugés.</span>",
-    "<span class='note'>Le préjugé, c’est le jugement qui en découle. La discrimination, c’est quand il devient un acte.</span>"
-  ]},
+    "Une idée toute faite sur un groupe (« les jeunes ne sont pas fiables », « les femmes sont moins techniques »), appliquée à une personne avant de la connaître. En entreprise, il pèse, directement ou non, sur la crédibilité accordée à une collègue pour une tâche, sur un recrutement, sur l’évolution d’un collaborateur.",
+    "<span class='vert'>Principe clé de la politique DE&amp;I Nhood : la déconstruction des stéréotypes et des préjugés.</span>"
+  ], schema:'chemin' },
   'vivre-ensemble': { n:2, titre:'Vivre-ensemble', corps:[
-    "Au travail, la manière dont on se traite au quotidien : comment on s’adresse aux autres, comment on écoute, comment on réagit à une remarque déplacée, comment on partage l’information. C’est la culture de l’équipe, que tout le monde fabrique sans s’en rendre compte.",
+    "En entreprise, la manière dont le collectif s’adresse aux autres, écoute, réagit à une remarque déplacée, partage l’information.",
     "<span class='vert'>Engagement n° 1 de Nhood : une culture du vivre ensemble fondée sur l’éthique, le courage, l’exemplarité, le respect et la confiance.</span>",
     "<span class='note'>Chacun en est responsable, pas seulement le manager : le témoin d’une remarque aussi.</span>"
   ]},
   'egalite-professionnelle': { n:2, titre:'Égalité professionnelle', corps:[
     "Le même traitement pour les femmes et les hommes à chaque étape du parcours : recrutement, salaire, évolution, accès aux responsabilités, parole en réunion. Elle se mesure dans les faits, pas dans les intentions.",
-    "<span class='vert'>Engagement n° 2 de Nhood : assurer l’égalité des genres en offrant un traitement juste et équitable tout au long du parcours professionnel.</span>",
-    "<span class='note'>Le sexisme ordinaire, c’est l’écart du quotidien : la question qu’on ne pose qu’aux femmes, l’idée reprise par un autre.</span>"
+    "<span class='vert'>Engagement n° 2 de Nhood : assurer l’égalité des genres en offrant un traitement juste et équitable tout au long du parcours professionnel.</span>"
   ]},
   'egalite-des-chances': { n:3, titre:'Égalité des chances', corps:[
     "Que l’accès à un poste, à une mission ou à une évolution dépende de ce que la personne sait faire, pas de son point de départ : origine sociale, école, quartier, réseau, santé.",
@@ -192,14 +208,13 @@ const NOTES = {
     "Cadre légal : dans les entreprises d’au moins 300 salariés, les recruteurs sont formés à la non-discrimination à l’embauche au moins tous les cinq ans (Code du travail, art. L1131-2). Chez Nhood : HRBP et managers formés au recrutement inclusif."
   ]},
   'equite': { n:4, titre:'Équité', corps:[
-    "Traiter chacun selon ses besoins pour arriver au même résultat, plutôt que donner la même chose à tout le monde : un aménagement de poste, un délai en plus, une consigne écrite en plus de l’oral. L’égalité distribue pareil, l’équité ajuste.",
+    "L’égalité, c’est donner la même chose à tout le monde. L’équité, c’est donner à chacun ce qu’il lui faut pour avoir les mêmes chances de réussir : un aménagement de poste, un délai en plus, une consigne écrite en plus de l’oral.",
     "<span class='vert'>Nhood s’engage à « un traitement juste et équitable tout au long du parcours professionnel » (engagement n° 2).</span>",
-    "<span class='note'>Ce n’est pas un avantage accordé à quelqu’un : c’est ce qui rend sa participation possible.</span>"
+    "<span class='note'>Un aménagement n’est pas un privilège : sans lui, la personne ne pourrait pas faire son travail dans les mêmes conditions que les autres.</span>"
   ]},
   'inclusion': { n:5, titre:'Inclusion', corps:[
-    "Faire en sorte que chacun puisse réellement participer, contribuer et évoluer, quelle que soit sa situation ou l’étape de vie qu’il traverse : parentalité, temps partiel, santé, fin de carrière. La diversité, c’est qui est là ; l’inclusion, c’est ce que l’équipe en fait.",
-    "<span class='vert'>Engagement n° 4 de Nhood : garantir l’inclusion de toutes et tous grâce à un accompagnement adapté aux réalités de chaque étape de vie.</span>",
-    "<span class='note'>Les mots de la politique : intégration, QVT, parentalité, début et fin de carrière.</span>"
+    "Faire en sorte que chacun puisse réellement participer, contribuer et évoluer, quelle que soit sa situation ou l’étape de vie qu’il traverse : parentalité, temps partiel, santé, fin de carrière.",
+    "<span class='vert'>Engagement n° 4 de Nhood : garantir l’inclusion de toutes et tous grâce à un accompagnement adapté aux réalités de chaque étape de vie.</span>"
   ]}
 };
 
@@ -216,6 +231,7 @@ let html = PAPIER ? '' : '<h1><span id="titre">' + N.titre + '</span></h1>';
 if (!PAPIER) html += N.corps.map(function (l) { return '<p>' + l + '</p>'; }).join('');
 if (N.schema === 'intention') html += schemaIntentionImpact();
 if (N.schema === 'usages') html += schemaUsages();
+if (N.schema === 'chemin') html += schemaChemin();
 document.getElementById('contenu').innerHTML = html;
 
 // les anneaux de la reliure

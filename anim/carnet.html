@@ -227,6 +227,7 @@ if (q.get('s')) document.querySelector('.pied').textContent = 'Mon carnet · sé
 // ?papier=1 : support seul (lignes, reliure, onglet, schéma) ; ?d=<px> cale la première ligne
 const PAPIER = q.get('papier') === '1';
 if (PAPIER) document.body.classList.add('papier');
+if (q.get('fond') === '0') { document.querySelector('.bureau').style.display = 'none'; document.documentElement.style.background = 'transparent'; document.body.style.background = 'transparent'; }
 let html = PAPIER ? '' : '<h1><span id="titre">' + N.titre + '</span></h1>';
 if (!PAPIER) html += N.corps.map(function (l) { return '<p>' + l + '</p>'; }).join('');
 if (N.schema === 'intention') html += schemaIntentionImpact();

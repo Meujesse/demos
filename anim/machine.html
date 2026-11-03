@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Machine à écrire</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:transparent;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#rideau{position:absolute;inset:0;pointer-events:none}
+.l{position:absolute;right:0;background:var(--fond,#fff);height:var(--lh)}
+#ctl{position:absolute;right:4px;bottom:2px;display:flex;gap:4px;font-size:10px;color:#6b7280;opacity:.0;transition:opacity .3s}
+body:hover #ctl{opacity:1}
+#ctl button{font:inherit;border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:1px 7px;cursor:pointer;color:#374151}
+#ctl button.on{background:#1f3a5f;color:#fff;border-color:#1f3a5f}
+</style></head><body>
+<div id="rideau"></div>
+<div id="ctl"><span>vitesse</span><button data-v="lent">lent</button><button data-v="normal">normal</button><button data-v="rapide">rapide</button></div>
+<script>
+// Rideau « machine à écrire » : le texte reste un vrai texte Genially (modifiable par le client) ;
+// cette couche transparente posée dessus le dévoile ligne par ligne, de gauche à droite.
+// Paramètres : lines=nb de lignes, lh=hauteur de ligne px, d=délai avant départ ms, fond=couleur du fond de la carte,
+// v=lent|normal|rapide (le choix fait à l'écran est mémorisé dans le navigateur)
+var q=new URLSearchParams(location.search);
+var lines=Number(q.get('lines')||5), lh=Number(q.get('lh')||23), d0=Number(q.get('d')||600), fond=q.get('fond')||'#fff';
+var VIT={lent:2600,normal:1400,rapide:650};
+var v=localStorage.getItem('machine-vitesse')||q.get('v')||'normal';
+document.documentElement.style.setProperty('--lh',lh+'px'); document.documentElement.style.setProperty('--fond',fond);
+var rideau=document.getElementById('rideau'); var L=[];
+for(var i=0;i<lines;i++){var e=document.createElement('div');e.className='l';e.style.top=(i*lh)+'px';e.style.width='100%';rideau.appendChild(e);L.push(e);}
+function jouer(){L.forEach(function(e){e.style.transition='none';e.style.width='100%';});
+  var par=VIT[v]||VIT.normal; var t=d0;
+  L.forEach(function(e,i){setTimeout(function(){e.style.transition='width '+par+'ms linear';e.style.width='0%';},t);t+=par;});}
+document.querySelectorAll('#ctl button').forEach(function(b){b.classList.toggle('on',b.dataset.v===v);
+  b.addEventListener('click',function(){v=b.dataset.v;localStorage.setItem('machine-vitesse',v);document.querySelectorAll('#ctl button').forEach(function(x){x.classList.toggle('on',x===b);});jouer();});});
+jouer();
+</script></body></html>

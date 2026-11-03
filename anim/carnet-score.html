@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Carnet · points</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:transparent;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#1f2937}
+#box{position:absolute;inset:0;display:flex;align-items:center;gap:14px;padding:0 6px}
+#btn{font:600 15px/1 inherit;background:#1f3a5f;color:#fff;border:0;border-radius:26px;padding:15px 20px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:transform .15s}
+#btn:active{transform:scale(.97)} #btn.ok{background:#009944}
+#pts{font-size:13px;color:#4b5563;line-height:1.3}
+#pts b{font-size:22px;color:#1f3a5f;display:block}
+#bar{height:8px;background:#e5e7eb;border-radius:4px;width:150px;overflow:hidden;margin-top:4px}
+#bar i{display:block;height:100%;background:#009944;width:0;transition:width .6s}
+#badge{position:absolute;right:8px;top:4px;background:#fff;border:2px solid #FABE14;border-radius:14px;padding:8px 12px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);transform:translateY(-80px);opacity:0;transition:all .5s cubic-bezier(.2,.8,.2,1)}
+#badge.on{transform:none;opacity:1} #badge b{display:block;color:#b45309}
+#reset{position:absolute;left:8px;bottom:0;font-size:10px;color:#9ca3af;cursor:pointer}
+</style></head><body>
+<div id="box">
+  <button id="btn">✓ Je valide cette note · +10 pts</button>
+  <div id="pts"><b><span id="n">0</span> pts</b><span id="prog">0 / 5 notes validées</span><div id="bar"><i id="fill"></i></div></div>
+  <div id="badge">🏅 Succès débloqué<b id="bt">Première note</b></div>
+  <span id="reset">réinitialiser la démo</span>
+</div>
+<script>
+// Démo « points et succès » : la mémoire est dans le navigateur (localStorage), partagée entre toutes les pages
+// du genially. Elle NE remonte PAS dans le LMS : seules les questions natives Genially remontent un score.
+var q=new URLSearchParams(location.search), note=q.get('n')||'signal-faible';
+var K='nhood-carnet'; var S=JSON.parse(localStorage.getItem(K)||'{"notes":{}}');
+var SUCCES={1:'Première note',3:'Observateur·rice',5:'Carnet complet'};
+var btn=document.getElementById('btn'), n=document.getElementById('n'), prog=document.getElementById('prog'), fill=document.getElementById('fill'), badge=document.getElementById('badge'), bt=document.getElementById('bt');
+function rendu(anim){var k=Object.keys(S.notes).length; n.textContent=k*10; prog.textContent=k+' / 5 notes validées'; fill.style.width=(k*20)+'%';
+  if(S.notes[note]){btn.textContent='✓ Note validée';btn.classList.add('ok');btn.disabled=true;}
+  if(anim&&SUCCES[k]){bt.textContent=SUCCES[k];badge.classList.add('on');setTimeout(function(){badge.classList.remove('on');},3200);}}
+btn.addEventListener('click',function(){if(S.notes[note])return;S.notes[note]=Date.now();localStorage.setItem(K,JSON.stringify(S));rendu(true);});
+document.getElementById('reset').addEventListener('click',function(){localStorage.removeItem(K);S={notes:{}};btn.textContent='✓ Je valide cette note · +10 pts';btn.classList.remove('ok');btn.disabled=false;rendu(false);});
+rendu(false);
+</script></body></html>

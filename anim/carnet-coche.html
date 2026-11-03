@@ -17,10 +17,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:transparent;font-famil
 // (localStorage partagé par toutes les fenêtres du genially) : le compteur « k sur 5 » est réel.
 // Paramètres : n = identifiant de la note, total = nombre de notes (5), reset=1 pour effacer la mémoire.
 var q=new URLSearchParams(location.search), n=q.get('n')||'note', total=Number(q.get('total')||5), K='nhood-carnet-notes';
-if(q.get('reset')) localStorage.removeItem(K);
-var S=JSON.parse(localStorage.getItem(K)||'{}');
+if(q.get('reset')) try{localStorage.removeItem(K);}catch(e){}
+var mem={}; function lire(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return mem;}} function ecrire(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){mem=o;}}
+var S=lire(); var dbg=q.get('debug')?(function(){var d=document.createElement('div');d.style.cssText='position:fixed;right:4px;top:2px;font:11px monospace;color:#b00;background:#fff8;padding:2px 4px';document.body.appendChild(d);return d;})():null; function log(t){if(dbg)dbg.textContent=t;}
 var btn=document.getElementById('btn'), ico=document.getElementById('ico'), lab=document.getElementById('lab'), badge=document.getElementById('badge'), cnt=document.getElementById('cnt');
 function rendu(anim){var k=Object.keys(S).length; if(S[n]){btn.classList.add('ok');ico.textContent='✓';lab.textContent='Idée notée';btn.disabled=true;cnt.textContent='Noté · '+k+' sur '+total;badge.classList.toggle('on',true);} }
-btn.addEventListener('click',function(){if(S[n])return;S[n]=Date.now();localStorage.setItem(K,JSON.stringify(S));rendu(true);});
+function noter(ev){log('clic '+(ev&&ev.type));if(S[n])return;S[n]=Date.now();ecrire(S);rendu(true);}
+btn.addEventListener('click',noter);btn.addEventListener('pointerup',function(e){if(e.pointerType==='touch')noter(e);});
+log('prêt '+(function(){try{localStorage.getItem(K);return 'storage ok';}catch(e){return 'storage KO';}})());
 rendu(false);
 </script></body></html>

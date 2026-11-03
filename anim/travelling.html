@@ -16,6 +16,9 @@ var ease=q.get('ease')==='out'?'cubic-bezier(.2,.7,.2,1)':'cubic-bezier(.45,.05,
 function tf(r){var s=100/r[2];var W=innerWidth,H=innerHeight;return 'translate('+(-r[0]/100*W*s)+'px,'+(-r[1]/100*H*s)+'px) scale('+s+')';}
 function pose(){img.style.transition='none';img.style.transform=tf(from);}
 pose();
-img.addEventListener('load',function(){pose();setTimeout(function(){img.style.transition='transform '+d+'ms '+ease;img.style.transform=tf(to);},delay);});
+var parti=false;
+function partir(){if(parti)return;parti=true;pose();requestAnimationFrame(function(){setTimeout(function(){img.style.transition='transform '+d+'ms '+ease;img.style.transform=tf(to);},delay);});}
+// départ robuste : image déjà en cache (load déjà passé), ou pas encore chargée, ou iframe remontée par le lecteur
+if(img.complete&&img.naturalWidth)partir();else{img.addEventListener('load',partir);setTimeout(partir,1500);}
 addEventListener('resize',function(){img.style.transition='none';img.style.transform=tf(to);});
 </script></body></html>

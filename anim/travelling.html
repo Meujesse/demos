@@ -17,10 +17,16 @@ function tf(r){var s=100/r[2];var W=innerWidth,H=innerHeight;return 'translate('
 function pose(){img.style.transition='none';img.style.transform=tf(from);}
 pose();
 var parti=false;
-function partir(){if(parti)return;parti=true;pose();requestAnimationFrame(function(){setTimeout(function(){img.style.transition='transform '+d+'ms '+ease;img.style.transform=tf(to);},delay);});}
+function partir(){if(parti)return;parti=true;t0=Date.now();pose();requestAnimationFrame(function(){setTimeout(function(){img.style.transition='transform '+d+'ms '+ease;img.style.transform=tf(to);},delay);});}
 // départ robuste : image déjà en cache (load déjà passé), ou pas encore chargée, ou iframe remontée par le lecteur
 if(img.complete&&img.naturalWidth)partir();else{img.addEventListener('load',partir);setTimeout(partir,1500);}
-addEventListener('resize',function(){img.style.transition='none';img.style.transform=tf(to);});
+var t0=0;
+addEventListener('resize',function(){
+  // Genially dimensionne l'iframe juste après le montage : si le travelling n'est pas fini, on le relance
+  // depuis le départ (sinon on fige directement sur le cadrage final).
+  if(parti&&Date.now()-t0<delay+d+200){parti=false;partir();}
+  else{img.style.transition='none';img.style.transform=tf(to);}
+});
 
 if(q.get('debug')){var dbg=document.createElement('div');dbg.style.cssText='position:fixed;left:8px;top:8px;background:#000c;color:#0f0;font:12px monospace;padding:6px;z-index:9;white-space:pre';document.body.appendChild(dbg);
   setInterval(function(){dbg.textContent='complete='+img.complete+' nat='+img.naturalWidth+'x'+img.naturalHeight+'\ninner='+innerWidth+'x'+innerHeight+' parti='+parti+'\ntf='+img.style.transform.slice(0,60)+'\ntr='+img.style.transition.slice(0,40)+'\nvis='+document.visibilityState+' t='+Math.round(performance.now()/100)/10;},250);}

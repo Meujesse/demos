@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Carnet · je note</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:transparent;font-family:"Sora","Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+#row{position:absolute;inset:0;display:flex;align-items:center;gap:18px}
+.b{height:52px;border-radius:26px;display:inline-flex;align-items:center;gap:12px;padding:0 24px;font-size:19px;font-weight:500;color:#fff;white-space:nowrap;box-sizing:border-box}
+#btn{background:#1f3a5f;border:0;cursor:pointer;transition:transform .3s ease}
+#btn:hover{transform:translateY(-6px)}
+#btn.ok{background:#009944;cursor:default;transform:none}
+#badge{background:#009944;opacity:0;transform:translateY(8px);transition:all .35s ease;pointer-events:none}
+#badge.on{opacity:1;transform:none}
+</style></head><body>
+<div id="row"><button id="btn" class="b"><span id="ico">☐</span><span id="lab">Je note cette idée</span></button><div id="badge" class="b">✓ <span id="cnt"></span></div></div>
+<script>
+// Coche « Je note cette idée » : même look que les boutons natifs, survol qui flotte, mémoire dans le navigateur
+// (localStorage partagé par toutes les fenêtres du genially) : le compteur « k sur 5 » est réel.
+// Paramètres : n = identifiant de la note, total = nombre de notes (5), reset=1 pour effacer la mémoire.
+var q=new URLSearchParams(location.search), n=q.get('n')||'note', total=Number(q.get('total')||5), K='nhood-carnet-notes';
+if(q.get('reset')) localStorage.removeItem(K);
+var S=JSON.parse(localStorage.getItem(K)||'{}');
+var btn=document.getElementById('btn'), ico=document.getElementById('ico'), lab=document.getElementById('lab'), badge=document.getElementById('badge'), cnt=document.getElementById('cnt');
+function rendu(anim){var k=Object.keys(S).length; if(S[n]){btn.classList.add('ok');ico.textContent='✓';lab.textContent='Idée notée';btn.disabled=true;cnt.textContent='Noté · '+k+' sur '+total;badge.classList.toggle('on',true);} }
+btn.addEventListener('click',function(){if(S[n])return;S[n]=Date.now();localStorage.setItem(K,JSON.stringify(S));rendu(true);});
+rendu(false);
+</script></body></html>

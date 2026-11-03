@@ -59,7 +59,11 @@ function boucle() {
 if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   // on ne clignote pas pour qui a demand&eacute; moins d'animation
 } else {
-  img.addEventListener('load', function () { setTimeout(boucle, alea(900, 2200)); });
+  // premier clignement seulement une fois l'animation d'entr&eacute;e de la page termin&eacute;e
+  // (un masque anim&eacute; pendant un fondu ou un zoom du parent donne un rendu qui saute) ;
+  // param&egrave;tre d= pour changer l'attente (ms), 3000 par d&eacute;faut
+  var attente = Number(q.get('d') || 3000);
+  img.addEventListener('load', function () { setTimeout(boucle, attente + alea(0, 1200)); });
 }
 document.addEventListener('visibilitychange', function () {
   if (document.hidden) img.getAnimations().forEach(function (a) { a.cancel(); });

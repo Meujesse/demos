@@ -239,6 +239,7 @@ if (N.schema === 'usages') html += schemaUsages();
 if (N.schema === 'chemin') html += schemaChemin();
 document.getElementById('contenu').innerHTML = html;
 if (q.get('st')) { const sc = document.querySelector('.schema'); if (sc) { sc.style.top = q.get('st') + 'px'; sc.style.bottom = 'auto'; } }
+if (q.get('sz')) { const sc = document.querySelector('.schema'); if (sc) { sc.style.transformOrigin = 'left top'; sc.style.transform = 'scale(' + q.get('sz') + ')'; } }
 
 // les anneaux de la reliure
 const rel = document.getElementById('reliure');

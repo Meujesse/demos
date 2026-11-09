@@ -227,6 +227,10 @@ if (q.get('s')) document.querySelector('.pied').textContent = 'Mon carnet · sé
 // ?papier=1 : support seul (lignes, reliure, onglet, schéma) ; ?d=<px> cale la première ligne
 const PAPIER = q.get('papier') === '1';
 if (PAPIER) document.body.classList.add('papier');
+// ?y=<px> place la feuille en haut (au lieu de la centrer), ?h=<px> change sa hauteur, ?st=<px> cale le schéma (mode papier)
+const HAUT = q.get('h'), TOP = q.get('y');
+if (HAUT) document.querySelector('.carnet').style.height = HAUT + 'px';
+if (TOP !== null) { document.body.style.alignItems = 'flex-start'; document.querySelector('.carnet').style.marginTop = TOP + 'px'; }
 if (q.get('fond') === '0') { document.querySelector('.bureau').style.display = 'none'; document.documentElement.style.background = 'transparent'; document.body.style.background = 'transparent'; }
 let html = PAPIER ? '' : '<h1><span id="titre">' + N.titre + '</span></h1>';
 if (!PAPIER) html += N.corps.map(function (l) { return '<p>' + l + '</p>'; }).join('');
@@ -234,10 +238,11 @@ if (N.schema === 'intention') html += schemaIntentionImpact();
 if (N.schema === 'usages') html += schemaUsages();
 if (N.schema === 'chemin') html += schemaChemin();
 document.getElementById('contenu').innerHTML = html;
+if (q.get('st')) { const sc = document.querySelector('.schema'); if (sc) { sc.style.top = q.get('st') + 'px'; sc.style.bottom = 'auto'; } }
 
 // les anneaux de la reliure
 const rel = document.getElementById('reliure');
-for (let y = 36; y < 480; y += 58){
+for (let y = 36; y < (HAUT ? Number(HAUT) - 22 : 480); y += 58){
   const i = document.createElement('i');
   i.style.top = y + 'px';
   rel.appendChild(i);

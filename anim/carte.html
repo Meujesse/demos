@@ -149,6 +149,9 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   var q = new URLSearchParams(location.search);
   var ouvert = q.get('ouvre') || 'agora';
   var vus = (q.get('vus') || '').split(',').filter(Boolean);
+  // ?halo=0 : pas d'anneau animé autour du lieu ouvert ; ?sans=a,b : aucun badge sur ces lieux (ils ont leur pastille dans Genially)
+  var sansHalo = q.get('halo') === '0';
+  var sans = (q.get('sans') || '').split(',').filter(Boolean);
   var hote = document.getElementById('carte');
   // ordre d'apparition : d'abord les cadenas (de gauche à droite), le lieu ouvert en dernier
   var ordre = Object.keys(LIEUX).filter(function(k){ return k !== ouvert; })
@@ -158,6 +161,7 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
     var p = LIEUX[k];
     var delai = (0.7 + idx * 0.14).toFixed(2) + 's';
     if (k === ouvert){
+      if (sansHalo) return;
       ['halo','onde','onde b'].forEach(function(cls){
         var h = document.createElement('div');
         h.className = cls;
@@ -167,6 +171,7 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
       });
       return;
     }
+    if (sans.indexOf(k) >= 0) return;
     var vu = vus.indexOf(k) >= 0;
     var b = document.createElement('div');
     b.className = 'badge' + (vu ? ' vu' : '');

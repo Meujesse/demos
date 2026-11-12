@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ton top 3 · Séquence 2</title>
+<!-- Top 3 des leviers (séquence 2 Nhood DE&I). Conçu en 1136 x 440, mis à l'échelle de l'iframe Genially. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:transparent}
+body{font-family:"Public Sans",Arial,sans-serif;color:#121417}
+#scene{width:1136px;height:440px;position:absolute;left:0;top:0;transform-origin:0 0;display:flex;gap:22px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.cards{flex:1;padding:10px 10px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.c{position:relative;background:#fff;border-radius:14px;padding:14px 16px 14px 70px;min-height:82px;text-align:left;font-size:16.5px;font-weight:600;line-height:1.3;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:transform .15s,box-shadow .15s,opacity .2s;display:flex;align-items:center}
+.c:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.c .ic{position:absolute;left:14px;top:50%;margin-top:-22px;width:44px;height:44px;border-radius:12px;background:#e6f5ec;color:#009944;display:flex;align-items:center;justify-content:center}
+.c .ic svg{width:26px;height:26px}
+.c .rk{position:absolute;right:-8px;top:-8px;width:32px;height:32px;border-radius:50%;background:#009944;color:#fff;font-weight:800;font-size:16px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.c.on{box-shadow:0 0 0 3px #009944,0 6px 16px rgba(0,0,0,.25)}
+.c.on .rk{display:flex}
+.c.off{opacity:.45;cursor:default}
+.c.off:hover{transform:none}
+.side{width:330px;background:rgba(255,255,255,.96);border-radius:16px;padding:20px 20px 18px;display:flex;flex-direction:column;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.side h3{font-size:19px;font-weight:800;margin-bottom:4px}
+.side p.sub{font-size:13.5px;color:#4a5560;margin-bottom:14px;line-height:1.35}
+.slot{display:flex;gap:12px;align-items:center;border:2px dashed #c9d3cc;border-radius:12px;padding:10px 12px;margin-bottom:10px;min-height:64px;font-size:14.5px;font-weight:600;line-height:1.3;color:#8a959e;transition:all .25s}
+.slot b{flex:0 0 34px;height:34px;border-radius:50%;background:#e9eef0;color:#8a959e;font-size:16px;display:flex;align-items:center;justify-content:center}
+.slot.full{border:2px solid #009944;background:#f2faf5;color:#121417}
+.slot.full b{background:#009944;color:#fff}
+.slot.pop{animation:pop .35s}
+@keyframes pop{40%{transform:scale(1.04)}}
+.go{margin-top:auto;background:#1f3a5f;color:#fff;font-weight:700;border-radius:26px;padding:12px 18px;font-size:16px;opacity:.35;pointer-events:none;transition:opacity .2s}
+.go.ready{opacity:1;pointer-events:auto}
+.reset{font-size:13px;color:#4a5560;text-decoration:underline;margin-top:8px;align-self:center}
+.done{position:absolute;inset:0;background:#fff;border-radius:16px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.done.on{display:flex;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:scale(.98)}}
+.done h2{font-size:26px;font-weight:800;margin-bottom:6px}
+.done .sub{font-size:15.5px;color:#4a5560;margin-bottom:24px}
+.pod{display:flex;align-items:flex-end;gap:16px}
+.step{width:290px;display:flex;flex-direction:column;align-items:center}
+.step .lab{font-size:15px;font-weight:700;line-height:1.3;min-height:60px;display:flex;align-items:flex-end;margin-bottom:10px;padding:0 8px}
+.step .blk{width:100%;border-radius:12px 12px 0 0;background:#009944;color:#fff;font-size:34px;font-weight:800;display:flex;align-items:flex-start;justify-content:center;padding-top:12px}
+.step.s1 .blk{height:130px}.step.s2 .blk{height:96px;background:#2fae67}.step.s3 .blk{height:72px;background:#5cc189}
+.done .end{margin-top:22px;font-size:15px;color:#4a5560}
+</style>
+</head>
+<body>
+<div id="scene">
+  <div class="cards" id="cards"></div>
+  <div class="side">
+    <h3>Mon top 3</h3>
+    <p class="sub">Clique sur trois leviers, dans l'ordre de tes priorités. Clique à nouveau pour en retirer un.</p>
+    <div id="slots"></div>
+    <button class="go" id="go">Valider mon top 3</button>
+    <button class="reset" id="reset">Tout recommencer</button>
+  </div>
+  <div class="done" id="done"></div>
+</div>
+<script>
+const I = { // petites icônes au trait
+  doc:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+  q:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.7-2.5 2-2.5 4M12 17h.01"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0012 0M12 17v4"/>',
+  pen:'<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
+  msg:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+  back:'<path d="M9 14l-5-5 5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/>',
+  loop:'<path d="M17 2l3 3-3 3"/><path d="M4 11V9a4 4 0 014-4h12M7 22l-3-3 3-3"/><path d="M20 13v2a4 4 0 01-4 4H4"/>'
+};
+const L = [
+  ['doc','Envoyer le support et le contexte en amont'],
+  ['q','Demander s’il y a des questions, pas un tunnel'],
+  ['mic','Un temps de parole pour chaque métier'],
+  ['pen','Désigner quelqu’un pour prendre des notes'],
+  ['list','Faire expliciter les contraintes de chacun'],
+  ['msg','Permettre une contribution écrite après'],
+  ['back','Faire un retour après l’arbitrage'],
+  ['loop','Reformuler les contraintes pour vérifier']
+];
+let pick = [];
+const $ = s => document.querySelector(s);
+const svg = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
+function render(popIdx) {
+  $('#cards').innerHTML = L.map((l, i) => { const r = pick.indexOf(i);
+    return `<button class="c ${r >= 0 ? 'on' : ''} ${r < 0 && pick.length >= 3 ? 'off' : ''}" data-i="${i}"><span class="ic">${svg(l[0])}</span>${l[1]}<span class="rk">${r + 1}</span></button>`; }).join('');
+  $('#slots').innerHTML = [0, 1, 2].map(n => { const i = pick[n];
+    return `<div class="slot ${i !== undefined ? 'full' : ''} ${n === popIdx ? 'pop' : ''}"><b>${n + 1}</b>${i !== undefined ? L[i][1] : 'À choisir'}</div>`; }).join('');
+  $('#go').classList.toggle('ready', pick.length === 3);
+  document.querySelectorAll('.c').forEach(b => b.onclick = () => { const i = +b.dataset.i, r = pick.indexOf(i);
+    if (r >= 0) { pick.splice(r, 1); render(); } else if (pick.length < 3) { pick.push(i); render(pick.length - 1); } });
+}
+$('#reset').onclick = () => { pick = []; render(); };
+$('#go').onclick = () => {
+  const st = (n, cls) => `<div class="step ${cls}"><div class="lab">${L[pick[n]][1]}</div><div class="blk">${n + 1}</div></div>`;
+  $('#done').innerHTML = `<h2>Ton top 3</h2><div class="sub">Les trois leviers que tu gardes pour ta prochaine réunion.</div>
+    <div class="pod">${st(1, 's2')}${st(0, 's1')}${st(2, 's3')}</div>
+    <div class="end">Tu peux les changer à tout moment : <button class="reset" id="again">refaire mon top 3</button></div>`;
+  $('#done').classList.add('on');
+  $('#again').onclick = () => { $('#done').classList.remove('on'); };
+};
+render();
+if (/demo=/.test(location.search)) { pick = [4, 0, 2]; render(); if (/demo=2/.test(location.search)) $('#go').click(); }
+function fit() { const W = document.documentElement.clientWidth || innerWidth, H = document.documentElement.clientHeight || innerHeight; if (!W || !H) return;
+  const k = Math.min(W / 1136, H / 440); const s = $('#scene'); s.style.transform = `scale(${k})`; s.style.left = ((W - 1136 * k) / 2) + 'px'; s.style.top = ((H - 440 * k) / 2) + 'px'; }
+addEventListener('resize', fit); fit(); if (window.ResizeObserver) new ResizeObserver(fit).observe(document.documentElement);
+let n = 0; const t = setInterval(() => { fit(); if (++n > 20) clearInterval(t); }, 250);
+</script>
+</body>
+</html>

@@ -202,7 +202,10 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   if (parle && LIEUX[parle] && vus.indexOf(parle) < 0){
     var f = document.createElement('iframe');
     f.className = 'parle'; f.src = 'parle.html'; f.setAttribute('frameborder', '0'); f.setAttribute('scrolling', 'no');
-    f.style.left = 'calc(' + LIEUX[parle][0] + '% + 2.3%)'; f.style.top = 'calc(' + LIEUX[parle][1] + '% - 14.6%)';
+    // ?parlexy=x,y (en %) : coin haut-gauche de l'animation, pour la poser au-dessus d'un personnage précis
+    var xy = (q.get('parlexy') || '').split(',').map(Number);
+    if (xy.length === 2 && !isNaN(xy[0]) && !isNaN(xy[1])) { f.style.left = xy[0] + '%'; f.style.top = xy[1] + '%'; }
+    else { f.style.left = 'calc(' + LIEUX[parle][0] + '% + 2.3%)'; f.style.top = 'calc(' + LIEUX[parle][1] + '% - 14.6%)'; }
     hote.appendChild(f);
   }
 })();

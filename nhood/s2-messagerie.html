@@ -17,6 +17,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#fff}
 body{font-family:"Segoe UI","Segoe UI Web",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;color:#242424}
 #scene{width:1600px;height:900px;position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;background:#fff}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+/* tout ce qui est cliquable affiche la main, comme dans Outlook ; le texte de l'interface ne se sélectionne pas */
+#scene{cursor:default;user-select:none;-webkit-user-select:none}
+.ol-new,.ol-bar span,.ol-search,.tabs span,.act b,.btns span,.rail>*,.cbar span,.nav button,.it,.toast,.toast .x,.tm-search,.tm-rail div,.ch,.box,.conv-h nav span,.send{cursor:pointer}
+.ol-bar span:hover,.tabs span:hover,.cbar span:hover{color:#0f6cbd}
+.btns span:hover{background:#f0f0f0}.btns span.p:hover{background:#0c5aa0}
+.rail>*:hover{color:#0f6cbd}
+.body,.cbody{user-select:text;-webkit-user-select:text;cursor:text}
 .av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex:0 0 auto}
 
 /* ---------- OUTLOOK ---------- */

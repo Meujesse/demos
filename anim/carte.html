@@ -107,6 +107,10 @@ if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').m
     box-shadow:0 3px 10px rgba(27,36,48,.28), 0 0 0 2px rgba(123,131,138,.55) inset;
     display:flex;align-items:center;justify-content:center}
   #carte .badge img{width:58%;display:block}
+  #carte .pastille{position:absolute;width:4.5%;aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;animation:pose .6s cubic-bezier(.2,.9,.3,1.25) forwards;animation-delay:var(--d,.8s)}
+  #carte .pastille img{width:100%;display:block;filter:drop-shadow(0 3px 6px rgba(27,36,48,.25))}
+  #carte .parle{position:absolute;width:7.5%;height:10.7%;border:0;background:transparent;pointer-events:none;opacity:0;animation:apparait .6s ease-out 1.6s forwards}
+  @keyframes apparait{to{opacity:1}}
   #carte .badge.vu{background:rgba(0,153,68,.95);box-shadow:0 3px 10px rgba(27,36,48,.26), 0 0 0 2px rgba(255,255,255,.75) inset}
   #carte .halo{position:absolute;width:6.2%;aspect-ratio:1;transform:translate(-50%,-50%);
     border-radius:50%;border:2.5px solid rgba(0,153,68,.8);
@@ -149,6 +153,11 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   var q = new URLSearchParams(location.search);
   var ouvert = q.get('ouvre') || 'agora';
   var vus = (q.get('vus') || '').split(',').filter(Boolean);
+  try { (sessionStorage.getItem('nhood-s1-vus') || '').split(',').filter(Boolean).forEach(function(k){ if (vus.indexOf(k) < 0) vus.push(k); }); } catch (e) {}
+  // ?pastilles=cuisine:bulle,serre:plus : la carte dessine elle-même la pastille (+ ou bulle) et la remplace par une coche une fois le lieu vu
+  var pastilles = {}; (q.get('pastilles') || '').split(',').filter(Boolean).forEach(function(x){ var t = x.split(':'); pastilles[t[0]] = t[1] || 'plus'; });
+  // ?parle=lieu : petites bulles « ça discute » à côté du lieu, tant qu'il n'a pas été vu
+  var parle = q.get('parle');
   // ?halo=0 : pas d'anneau animé autour du lieu ouvert ; ?sans=a,b : aucun badge sur ces lieux (ils ont leur pastille dans Genially)
   var sansHalo = q.get('halo') === '0';
   var sans = (q.get('sans') || '').split(',').filter(Boolean);
@@ -160,6 +169,16 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   ordre.forEach(function(k, idx){
     var p = LIEUX[k];
     var delai = (0.7 + idx * 0.14).toFixed(2) + 's';
+    if (pastilles[k]){
+      var vuP = vus.indexOf(k) >= 0;
+      var e = document.createElement('div');
+      e.className = vuP ? 'badge vu' : 'pastille';
+      e.style.setProperty('--d', delai);
+      e.style.left = p[0] + '%'; e.style.top = p[1] + '%';
+      e.innerHTML = '<img src="' + (vuP ? COCHE : '../nhood/' + (pastilles[k] === 'bulle' ? 'marqueur-bulle-carte' : 'marqueur-plus') + '.png') + '" alt="">';
+      hote.appendChild(e);
+      return;
+    }
     if (k === ouvert){
       if (sansHalo) return;
       ['halo','onde','onde b'].forEach(function(cls){
@@ -180,6 +199,12 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
     b.innerHTML = '<img src="' + (vu ? COCHE : VERROU) + '" alt="">';
     hote.appendChild(b);
   });
+  if (parle && LIEUX[parle] && vus.indexOf(parle) < 0){
+    var f = document.createElement('iframe');
+    f.className = 'parle'; f.src = 'parle.html'; f.setAttribute('frameborder', '0'); f.setAttribute('scrolling', 'no');
+    f.style.left = 'calc(' + LIEUX[parle][0] + '% + 2.3%)'; f.style.top = 'calc(' + LIEUX[parle][1] + '% - 14.6%)';
+    hote.appendChild(f);
+  }
 })();
 </script>
 

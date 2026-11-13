@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Lieu vu</title>
+<style>html,body{margin:0;background:transparent}</style></head>
+<body>
+<script>
+// Posée (invisible) sur chaque page de lieu de la séquence 1 Nhood : note le lieu comme « vu » pour la session.
+// La carte (carte.html) lit cette mémoire et remplace la pastille du lieu par une coche verte.
+// sessionStorage : la mémoire s'efface à la fermeture de l'onglet, chaque apprenant repart de zéro.
+try {
+  var lieu = new URLSearchParams(location.search).get('lieu');
+  if (lieu) {
+    var vus = (sessionStorage.getItem('nhood-s1-vus') || '').split(',').filter(Boolean);
+    if (vus.indexOf(lieu) < 0) vus.push(lieu);
+    sessionStorage.setItem('nhood-s1-vus', vus.join(','));
+  }
+} catch (e) {}
+</script>
+</body></html>

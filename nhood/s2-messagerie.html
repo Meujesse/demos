@@ -93,6 +93,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .btns{display:flex;gap:10px;margin-top:9px}
 .btns span{border:1px solid #d1d1d1;border-radius:5px;padding:5px 20px;font-size:13px;font-weight:600}
 .btns span.p{background:#0f6cbd;color:#fff;border-color:#0f6cbd}
+.btns span.ok{background:#dff6dd;border-color:#9fd89f;color:#0e700e}
 .att{display:inline-flex;gap:10px;align-items:center;border:1px solid #d1d1d1;border-radius:6px;padding:8px 14px;margin-top:6px;font-size:13.5px}
 .att i{width:26px;height:30px;background:#c50f1f;border-radius:3px;color:#fff;font-style:normal;font-size:9px;font-weight:700;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px}
 .spam{background:#fff4ce;border:1px solid #f1d38a;border-radius:6px;padding:10px 14px;font-size:13.5px;margin-top:16px;max-width:820px}
@@ -372,7 +373,7 @@ function renderRead() {
     <div class="from">${avatar(m.de)}<div><h3>${p.nom} <small>&lt;${p.mail}&gt;</small></h3><p>À : ${m.a}</p></div>
       <div class="act">${m.heure}<b>Répondre &nbsp;·&nbsp; Transférer</b></div></div>
     ${m.spam ? '<div class="spam">⚠ Ce message a été identifié comme courrier indésirable. Les liens et les pièces jointes sont désactivés.</div>' : ''}
-    ${m.invit ? `<div class="inv"><div class="cal"><em>${m.invit.mois}</em><strong>${m.invit.jour}</strong></div><div><h5>${m.invit.quand}</h5><p>${m.invit.ou}</p><div class="btns"><span class="p">✓ Accepter</span><span>? Provisoire</span><span>✕ Refuser</span></div></div></div>` : ''}
+    ${m.invit ? `<div class="inv"><div class="cal"><em>${m.invit.mois}</em><strong>${m.invit.jour}</strong></div><div><h5>${m.invit.quand}</h5><p>${m.invit.ou}</p><div class="btns">${m.accepte ? '<span class="ok">✓ Accepté</span>' : '<span class="p" id="btn-accepter">✓ Accepter</span><span>? Provisoire</span><span>✕ Refuser</span>'}</div></div></div>` : ''}
     <div class="body">${m.corps.map(x => x.startsWith('<ol') || x.startsWith('<b>') ? `<div>${x}</div>` : `<p>${x}</p>`).join('')}</div>`;
 }
 function renderAll(autoSel) { if (!$('#nav')) { restoreMail(); } renderNav(); renderList(autoSel); renderRead(); }
@@ -402,7 +403,12 @@ function info(msg) {
   let el = $('#info'); if (!el) { el = document.createElement('div'); el.id = 'info'; el.className = 'sent'; scene.appendChild(el); }
   el.textContent = msg; el.classList.add('on'); clearTimeout(infoT); infoT = setTimeout(() => el.classList.remove('on'), 2600);
 }
-const INVIT = { '✓ Accepter': 'Invitation acceptée : jeudi, 17 h – 18 h 30.', '? Provisoire': 'Réponse provisoire envoyée à Grégoire.', '✕ Refuser': 'Tu n’as pas encore décidé de refuser : regarde d’abord tes messages.' };
+const INVIT = {
+  '✓ Accepter': 'Invitation acceptée : jeudi, 17 h – 18 h 30.',
+  '✓ Accepté': 'C’est noté : tu participes à la synergie BU jeudi.',
+  '? Provisoire': 'Tu avais dit à Grégoire que tu serais disponible : une réponse provisoire le laisserait dans le flou. Accepte plutôt.',
+  '✕ Refuser': 'Tu avais dit à Grégoire que tu étais disponible jeudi : difficile de refuser maintenant sans une excellente raison.'
+};
 scene.addEventListener('click', e => {
   const t = e.target; const txt = el => (el.textContent || '').replace(/[+ ]/g, '').trim();
   let el;
@@ -411,7 +417,7 @@ scene.addEventListener('click', e => {
   if (t.closest('.ol-search') || t.closest('.tm-search')) return info(MSG['Rechercher']);
   if ((el = t.closest('.tabs span')) && txt(el) === 'Autres') return info(MSG['Autres']);
   if (t.closest('.act b')) return info(MSG['Répondre']);
-  if ((el = t.closest('.btns span'))) return info(INVIT[txt(el)] || INVIT['✓ Accepter']);
+  if ((el = t.closest('.btns span'))) { if (el.id === 'btn-accepter') { const g = mails.find(x => x.id === 'gr1'); g.accepte = true; renderRead(); } return info(INVIT[txt(el)] || INVIT['✓ Accepter']); }
   if ((el = t.closest('.rail > *'))) { const i = [...el.parentNode.children].indexOf(el); if (i === 1) return showCal(); if (i === 2) return info(MSG['Contacts']); if (i === 0) return backToMail(); }
   if ((el = t.closest('.cbar span'))) return info(MSG[txt(el)] || MSG['Ignorer']);
   if (t.closest('.toast .x')) { t.closest('.toast').classList.remove('on'); return; }
@@ -489,9 +495,15 @@ const teamsToast = () => `<div class="tt">${ICO.teams}Microsoft Teams<span class
   <div class="tb">${avatar('no')}<div><h4>Noé</h4><p>${NOE_MSG}</p></div></div>
   <div class="reply"><span>Envoyer une réponse rapide</span><span>➤</span></div>`;
 
+// ?accepte=1 : l'invitation est acceptée (page suivante du Genially), puis Noé écrit sur Teams.
+// Sans ce paramètre : pas de notification, l'apprenant doit d'abord accepter la réunion.
+const ACCEPTE = Q.get('accepte') === '1';
 async function vueBoite() {
+  if (ACCEPTE) { MAILS[0].accepte = true; MAILS[0].nonlu = false; }
   outlookShell(); selection = 'gr1'; renderAll();
-  await wait(Number(Q.get('t') || 6000));
+  if (!ACCEPTE) return;
+  await wait(400); info('Invitation acceptée : jeudi, 17 h – 18 h 30.');
+  await wait(Number(Q.get('t') || 1600));
   toast(teamsToast());
 }
 

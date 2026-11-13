@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Ça parle</title>
+<!-- Petite animation « ça discute ici » posée à côté d'une bulle de la carte (Nhood S1).
+     Fond transparent, deux bulles qui se répondent avec des points de suspension. Pensée pour 100 x 80. -->
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
+.s{position:absolute;inset:0}
+.b{position:absolute;border-radius:14px;display:flex;gap:4px;align-items:center;justify-content:center;
+   box-shadow:0 2px 6px rgba(27,36,48,.25);opacity:0;transform:scale(.4) translateY(6px)}
+.b i{width:6px;height:6px;border-radius:50%;display:block;animation:d 1s infinite ease-in-out}
+.b i:nth-child(2){animation-delay:.15s}.b i:nth-child(3){animation-delay:.3s}
+.b1{left:6%;bottom:12%;width:46%;height:34%;background:#fff;border:2px solid #009944;transform-origin:10% 100%;animation:pop 3.6s infinite}
+.b1 i{background:#009944}
+.b1:after{content:"";position:absolute;left:10%;bottom:-7px;border:6px solid transparent;border-top-color:#009944;border-bottom:0}
+.b2{right:6%;top:8%;width:40%;height:30%;background:#009944;transform-origin:90% 100%;animation:pop 3.6s infinite 1.8s}
+.b2 i{background:#fff}
+.b2:after{content:"";position:absolute;right:12%;bottom:-6px;border:6px solid transparent;border-top-color:#009944;border-bottom:0}
+@keyframes pop{0%{opacity:0;transform:scale(.4) translateY(6px)}10%{opacity:1;transform:scale(1.06) translateY(0)}
+  16%{transform:scale(1)}48%{opacity:1;transform:scale(1)}58%,100%{opacity:0;transform:scale(.9) translateY(-4px)}}
+@keyframes d{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-3px);opacity:1}}
+@media (prefers-reduced-motion: reduce){.b{animation:none;opacity:1;transform:none}.b i{animation:none}}
+</style>
+</head>
+<body>
+<div class="s">
+  <div class="b b1"><i></i><i></i><i></i></div>
+  <div class="b b2"><i></i><i></i><i></i></div>
+</div>
+<script>
+// Taille proportionnelle à la fenêtre (l'iframe peut être agrandie dans Genially)
+function fit(){ var k = Math.min(innerWidth / 100, innerHeight / 80) || 1;
+  document.querySelectorAll('.b i').forEach(function(i){ i.style.width = i.style.height = (6 * k) + 'px'; });
+  document.querySelectorAll('.b').forEach(function(b){ b.style.gap = (4 * k) + 'px'; b.style.borderRadius = (14 * k) + 'px'; }); }
+addEventListener('resize', fit); fit();
+</script>
+</body>
+</html>

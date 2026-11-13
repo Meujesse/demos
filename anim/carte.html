@@ -153,7 +153,8 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   var q = new URLSearchParams(location.search);
   var ouvert = q.get('ouvre') || 'agora';
   var vus = (q.get('vus') || '').split(',').filter(Boolean);
-  try { (sessionStorage.getItem('nhood-s1-vus') || '').split(',').filter(Boolean).forEach(function(k){ if (vus.indexOf(k) < 0) vus.push(k); }); } catch (e) {}
+  // la mémoire des lieux vus ne sert que sur la carte où tous les lieux sont ouverts (?pastilles=…)
+  if (q.get('pastilles')) try { (sessionStorage.getItem('nhood-s1-vus') || '').split(',').filter(Boolean).forEach(function(k){ if (vus.indexOf(k) < 0) vus.push(k); }); } catch (e) {}
   // ?pastilles=cuisine:bulle,serre:plus : la carte dessine elle-même la pastille (+ ou bulle) et la remplace par une coche une fois le lieu vu
   var pastilles = {}; (q.get('pastilles') || '').split(',').filter(Boolean).forEach(function(x){ var t = x.split(':'); pastilles[t[0]] = t[1] || 'plus'; });
   // ?parle=lieu : petites bulles « ça discute » à côté du lieu, tant qu'il n'a pas été vu

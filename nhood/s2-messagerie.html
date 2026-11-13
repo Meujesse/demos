@@ -503,6 +503,7 @@ async function vueBoite() {
   outlookShell(); selection = 'gr1'; renderAll();
   if (!ACCEPTE) return;
   await wait(400); info('Invitation acceptée : jeudi, 17 h – 18 h 30.');
+  if (Q.get('notif') === '0') return; // la notification de Noé est alors un groupe natif Genially
   await wait(Number(Q.get('t') || 1600));
   toast(teamsToast());
 }

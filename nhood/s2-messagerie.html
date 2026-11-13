@@ -368,7 +368,69 @@ function renderRead() {
     ${m.invit ? `<div class="inv"><div class="cal"><em>${m.invit.mois}</em><strong>${m.invit.jour}</strong></div><div><h5>${m.invit.quand}</h5><p>${m.invit.ou}</p><div class="btns"><span class="p">✓ Accepter</span><span>? Provisoire</span><span>✕ Refuser</span></div></div></div>` : ''}
     <div class="body">${m.corps.map(x => x.startsWith('<ol') || x.startsWith('<b>') ? `<div>${x}</div>` : `<p>${x}</p>`).join('')}</div>`;
 }
-function renderAll(autoSel) { renderNav(); renderList(autoSel); renderRead(); }
+function renderAll(autoSel) { if (!$('#nav')) { restoreMail(); } renderNav(); renderList(autoSel); renderRead(); }
+
+// ------------------------------------------------------------------
+// Tous les boutons répondent : un petit message, jamais un clic mort
+// ------------------------------------------------------------------
+const MSG = {
+  'Nouveau courrier': 'Pas de nouveau mail à écrire pour l’instant.',
+  'Supprimer': 'Tu gardes ce mail : il peut encore servir.',
+  'Archiver': 'Tu l’archiveras plus tard : pour l’instant, tu en as besoin.',
+  'Signaler': 'Rien de suspect ici. Les indésirables sont déjà dans « Courrier indésirable ».',
+  'Déplacer': 'Il est très bien là où il est.',
+  'Répondre': 'Prends d’abord le temps de lire tes messages.',
+  'Répondre à tous': 'Prends d’abord le temps de lire tes messages.',
+  'Transférer': 'Pas besoin de transférer ce message.',
+  'Rechercher': 'Pas besoin de chercher : tes mails sont tous sous tes yeux.',
+  'Autres': 'Rien de nouveau dans « Autres ».',
+  'Contacts': 'L’annuaire Nhood : tu y retrouveras tes collègues.',
+  'Ignorer': 'Ton message est prêt : il ne reste qu’à l’envoyer.',
+  'Joindre un fichier': 'Pas de pièce jointe nécessaire ici.',
+  'Insérer un lien': 'Pas de lien nécessaire ici.',
+  'Teams': 'Choisis ta réponse avec les boutons proposés.'
+};
+let infoT = null;
+function info(msg) {
+  let el = $('#info'); if (!el) { el = document.createElement('div'); el.id = 'info'; el.className = 'sent'; scene.appendChild(el); }
+  el.textContent = msg; el.classList.add('on'); clearTimeout(infoT); infoT = setTimeout(() => el.classList.remove('on'), 2600);
+}
+const INVIT = { '✓ Accepter': 'Invitation acceptée : jeudi, 17 h – 18 h 30.', '? Provisoire': 'Réponse provisoire envoyée à Grégoire.', '✕ Refuser': 'Tu n’as pas encore décidé de refuser : regarde d’abord tes messages.' };
+scene.addEventListener('click', e => {
+  const t = e.target; const txt = el => (el.textContent || '').replace(/[+ ]/g, '').trim();
+  let el;
+  if ((el = t.closest('.ol-new'))) return info(MSG['Nouveau courrier']);
+  if ((el = t.closest('.ol-bar span'))) return info(MSG[txt(el)] || MSG['Déplacer']);
+  if (t.closest('.ol-search') || t.closest('.tm-search')) return info(MSG['Rechercher']);
+  if ((el = t.closest('.tabs span')) && txt(el) === 'Autres') return info(MSG['Autres']);
+  if (t.closest('.act b')) return info(MSG['Répondre']);
+  if ((el = t.closest('.btns span'))) return info(INVIT[txt(el)] || INVIT['✓ Accepter']);
+  if ((el = t.closest('.rail > *'))) { const i = [...el.parentNode.children].indexOf(el); if (i === 1) return showCal(); if (i === 2) return info(MSG['Contacts']); if (i === 0) return backToMail(); }
+  if ((el = t.closest('.cbar span'))) return info(MSG[txt(el)] || MSG['Ignorer']);
+  if (t.closest('.toast .x')) { t.closest('.toast').classList.remove('on'); return; }
+  if (t.closest('.tm-rail div') || t.closest('.box') || t.closest('.conv-h nav span') || (t.closest('.ch') && !t.closest('.ch.sel'))) return info(MSG['Teams']);
+});
+
+// Le calendrier : la seule vue en plus, parce qu'elle sert l'observation (jeudi 17 h – 18 h 30)
+let savedWrap = null;
+function restoreMail() { const w = $('.ol-wrap'); if (w && savedWrap) { w.innerHTML = savedWrap; savedWrap = null; } }
+function backToMail() { if (!savedWrap) return; restoreMail(); renderAll(); }
+function showCal() {
+  const w = $('.ol-wrap'); if (!w || savedWrap) return; savedWrap = w.innerHTML;
+  const J = ['Lun. 13', 'Mar. 14', 'Mer. 15', 'Jeu. 16', 'Ven. 17'];
+  const EV = [[0, 9, 10, 'Point d’équipe', '#c7e0f4'], [1, 9, 9.75, 'Café avec Noé', '#d2ecd8'], [2, 14, 15, 'Parcours DE&I · séquence 1', '#e8ebfa'], [3, 10, 11.5, 'Visite de site avec Mai', '#c7e0f4'], [3, 17, 18.5, 'Synergie BU', '#fde3c7', true], [4, 11, 12, 'Point hebdo', '#c7e0f4']];
+  const H0 = 8, H1 = 19, RH = 58;
+  let g = `<div style="flex:1;display:flex;flex-direction:column;padding:18px 26px;min-width:0"><div style="display:flex;align-items:center;gap:16px;margin-bottom:14px"><h1 style="font-size:22px;font-weight:600">Octobre 2026</h1><span style="color:#616161">Semaine du 13 au 17 octobre</span></div>
+    <div style="display:grid;grid-template-columns:60px repeat(5,1fr);border-top:1px solid #e0e0e0;font-size:14px">
+    <div></div>${J.map(j => `<div style="padding:8px 10px;font-weight:600;border-left:1px solid #e0e0e0;${j.startsWith('Jeu') ? 'color:#0f6cbd' : ''}">${j}</div>`).join('')}</div>
+    <div style="position:relative;display:grid;grid-template-columns:60px repeat(5,1fr);height:${(H1 - H0) * RH}px;border-top:1px solid #e0e0e0">`;
+  g += '<div>' + Array.from({ length: H1 - H0 }, (_, i) => `<div style="height:${RH}px;font-size:12px;color:#616161;padding:2px 8px">${H0 + i}:00</div>`).join('') + '</div>';
+  for (let d = 0; d < 5; d++) { g += `<div style="position:relative;border-left:1px solid #e0e0e0;background:repeating-linear-gradient(#fff 0 ${RH - 1}px,#eee ${RH - 1}px ${RH}px)">`;
+    EV.filter(e => e[0] === d).forEach(e => { g += `<div style="position:absolute;left:4px;right:4px;top:${(e[1] - H0) * RH + 2}px;height:${(e[2] - e[1]) * RH - 4}px;background:${e[4]};border-left:4px solid ${e[5] ? '#e8590c' : '#0f6cbd'};border-radius:4px;padding:5px 8px;font-size:13px;line-height:1.3;overflow:hidden"><b>${e[3]}</b><br>${String(e[1]).replace('.5', ':30').replace(/^(\d+)$/, '$1:00')} – ${String(e[2]).replace('.5', ':30').replace('.75', ':45').replace(/^(\d+)$/, '$1:00')}</div>`; });
+    g += '</div>'; }
+  g += '</div></div>';
+  w.innerHTML = `<div class="rail"><span>${ICO.mail}</span><span class="on">${ICO.cal}</span>${ICO.ppl}</div>` + g;
+}
 
 function toast(html, place) {
   const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = html;

@@ -153,6 +153,8 @@ var VERROU = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   var q = new URLSearchParams(location.search);
   var ouvert = q.get('ouvre') || 'agora';
   var vus = (q.get('vus') || '').split(',').filter(Boolean);
+  // ?reset=1 (première carte de la visite) : on repart de zéro, aucun lieu vu
+  if (q.get('reset') === '1') try { sessionStorage.removeItem('nhood-s1-vus'); } catch (e) {}
   // la mémoire des lieux vus ne sert que sur la carte où tous les lieux sont ouverts (?pastilles=…)
   if (q.get('pastilles')) try { (sessionStorage.getItem('nhood-s1-vus') || '').split(',').filter(Boolean).forEach(function(k){ if (vus.indexOf(k) < 0) vus.push(k); }); } catch (e) {}
   // ?pastilles=cuisine:bulle,serre:plus : la carte dessine elle-même la pastille (+ ou bulle) et la remplace par une coche une fois le lieu vu

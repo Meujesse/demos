@@ -415,8 +415,48 @@ scene.addEventListener('click', e => {
   if ((el = t.closest('.rail > *'))) { const i = [...el.parentNode.children].indexOf(el); if (i === 1) return showCal(); if (i === 2) return info(MSG['Contacts']); if (i === 0) return backToMail(); }
   if ((el = t.closest('.cbar span'))) return info(MSG[txt(el)] || MSG['Ignorer']);
   if (t.closest('.toast .x')) { t.closest('.toast').classList.remove('on'); return; }
-  if (t.closest('.tm-rail div') || t.closest('.box') || t.closest('.conv-h nav span') || (t.closest('.ch') && !t.closest('.ch.sel'))) return info(MSG['Teams']);
+  if ((el = t.closest('.ch'))) return openChat(el.dataset.c);
+  if (t.closest('.box')) return info(chatEnCours === 'no' ? MSG['Teams'] : 'Pas besoin d’écrire à ' + CHATS[chatEnCours].nom + ' pour l’instant.');
+  if ((el = t.closest('.tm-rail div'))) return info(TEAMS_RAIL[txt(el)] || MSG['Teams']);
+  if (t.closest('.conv-h nav span')) return info('Rien de partagé dans cette conversation pour l’instant.');
 });
+
+
+// ------------------------------------------------------------------
+// Teams : on peut ouvrir chaque conversation
+// ------------------------------------------------------------------
+const CHATS = {
+  ma: {nom:'Mai', ini:'MA', bg:'#fbd8c5', fg:'#8e562e', jour:'Hier', msgs:[
+    ['ma','Merci pour ton aide sur le site ! Les panneaux pour la bascule sont prêts.','16:20'],
+    ['moi','Avec plaisir 🙂','16:24'],
+    ['ma','Jeudi, à la synergie, j’aimerais parler des deux semaines de bascule. C’est le moment le plus chargé pour l’exploitation.','16:25']]},
+  se: {nom:'Séverine', ini:'SÉ', bg:'#e8ebfa', fg:'#4f52b2', jour:'Lundi', msgs:[
+    ['se','Bienvenue dans l’équipe 🙂 Si tu as besoin de quoi que ce soit, je suis là le matin : je pars à 16 h 30 pour aller chercher mes enfants.','9:12'],
+    ['moi','Merci Séverine, c’est noté !','9:15']]},
+  gr: {nom:'Grégoire', ini:'GR', bg:'#c7e0f4', fg:'#0f548c', jour:'Lundi', msgs:[
+    ['gr','Je t’ai ajouté à la synergie BU. Tu verras, c’est un bon moyen de rencontrer l’exploitation.','11:02'],
+    ['moi','Merci, j’y serai !','11:05']]}
+};
+const TEAMS_RAIL = { 'Activité': 'Pas de nouvelle activité.', 'Équipes': 'Tes équipes : Asset management, Synergies BU.', 'Calendrier': 'Jeudi 16 octobre : synergie BU, 17 h – 18 h 30.', 'Conversation': 'Tu es déjà dans tes conversations.' };
+let chatEnCours = 'no';
+function openChat(c) {
+  if (!c || !$('.tm')) return; chatEnCours = c;
+  document.querySelectorAll('.ch').forEach(x => x.classList.toggle('sel', x.dataset.c === c));
+  const it = document.querySelector('.ch[data-c="' + c + '"]'); if (it) it.classList.remove('unread');
+  const C = CHATS[c], av = (bg, fg, ini) => '<div class="av" style="background:' + bg + ';color:' + fg + '">' + ini + '</div>';
+  $('#conv-av').innerHTML = c === 'no' ? avatar('no') : av(C.bg, C.fg, C.ini);
+  $('#conv-nom').textContent = c === 'no' ? 'Noé' : C.nom;
+  document.querySelectorAll('.msgs').forEach(m => m.style.display = 'none');
+  let box = c === 'no' ? $('#msgs') : document.getElementById('msgs-' + c);
+  if (!box) {
+    box = document.createElement('div'); box.className = 'msgs'; box.id = 'msgs-' + c;
+    box.innerHTML = '<div class="day">' + C.jour + '</div>' + C.msgs.map(([w, txt, h]) => w === 'moi'
+      ? '<div class="m me on"><div class="bub"><small>' + h + '</small>' + txt + '</div></div>'
+      : '<div class="m on">' + av(C.bg, C.fg, C.ini) + '<div class="bub"><small><b>' + C.nom + '</b>' + h + '</small>' + txt + '</div></div>').join('');
+    $('#msgs').after(box);
+  }
+  box.style.display = '';
+}
 
 // Le calendrier : la seule vue en plus, parce qu'elle sert l'observation (jeudi 17 h – 18 h 30)
 let savedWrap = null;
@@ -506,12 +546,12 @@ async function vueTeams() {
     <div class="tm-wrap">
       <div class="tm-rail"><div>${ICO.bell}Activité</div><div class="on">${ICO.chat}Conversation<b>1</b></div><div>${ICO.team}Équipes</div><div>${ICO.cal}Calendrier</div></div>
       <div class="chats"><h5>Conversation</h5>
-        <div class="ch sel unread">${avatar('no')}<div><h4>Noé <small>10:51</small></h4><p>${r ? REPLIES[r].noe : 'T’as vu l’heure de la synergie ?…'}</p></div></div>
-        <div class="ch"><div class="av off" style="background:#fbd8c5;color:#8e562e">MA</div><div><h4>Mai <small>Hier</small></h4><p>Merci pour ton aide sur le site !</p></div></div>
-        <div class="ch"><div class="av off" style="background:#e8ebfa;color:#4f52b2">SÉ</div><div><h4>Séverine <small>Lun.</small></h4><p>Bienvenue dans l’équipe 🙂</p></div></div>
-        <div class="ch">${avatar('gr')}<div><h4>Grégoire <small>Lun.</small></h4><p>Je t’ai ajouté à la synergie BU.</p></div></div>
+        <div class="ch sel unread" data-c="no">${avatar('no')}<div><h4>Noé <small>10:51</small></h4><p>${r ? REPLIES[r].noe : 'T’as vu l’heure de la synergie ?…'}</p></div></div>
+        <div class="ch unread" data-c="ma"><div class="av off" style="background:#fbd8c5;color:#8e562e">MA</div><div><h4>Mai <small>Hier</small></h4><p>Jeudi, à la synergie, j’aimerais parler de la bascule.</p></div></div>
+        <div class="ch" data-c="se"><div class="av off" style="background:#e8ebfa;color:#4f52b2">SÉ</div><div><h4>Séverine <small>Lun.</small></h4><p>Bienvenue dans l’équipe 🙂</p></div></div>
+        <div class="ch" data-c="gr">${avatar('gr')}<div><h4>Grégoire <small>Lun.</small></h4><p>Je t’ai ajouté à la synergie BU.</p></div></div>
       </div>
-      <div class="conv"><div class="conv-h">${avatar('no')}<h3>Noé</h3><nav><span class="on">Conversation</span><span>Fichiers</span><span>Photos</span></nav></div>
+      <div class="conv"><div class="conv-h"><span id="conv-av">${avatar('no')}</span><h3 id="conv-nom">Noé</h3><nav><span class="on">Conversation</span><span>Fichiers</span><span>Photos</span></nav></div>
         <div class="msgs" id="msgs"><div class="day">Aujourd’hui</div></div>
         <div class="box">Tapez un message</div></div>
     </div></div>`;

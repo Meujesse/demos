@@ -43,9 +43,9 @@
       const buttons = it.filter(i => i.type === 'group' && navOut(i).length);
       const choices = buttons.filter(g => !/→/.test(H.kids(s, g).filter(k => k.type === 'text').map(TX).join(''))).sort((a, b) => H.Y(a) - H.Y(b));
       const conts = buttons.filter(g => /→/.test(H.kids(s, g).filter(k => k.type === 'text').map(TX).join('')));
-      if (choices.length > 1) choices.forEach((g, k) => fx(g, txtMax + 0.9 + k * 0.45));
-      const last = choices.length > 1 ? txtMax + 0.9 + (choices.length - 1) * 0.45 : txtMax;
-      conts.forEach(g => { if (d(g) + 0.05 < last) fx(g, last + 0.5); });
+      if (choices.length > 1) choices.forEach((g, k) => fx(g, txtMax + 1.6 + k * 0.5));
+      const last = choices.length > 1 ? txtMax + 1.6 + (choices.length - 1) * 0.5 : txtMax;
+      conts.forEach(g => { if (d(g) + 0.05 < last + (choices.length > 1 ? 0.5 : 0.8)) fx(g, last + (choices.length > 1 ? 0.5 : 0.8)); });
     });
     return n;
   };

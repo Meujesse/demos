@@ -32,7 +32,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;font-fam
 .face,.tranche{position:absolute;inset:0}
 .face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .face svg,.tranche svg{width:100%;height:100%;display:block;overflow:visible}
-.dos{transform:rotateY(180deg)}
+.face{transform:translateZ(7px)}
+.dos{transform:rotateY(180deg) translateZ(7px)}
 .reflet{position:absolute;inset:0;-webkit-mask:var(--forme) center/100% 100% no-repeat;mask:var(--forme) center/100% 100% no-repeat;overflow:hidden}
 .reflet:after{content:"";position:absolute;top:-20%;bottom:-20%;width:40%;left:-60%;
   background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-12deg);animation:brille 5.5s ease-in-out infinite 2.2s}

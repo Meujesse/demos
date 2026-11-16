@@ -179,6 +179,63 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
 @keyframes dot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
 .box{margin:0 60px 22px;height:52px;border-radius:6px;background:#fff;border:1px solid #e0e0e0;border-bottom:2px solid #5b5fc7;display:flex;align-items:center;padding:0 16px;color:#8a8a8a;font-size:15px}
+
+/* ---------- ANNUAIRE (Contacts) ---------- */
+.pp-nav{width:236px;background:#fafafa;border-right:1px solid #e0e0e0;padding:18px 0;font-size:15px}
+.pp-nav .nc{margin:0 18px 16px;background:#0f6cbd;color:#fff;border-radius:6px;padding:8px 14px;font-weight:600;font-size:14.5px;text-align:center}
+.pp-nav h6{font-size:13px;color:#616161;padding:10px 20px 6px;font-weight:600}
+.pp-nav button{width:100%;text-align:left;padding:9px 20px;display:flex;gap:10px;align-items:center;border-left:4px solid transparent}
+.pp-nav button svg{width:18px;height:18px;color:#605e5c}
+.pp-nav button:hover{background:#f0f0f0}
+.pp-nav button.sel{background:#e5f1fb;border-left-color:#0f6cbd;font-weight:600}
+.pp-list{width:380px;border-right:1px solid #e0e0e0;display:flex;flex-direction:column;min-height:0}
+.pp-h{padding:16px 20px 12px;border-bottom:1px solid #e0e0e0}
+.pp-h h5{font-size:18px;font-weight:600;margin-bottom:10px}
+.pp-h .q{height:34px;border:1px solid #d1d1d1;border-radius:6px;display:flex;align-items:center;gap:8px;padding:0 12px;color:#707070;font-size:14px}
+.pp-h .q svg{width:15px;height:15px}
+.pp-items{overflow:auto;flex:1}
+.pp-l{font-size:13px;font-weight:700;color:#0f6cbd;padding:10px 20px 4px}
+.pp-it{width:100%;display:flex;gap:12px;align-items:center;padding:9px 18px 9px 16px;border-left:4px solid transparent;text-align:left}
+.pp-it:hover{background:#f5f5f5}
+.pp-it.sel{background:#e5f1fb;border-left-color:#0f6cbd}
+.pp-it .av{width:40px;height:40px;font-size:13px;position:relative}
+.pp-it b{display:block;font-size:15px;font-weight:600}
+.pp-it small{display:block;font-size:13px;color:#616161}
+.pres{position:absolute;right:-1px;bottom:-1px;width:13px;height:13px;border-radius:50%;border:2px solid #fff;background:#6bb700}
+.pres.abs{background:#fff;border:2.5px solid #c50f1f;box-shadow:0 0 0 1.5px #fff}
+.pres.occ{background:#c50f1f}
+.pres.loin{background:#f8c400}
+.pp-card{flex:1;overflow:auto;min-width:0;padding:30px 40px}
+.pp-top{display:flex;gap:24px;align-items:center;margin-bottom:22px}
+.pp-top .av{width:96px;height:96px;font-size:30px;position:relative}
+.pp-top .pres{width:22px;height:22px;border-width:3px;right:2px;bottom:2px}
+.pp-top h1{font-size:26px;font-weight:600}
+.pp-top p{font-size:15.5px;color:#424242;margin-top:2px}
+.pp-top .st{font-size:14px;color:#616161;margin-top:6px;display:flex;gap:6px;align-items:center}
+.pp-act{display:flex;gap:10px;margin-bottom:22px}
+.pp-act span{display:flex;align-items:center;gap:8px;border:1px solid #d1d1d1;border-radius:6px;padding:8px 14px;font-size:14px;cursor:pointer}
+.pp-act span:hover{background:#f5f5f5}
+.pp-act span svg{width:17px;height:17px;color:#0f6cbd}
+.pp-tabs{display:flex;gap:26px;border-bottom:1px solid #e0e0e0;margin-bottom:20px;font-size:15px}
+.pp-tabs span{padding-bottom:9px;cursor:pointer}
+.pp-tabs .on{font-weight:700;border-bottom:3px solid #0f6cbd}
+.pp-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.pp-box{border:1px solid #e6e6e6;border-radius:8px;padding:16px 18px}
+.pp-box h4{font-size:15px;font-weight:600;margin-bottom:12px}
+.pp-row{display:flex;gap:12px;font-size:14px;margin-bottom:10px;line-height:1.35}
+.pp-row em{font-style:normal;color:#616161;width:120px;flex:0 0 120px}
+.pp-row a{color:#0f6cbd;text-decoration:none}
+.org{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.org .o{display:flex;gap:10px;align-items:center;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:14px}
+.org .o:hover{background:#f5f5f5}
+.org .o .av{width:32px;height:32px;font-size:11px}
+.org .o small{display:block;color:#616161;font-size:12.5px}
+.org .o.me2{background:#e5f1fb}
+.org .tr{width:2px;height:12px;background:#d1d1d1;margin-left:26px}
+.rec{font-size:14px}
+.rec div{padding:8px 0;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.rec div:hover{color:#0f6cbd}
+.rec small{color:#616161;display:block;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -341,7 +398,7 @@ function outlookShell() {
       <div class="ol-icons"></div></div>
     <div class="ol-bar"><div class="ol-new">+ &nbsp;Nouveau courrier</div><span>Supprimer</span><span>Archiver</span><span>Signaler</span><span>Déplacer</span><span>Répondre</span><span>Répondre à tous</span><span>Transférer</span></div>
     <div class="ol-wrap">
-      <div class="rail"><span class="on">${ICO.mail}</span>${ICO.cal}${ICO.ppl}</div>
+      ${railHtml('mail')}
       <div class="nav" id="nav"></div>
       <div class="list"><div class="list-h"><h5 id="lt"></h5><div class="tabs"><span class="on">Prioritaire</span><span>Autres</span></div></div><div class="items" id="items"></div></div>
       <div class="read" id="read"></div>
@@ -418,7 +475,7 @@ scene.addEventListener('click', e => {
   if ((el = t.closest('.tabs span')) && txt(el) === 'Autres') return info(MSG['Autres']);
   if (t.closest('.act b')) return info(MSG['Répondre']);
   if ((el = t.closest('.btns span'))) { if (el.id === 'btn-accepter') { const g = mails.find(x => x.id === 'gr1'); g.accepte = true; renderRead(); } return info(INVIT[txt(el)] || INVIT['✓ Accepter']); }
-  if ((el = t.closest('.rail > *'))) { const i = [...el.parentNode.children].indexOf(el); if (i === 1) return showCal(); if (i === 2) return info(MSG['Contacts']); if (i === 0) return backToMail(); }
+  if ((el = t.closest('.rail > *'))) { const i = [...el.parentNode.children].indexOf(el); if (i === 1) return showCal(); if (i === 2) return showPpl(); if (i === 0) return backToMail(); }
   if ((el = t.closest('.cbar span'))) return info(MSG[txt(el)] || MSG['Ignorer']);
   if (t.closest('.toast .x')) { t.closest('.toast').classList.remove('on'); return; }
   if ((el = t.closest('.ch'))) return openChat(el.dataset.c);
@@ -469,7 +526,7 @@ let savedWrap = null;
 function restoreMail() { const w = $('.ol-wrap'); if (w && savedWrap) { w.innerHTML = savedWrap; savedWrap = null; } }
 function backToMail() { if (!savedWrap) return; restoreMail(); renderAll(); }
 function showCal() {
-  const w = $('.ol-wrap'); if (!w || savedWrap) return; savedWrap = w.innerHTML;
+  const w = $('.ol-wrap'); if (!w) return; if (!savedWrap) savedWrap = w.innerHTML;
   const J = ['Lun. 13', 'Mar. 14', 'Mer. 15', 'Jeu. 16', 'Ven. 17'];
   const EV = [[0, 9, 10, 'Point d’équipe', '#c7e0f4'], [1, 9, 9.75, 'Café avec Noé', '#d2ecd8'], [2, 14, 15, 'Parcours DE&I · séquence 1', '#e8ebfa'], [3, 10, 11.5, 'Visite de site avec Mai', '#c7e0f4'], [3, 17, 18.5, 'Synergie BU', '#fde3c7', true], [4, 11, 12, 'Point hebdo', '#c7e0f4']];
   const H0 = 8, H1 = 19, RH = 58;
@@ -482,8 +539,98 @@ function showCal() {
     EV.filter(e => e[0] === d).forEach(e => { g += `<div style="position:absolute;left:4px;right:4px;top:${(e[1] - H0) * RH + 2}px;height:${(e[2] - e[1]) * RH - 4}px;background:${e[4]};border-left:4px solid ${e[5] ? '#e8590c' : '#0f6cbd'};border-radius:4px;padding:5px 8px;font-size:13px;line-height:1.3;overflow:hidden"><b>${e[3]}</b><br>${String(e[1]).replace('.5', ':30').replace(/^(\d+)$/, '$1:00')} – ${String(e[2]).replace('.5', ':30').replace('.75', ':45').replace(/^(\d+)$/, '$1:00')}</div>`; });
     g += '</div>'; }
   g += '</div></div>';
-  w.innerHTML = `<div class="rail"><span>${ICO.mail}</span><span class="on">${ICO.cal}</span>${ICO.ppl}</div>` + g;
+  w.innerHTML = railHtml('cal') + g;
 }
+
+// ------------------------------------------------------------------
+// L'annuaire (bouton Contacts) : les collègues du parcours, comme dans le vrai Outlook
+const DIR = [
+  {k:'cl', nom:'Claire', role:'Directrice engagement & RSE', svc:'Direction', ini:'CL', bg:'#e8ebfa', fg:'#4f52b2', pres:'occ', st:'Occupée · en réunion jusqu’à 12 h', tel:'+33 3 20 00 10 01', bureau:'Siège · 4e étage', h:'Lun. – ven. · 8 h 30 – 18 h', mgr:null},
+  {k:'fr', nom:'Franck', role:'Property manager', svc:'Property management', ini:'FR', bg:'#e0e0e0', fg:'#424242', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 31', bureau:'Siège · 2e étage', h:'Lun. – ven. · 9 h – 18 h', mgr:'so'},
+  {k:'gr', nom:'Grégoire', role:'Responsable asset management', svc:'Asset management', ini:'GR', bg:'#c7e0f4', fg:'#0f548c', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 12', bureau:'Siège · 3e étage', h:'Lun. – ven. · 8 h 30 – 19 h', mgr:'cl', note:'Organise les synergies BU du jeudi.'},
+  {k:'in', nom:'Inès', role:'Chargée de projets', svc:'Développement', ini:'IN', bg:'#fde7e9', fg:'#a4262c', pres:'loin', st:'Absente du bureau · de retour à 14 h', tel:'+33 3 20 00 10 44', bureau:'Siège · 2e étage', h:'Lun. – ven. · 9 h – 17 h 30', mgr:'so'},
+  {k:'ka', nom:'Karine S.', role:'Chargée RH · référente intégration', svc:'Ressources humaines', ini:'KS', bg:'#fbd8c5', fg:'#8e562e', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 05', bureau:'Siège · 1er étage', h:'Lun. – jeu. · 9 h – 17 h', mgr:'cl', note:'Ta contact RH pour tes premières semaines.'},
+  {k:'ma', nom:'Mai', role:'Analyste asset management', svc:'Asset management', ini:'MA', bg:'#fbd8c5', fg:'#8e562e', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 18', bureau:'Siège · 3e étage', h:'Lun. – ven. · 9 h – 18 h', mgr:'gr'},
+  {k:'no', nom:'Noé', role:'Chargé d’asset management · ton binôme', svc:'Asset management', ini:'NO', bg:'#d2ecd8', fg:'#0e7a0b', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 16', bureau:'Siège · 3e étage', h:'Lun. – ven. · 9 h – 18 h', mgr:'gr', note:'Ton binôme d’intégration : pose-lui toutes tes questions.'},
+  {k:'pa', nom:'Patrick', role:'Responsable commercial', svc:'Commercialisation', ini:'PA', bg:'#e0e0e0', fg:'#424242', pres:'occ', st:'Occupé · en rendez-vous extérieur', tel:'+33 3 20 00 10 52', bureau:'Siège · 2e étage', h:'Lun. – ven. · 8 h – 18 h', mgr:'cl'},
+  {k:'sa', nom:'Sarah', role:'Chargée de marketing', svc:'Marketing', ini:'SA', bg:'#e8ebfa', fg:'#4f52b2', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 57', bureau:'Siège · 2e étage', h:'Lun. – ven. · 9 h – 18 h', mgr:'pa'},
+  {k:'se', nom:'Séverine', role:'Gestionnaire locative', svc:'Asset management', ini:'SÉ', bg:'#e8ebfa', fg:'#4f52b2', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 21', bureau:'Siège · 3e étage', h:'Lun. – ven. · 8 h – 16 h 30', mgr:'gr'},
+  {k:'so', nom:'Sophie', role:'Directrice de projets', svc:'Développement', ini:'SO', bg:'#d2ecd8', fg:'#0e7a0b', pres:'occ', st:'Occupée · CODIR', tel:'+33 3 20 00 10 40', bureau:'Siège · 4e étage', h:'Lun. – ven. · 8 h 30 – 18 h 30', mgr:'cl'},
+  {k:'moi', nom:'Toi', role:'Nouvelle recrue · asset management', svc:'Asset management', ini:'TOI', bg:'#c7e0f4', fg:'#0f548c', pres:'dispo', st:'Disponible', tel:'+33 3 20 00 10 77', bureau:'Siège · 3e étage', h:'Lun. – ven. · 9 h – 18 h', mgr:'gr', note:'C’est toi ! Bienvenue chez Nhood.'}
+];
+const D = k => DIR.find(d => d.k === k);
+const mailOf = d => P[d.k] ? P[d.k].mail : d.nom.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]/g, '') + '@nhood.com';
+const dav = (d, sz) => `<div class="av" style="background:${d.bg};color:${d.fg}${sz ? `;width:${sz}px;height:${sz}px` : ''}">${d.ini}<i class="pres ${d.pres}"></i></div>`;
+let ppSel = 'gr', ppFiltre = 'tous', ppTab = 'vue';
+const railHtml = on => `<div class="rail"><span class="${on === 'mail' ? 'on' : ''}">${ICO.mail}</span><span class="${on === 'cal' ? 'on' : ''}">${ICO.cal}</span><span class="${on === 'ppl' ? 'on' : ''}">${ICO.ppl}</span></div>`;
+const PP_FILTRES = [['tous', 'Tous les contacts', ICO.ppl], ['fav', 'Favoris', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>'], ['equipe', 'Mon équipe · Asset management', ICO.team], ['syn', 'Synergie BU · jeudi', ICO.cal]];
+const FAV = ['no', 'gr', 'ka'];
+const SYN = ['gr', 'ma', 'se', 'no', 'moi', 'fr', 'in', 'sa', 'pa'];
+function ppListe() {
+  return DIR.filter(d => ppFiltre === 'tous' || (ppFiltre === 'fav' && FAV.includes(d.k)) || (ppFiltre === 'equipe' && d.svc === 'Asset management') || (ppFiltre === 'syn' && SYN.includes(d.k)));
+}
+function renderPpl() {
+  const w = $('.ol-wrap'); if (!w) return;
+  const liste = ppListe(); if (!liste.find(d => d.k === ppSel)) ppSel = liste[0].k;
+  let lettre = '', items = '';
+  liste.forEach(d => { const l = d.nom[0].toUpperCase(); if (l !== lettre) { lettre = l; items += `<div class="pp-l">${l}</div>`; }
+    items += `<button class="pp-it ${d.k === ppSel ? 'sel' : ''}" data-p="${d.k}">${dav(d)}<span><b>${d.nom}</b><small>${d.role}</small></span></button>`; });
+  const titre = PP_FILTRES.find(f => f[0] === ppFiltre)[1];
+  w.innerHTML = railHtml('ppl') + `<div class="pp-nav"><div class="nc">+ Nouveau contact</div><h6>Mes contacts</h6>${PP_FILTRES.slice(0, 2).map(f => `<button class="${f[0] === ppFiltre ? 'sel' : ''}" data-f="${f[0]}">${f[2]}${f[1]}</button>`).join('')}<h6>Annuaire Nhood</h6>${PP_FILTRES.slice(2).map(f => `<button class="${f[0] === ppFiltre ? 'sel' : ''}" data-f="${f[0]}">${f[2]}${f[1]}</button>`).join('')}</div>
+    <div class="pp-list"><div class="pp-h"><h5>${titre}</h5><div class="q">${ICO.search}Rechercher dans l’annuaire</div></div><div class="pp-items">${items}</div></div>
+    <div class="pp-card" id="pp-card"></div>`;
+  renderCarte();
+}
+function renderCarte() {
+  const d = D(ppSel), c = $('#pp-card'); if (!c) return;
+  const m = d.mgr ? D(d.mgr) : null;
+  const equipe = DIR.filter(x => x.mgr === d.k);
+  const pairs = m ? DIR.filter(x => x.mgr === d.mgr && x.k !== d.k).slice(0, 4) : [];
+  const recents = mails.filter(x => x.de === d.k && !x.spam);
+  const o = (x, cls) => `<div class="o ${cls || ''}" data-p="${x.k}"><div class="av" style="background:${x.bg};color:${x.fg}">${x.ini}</div><span>${x.nom}<small>${x.role}</small></span></div>`;
+  const vue = `<div class="pp-grid">
+      <div class="pp-box"><h4>Coordonnées</h4>
+        <div class="pp-row"><em>E-mail</em><a>${mailOf(d)}</a></div>
+        <div class="pp-row"><em>Téléphone</em><span>${d.tel}</span></div>
+        <div class="pp-row"><em>Service</em><span>${d.svc}</span></div>
+        <div class="pp-row"><em>Bureau</em><span>${d.bureau}</span></div>
+        <div class="pp-row"><em>Heures de travail</em><span>${d.h}</span></div>
+        ${d.note ? `<div class="pp-row"><em>À savoir</em><span>${d.note}</span></div>` : ''}
+      </div>
+      <div class="pp-box"><h4>Organisation</h4><div class="org">
+        ${m ? o(m) + '<i class="tr"></i>' : ''}${o(d, 'me2')}${equipe.length ? '<i class="tr"></i>' + equipe.slice(0, 3).map(x => o(x)).join('') : ''}
+      </div></div>
+      ${recents.length ? `<div class="pp-box" style="grid-column:1/-1"><h4>Échanges récents</h4><div class="rec">${recents.map(x => `<div data-m="${x.id}">${x.objet}<small>${x.heure}</small></div>`).join('')}</div></div>` : ''}
+    </div>`;
+  const orga = `<div class="pp-box"><h4>${m ? 'Rattachement' : 'Direction'}</h4><div class="org">${m ? o(m) + '<i class="tr"></i>' : ''}${o(d, 'me2')}</div></div>
+    ${pairs.length ? `<div class="pp-box" style="margin-top:18px"><h4>Travaille avec</h4><div class="org">${pairs.map(x => o(x)).join('')}</div></div>` : ''}
+    ${equipe.length ? `<div class="pp-box" style="margin-top:18px"><h4>Équipe</h4><div class="org">${equipe.map(x => o(x)).join('')}</div></div>` : ''}`;
+  c.innerHTML = `<div class="pp-top">${dav(d)}<div><h1>${d.nom}</h1><p>${d.role}</p><div class="st"><i class="pres ${d.pres}" style="position:static;display:inline-block;width:11px;height:11px;border-width:0"></i>${d.st}</div></div></div>
+    <div class="pp-act"><span data-a="mail">${ICO.mail}Envoyer un e-mail</span><span data-a="chat">${ICO.chat}Discuter</span><span data-a="cal">${ICO.cal}Planifier une réunion</span></div>
+    <div class="pp-tabs"><span class="${ppTab === 'vue' ? 'on' : ''}" data-t="vue">Vue d’ensemble</span><span class="${ppTab === 'orga' ? 'on' : ''}" data-t="orga">Organisation</span></div>
+    ${ppTab === 'vue' ? vue : orga}`;
+}
+function showPpl() {
+  const w = $('.ol-wrap'); if (!w) return; if (!savedWrap) savedWrap = w.innerHTML;
+  renderPpl();
+}
+const PP_ACT = {
+  mail: d => d.k === 'moi' ? 'C’est ton adresse : inutile de t’écrire à toi-même !' : 'Pas besoin d’écrire à ' + d.nom + ' pour l’instant. Reviens à ta boîte de réception.',
+  chat: d => d.k === 'moi' ? 'Discuter avec toi-même ? Garde plutôt tes questions pour Noé.' : d.k === 'no' ? 'Noé t’écrira sur Teams dès que tu auras accepté la réunion.' : 'Pas besoin d’écrire à ' + d.nom + ' pour l’instant.',
+  cal: d => 'Pas de réunion à planifier : celle de jeudi t’attend déjà dans ton calendrier.'
+};
+scene.addEventListener('click', e => {
+  const t = e.target; let el;
+  if (!t.closest('.pp-nav, .pp-list, .pp-card')) return;
+  e.stopImmediatePropagation();
+  if ((el = t.closest('[data-f]'))) { ppFiltre = el.dataset.f; return renderPpl(); }
+  if ((el = t.closest('[data-p]'))) { ppSel = el.dataset.p; return renderPpl(); }
+  if ((el = t.closest('[data-t]'))) { ppTab = el.dataset.t; return renderCarte(); }
+  if ((el = t.closest('[data-a]'))) return info(PP_ACT[el.dataset.a](D(ppSel)));
+  if ((el = t.closest('[data-m]'))) { const mm = mails.find(x => x.id === el.dataset.m); restoreMail(); if (mm) { dossier = mm.dossier; selection = mm.id; mm.nonlu = false; mm.neuf = false; } renderAll(); return; }
+  if (t.closest('.nc')) return info('Ton annuaire Nhood est déjà à jour : pas besoin d’ajouter de contact.');
+  if (t.closest('.q')) return info(MSG['Rechercher']);
+}, true);
 
 function toast(html, place) {
   const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = html;

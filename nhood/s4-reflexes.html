@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quatre réflexes · Séquence 4</title>
+<!-- Quatre cartes à retourner (séquence 4 Nhood DE&I). Recto : illustration + titre. Verso : lien avec la situation de ce matin + notions clés.
+     Conçu en 1136 x 430, mis à l'échelle de l'iframe Genially. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:transparent}
+body{font-family:"Public Sans",Arial,sans-serif;color:#121417}
+#scene{width:1136px;height:430px;position:absolute;left:0;top:0;transform-origin:0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.c{position:relative;perspective:1400px;cursor:pointer;opacity:0;transform:translateY(14px);animation:arrive .5s ease-out forwards}
+.c:nth-child(1){animation-delay:.2s}.c:nth-child(2){animation-delay:.35s}.c:nth-child(3){animation-delay:.5s}.c:nth-child(4){animation-delay:.65s}
+@keyframes arrive{to{opacity:1;transform:none}}
+.in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.8,.3,1)}
+.c.flip .in{transform:rotateY(180deg)}
+.f,.b{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 4px 14px rgba(0,0,0,.22);overflow:hidden}
+.f{background:#fff;display:flex;flex-direction:column;align-items:center;padding:22px 18px 18px;text-align:center}
+.f .num{position:absolute;left:16px;top:14px;width:30px;height:30px;border-radius:50%;background:#009944;color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+.f img{width:170px;height:170px;object-fit:contain;margin:14px 0 14px}
+.f h3{font-size:19px;font-weight:800;line-height:1.25;color:#121417;min-height:48px;display:flex;align-items:center}
+.f p{font-size:14px;line-height:1.4;color:#4a5560;margin-top:8px}
+.turn{position:absolute;right:14px;bottom:14px;width:40px;height:40px;border-radius:50%;background:#009944;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.turn svg{width:22px;height:22px}
+.c:hover .turn{transform:scale(1.08)}
+.b{transform:rotateY(180deg);background:#f2faf5;border:2px solid #009944;padding:18px 18px 16px;display:flex;flex-direction:column}
+.b h4{font-size:15px;font-weight:800;color:#121417;margin-bottom:10px;padding-right:20px}
+.tag{display:inline-block;align-self:flex-start;background:#009944;color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.6px;border-radius:12px;padding:3px 10px;margin-bottom:6px}
+.b .sit{font-size:13.5px;line-height:1.42;margin-bottom:12px}
+.b .not{font-size:13.5px;line-height:1.42;margin-bottom:7px}
+.b .not b{color:#007a36}
+.b .turn{background:#fff;color:#009944;border:2px solid #009944}
+@media (prefers-reduced-motion: reduce){.in{transition:none}.c{animation:none;opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="scene"></div>
+<script>
+const IMG = 'https://meujesse.github.io/demos/nhood/';
+const R = [
+  {img:'s4-ill-observer.png', t:'Observer l’effet', s:'Qui se tait ? Qui est mis de côté ? Quel sujet disparaît ?',
+   sit:'Ce matin, après la blague de Patrick, Mai ne reprend plus la parole, et le groupe passe à autre chose. Une blague se juge à son effet, pas à son intention.',
+   n:[['Vivre-ensemble','chacun doit pouvoir rester dans la conversation.'],['Stéréotype','« on est en France, pas au Vietnam » ramène Mai à une origine.']]},
+  {img:'s4-ill-reagir.png', t:'Réagir à son niveau', s:'Reformuler, redonner une place à l’alerte, poser une limite si besoin.',
+   sit:'Ce matin : « Patrick, ce que dit Mai, c’est important pour elle. » Une phrase suffit à rendre la parole à Mai, sans faire monter la tension.',
+   n:[['Rôle du témoin','celui qui voit peut agir, à sa mesure.']]},
+  {img:'s4-ill-soutenir.png', t:'Soutenir sans surexposer', s:'Vérifier que la personne va bien, ne pas parler à sa place.',
+   sit:'À la sortie, Noé va voir Mai. Lui demander ce qu’elle souhaite, c’est la soutenir sans décider pour elle, ni raconter son histoire sans son accord.',
+   n:[['Rôle du témoin','soutenir la personne visée, pas seulement répondre à l’auteur.'],['Inclusion','Mai garde la main sur ce qui la concerne.']]},
+  {img:'s4-ill-orienter.png', t:'Savoir vers qui se tourner', s:'Manager, RH, représentants du personnel, SpeakUp, compliance.',
+   sit:'Si Patrick recommence la semaine suivante : manager, RH, représentants du personnel, ou SpeakUp si tu ne veux pas t’exposer. Référent·e DE&I à venir début 2027.',
+   n:[['Rôle du témoin','agir ne veut pas dire agir seul.'],['Vivre-ensemble','les règles communes protègent tout le monde.']]}
+];
+const turn = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>';
+document.getElementById('scene').innerHTML = R.map((r, i) => `
+  <div class="c" data-i="${i}" role="button" tabindex="0" aria-label="${r.t} : retourner la carte">
+    <div class="in">
+      <div class="f"><span class="num">${i + 1}</span><img src="${IMG + r.img}" alt=""><h3>${r.t}</h3><p>${r.s}</p><span class="turn">${turn}</span></div>
+      <div class="b"><h4>${i + 1} · ${r.t}</h4><span class="tag">CE MATIN</span><p class="sit">${r.sit}</p>
+        <span class="tag">NOTIONS CLÉS</span>${r.n.map(([a, b]) => `<p class="not"><b>${a} :</b> ${b}</p>`).join('')}<span class="turn">${turn}</span></div>
+    </div>
+  </div>`).join('');
+document.querySelectorAll('.c').forEach(c => { const go = () => c.classList.toggle('flip'); c.onclick = go; c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
+function fit() { const W = document.documentElement.clientWidth || innerWidth, H = document.documentElement.clientHeight || innerHeight; if (!W || !H) return;
+  const k = Math.min(W / 1136, H / 430), s = document.getElementById('scene'); s.style.transform = `scale(${k})`; s.style.left = ((W - 1136 * k) / 2) + 'px'; s.style.top = ((H - 430 * k) / 2) + 'px'; }
+addEventListener('resize', fit); fit(); if (window.ResizeObserver) new ResizeObserver(fit).observe(document.documentElement);
+let n = 0; const t = setInterval(() => { fit(); if (++n > 20) clearInterval(t); }, 250);
+</script>
+</body>
+</html>

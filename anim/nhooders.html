@@ -7,6 +7,8 @@
 <!-- Badges du parcours Nhood DE&I : une lettre de NHOODERS par séquence.
      ?vue=badge&n=1      grand badge qui tourne (fond transparent, pensé pour 520 x 520)
      ?vue=collection&n=1 les 8 badges en ligne, débloqués jusqu'à n (fond transparent, pensé pour 1000 x 190)
+     &attente=2  attendre 2 s avant de faire arriver la collection
+     &theme=sombre  textes clairs pour un fond foncé
      &calme=1            pas d'arrivée animée (aperçu éditeur) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -174,10 +176,12 @@ function vueBadge() {
 }
 
 function vueCollection() {
+  const A = parseFloat(Q.get('attente') || '0') || 0; // secondes avant l'arrivée des badges
   const sc = document.getElementById('scene');
   sc.innerHTML = `<div class="collec ${CALME ? '' : 'go'}">${B.map((b, i) => {
     const on = i < N, cls = (on ? '' : 'ferme') + (i === N - 1 ? ' actuel' : '');
-    return `<div class="case ${cls}" style="animation-delay:${(i * .09).toFixed(2)}s"><div class="mini" style="animation-delay:${(.8 + i * .09).toFixed(2)}s">${face(b, i, {on, mini: true, suffix: 'm'})}</div><div class="nom">${on ? b.nom : 'À débloquer'}</div></div>`;
+    const d0 = A + i * .09, d1 = A + .5 + i * .09;
+    return `<div class="case ${cls}" style="animation-delay:${d0.toFixed(2)}s"><div class="mini" style="animation-delay:${d1.toFixed(2)}s,${(d1 + .8).toFixed(2)}s">${face(b, i, {on, mini: true, suffix: 'm'})}</div><div class="nom">${on ? b.nom : 'À débloquer'}</div></div>`;
   }).join('')}</div>`;
   fit(1000, 190);
 }

@@ -26,7 +26,7 @@
       const choices = buttons.filter(g => !/Continuer|→/.test(H.kids(s, g).filter(k => k.type === 'text').map(TX).join('')));
       const conts = buttons.filter(g => /→/.test(H.kids(s, g).filter(k => k.type === 'text').map(TX).join('')));
       conts.forEach(g => { if (d(g) + 0.05 < txtMax) P.push([nm, 'bouton de suite (' + d(g) + 's) avant le dernier texte (' + txtMax + 's)']); });
-      if (choices.length > 1) { const ds = choices.map(d); if (Math.max(...ds) - Math.min(...ds) < 0.3 * (choices.length - 1)) P.push([nm, choices.length + ' choix qui arrivent ensemble']); if (Math.min(...ds) + 0.05 < txtMax) P.push([nm, 'choix avant la fin du texte']); }
+      if (choices.length > 1) { const ds = choices.map(d); if (Math.max(...ds) - Math.min(...ds) < 0.25 * (choices.length - 1)) P.push([nm, choices.length + ' choix qui arrivent ensemble']); if (Math.min(...ds) + 0.05 < txtMax) P.push([nm, 'choix avant la fin du texte']); }
       it.forEach(i => { const c = J(i.data.interactivities || {}); if (c.hover && c.click) P.push([nm, 'survol + clic sur ' + (i.data.LayerTitle || i.type)]); if (i.data.Blocked) P.push([nm, 'élément verrouillé ' + (i.data.LayerTitle || i.type)]); });
       it.filter(isText).forEach(t => { if (/\s{2,}|  |\.\./.test(TX(t)) || /\bl ?' /.test(TX(t))) P.push([nm, 'typo ? «' + TX(t).slice(0, 60) + '»']); });
     });

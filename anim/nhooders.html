@@ -44,6 +44,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;font-fam
 
 .go .rayons{animation:apparait .8s ease-out .5s forwards,tourne 40s linear infinite}
 .go .halo{animation:apparait .6s ease-out .4s forwards,pulse 3.2s ease-in-out 1.2s infinite}
+.go .piece{opacity:0;animation:apparait .35s ease-out forwards}
 .go .coin{animation:arrivee 2.6s cubic-bezier(.2,.75,.25,1) forwards,flotte 9s linear 2.6s infinite}
 .go .ruban{animation:ruban .7s cubic-bezier(.3,1.6,.5,1) 1.7s forwards}
 .go .etincelle{animation:etinc 1.4s ease-out forwards}
@@ -53,7 +54,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;font-fam
 @keyframes tourne{to{transform:rotate(360deg)}}
 @keyframes apparait{to{opacity:1}}
 @keyframes pulse{50%{transform:scale(1.08);opacity:.75}}
-@keyframes arrivee{0%{transform:scale(.1) rotateY(-900deg);opacity:0}12%{opacity:1}100%{transform:scale(1) rotateY(0deg);opacity:1}}
+@keyframes arrivee{0%{transform:scale(.1) rotateY(-900deg)}100%{transform:scale(1) rotateY(0deg)}}
 @keyframes flotte{0%{transform:rotateY(0deg)}30%{transform:rotateY(0deg)}55%{transform:rotateY(180deg)}70%{transform:rotateY(180deg)}95%,100%{transform:rotateY(360deg)}}
 @keyframes ruban{from{opacity:0;transform:translateX(-50%) scale(.4)}to{opacity:1;transform:translateX(-50%) scale(1)}}
 @keyframes brille{0%,70%{left:-60%}100%{left:130%}}

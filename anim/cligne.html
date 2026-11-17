@@ -56,6 +56,32 @@ function boucle() {
   setTimeout(boucle, alea(2400, 6400));
 }
 
+// ?sep=1 : chaque visage cligne de son côté (une copie de l'image par zone, chacune son propre rythme)
+var SEP = q.get('sep') === '1' && zones.length > 1;
+if (SEP) {
+  img.style.display = 'none';
+  var imgs = zones.map(function (z) {
+    var e = document.createElement('img'); e.alt = ''; e.src = img.src;
+    e.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;object-fit:fill;opacity:0;will-change:opacity;pointer-events:none';
+    var g = 'radial-gradient(ellipse ' + z[2] + '% ' + z[3] + '% at ' + z[0] + '% ' + z[1] + '%, #000 0%, #000 52%, rgba(0,0,0,.55) 74%, transparent 100%)';
+    e.style.webkitMaskImage = g; e.style.maskImage = g; e.style.webkitMaskRepeat = 'no-repeat'; e.style.maskRepeat = 'no-repeat';
+    document.body.appendChild(e); return e;
+  });
+  var cligneUn = function (e) {
+    e.animate([
+      { opacity: 0, offset: 0,   easing: 'cubic-bezier(.45,0,.85,1)' },
+      { opacity: 1, offset: .22, easing: 'linear' },
+      { opacity: 1, offset: .46, easing: 'cubic-bezier(.1,0,.35,1)' },
+      { opacity: 0, offset: 1 }
+    ], { duration: 210 + Math.random() * 60 });
+  };
+  var boucleUn = function (e) {
+    cligneUn(e);
+    if (Math.random() < 0.2) setTimeout(function () { cligneUn(e); }, alea(260, 340));
+    setTimeout(function () { boucleUn(e); }, alea(2600, 7000));
+  };
+}
+
 if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   // on ne clignote pas pour qui a demand&eacute; moins d'animation
 } else {
@@ -63,10 +89,11 @@ if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').m
   // (un masque anim&eacute; pendant un fondu ou un zoom du parent donne un rendu qui saute) ;
   // param&egrave;tre d= pour changer l'attente (ms), 3000 par d&eacute;faut
   var attente = Number(q.get('d') || 3000);
-  img.addEventListener('load', function () { setTimeout(boucle, attente + alea(0, 1200)); });
+  if (SEP) imgs.forEach(function (e) { e.addEventListener('load', function () { setTimeout(function () { boucleUn(e); }, attente + alea(0, 3500)); }); });
+  else img.addEventListener('load', function () { setTimeout(boucle, attente + alea(0, 1200)); });
 }
 document.addEventListener('visibilitychange', function () {
-  if (document.hidden) img.getAnimations().forEach(function (a) { a.cancel(); });
+  if (document.hidden) document.querySelectorAll('img').forEach(function (e) { e.getAnimations().forEach(function (a) { a.cancel(); }); });
 });
 </script>
 </body>
